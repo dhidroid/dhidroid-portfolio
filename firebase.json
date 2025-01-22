@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "dhidroid",
     "public": "dist",
     "ignore": [
       "firebase.json",
