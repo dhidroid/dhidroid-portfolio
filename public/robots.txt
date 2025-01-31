@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /private/
 Allow: /
 
-Sitemap: https://dhidroid.com/sitemap.xml
+Sitemap: https://dhidroid.web.app/sitemap.xml
