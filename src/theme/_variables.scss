@@ -1,0 +1,22 @@
+@font-face {
+    font-family: 'GilroyRegular';
+    src: url('/src/assets/fonts/Gilroy-Regular.ttf') format('truetype'),
+        url('/src/assets/fonts/Gilroy-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GilroyMedium';
+    src: url('/src/assets/fonts/Gilroy-Medium.ttf') format('truetype'),
+        url('/src/assets/fonts/Gilroy-Medium.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+// colors
+$primary-color: #5F28FD;
+$secondary-color: #EE4E00;
+$bg-color: #EBEBEB;
+$black-color: #1A1A1A;
+$white-color: #FFFFFF
