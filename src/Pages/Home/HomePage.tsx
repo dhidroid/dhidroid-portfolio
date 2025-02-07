@@ -16,7 +16,6 @@ const HomePage: Component = () => {
         />
         <Meta name="author" content="DhineshKumar Thirupathi" />
       </MetaProvider>
-
       <div>Home</div>
     </div>
   );
