@@ -7,7 +7,7 @@ const NotFound: Component = () => {
     <div class={styles.notFoundContainer}>
       <div class={styles.content}></div>
       <div class={styles.textContent}>
-        <h1>[404]</h1>
+        <h1>[<span>404</span>]</h1>
         <p>PAGE NOT FOUND</p>
         <a href="/" class={styles.returnHome}>
           Return to Home

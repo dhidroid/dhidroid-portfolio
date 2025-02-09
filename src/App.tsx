@@ -15,6 +15,10 @@ const trackPageView = () => {
 };
 
 const App: Component = () => {
+
+  createEffect(() => {
+    trackPageView();
+  }, [])
   return (
     <div>
       <MetaProvider>

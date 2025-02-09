@@ -1,3 +1,4 @@
+@import '../../theme/variables';
 .notFoundContainer {
     display: flex;
     justify-content: center;
@@ -12,7 +13,11 @@
         h1 {
             font-size: 80px;
             font-weight: bold;
-            color: #222;
+            color: #343333;
+            
+                span {
+                    color: $primary-color
+                }
         }
 
         p {
@@ -24,7 +29,7 @@
             display: inline-block;
             margin-top: 20px;
             font-size: 18px;
-            color: blue;
+            color: $primary-color;
             text-decoration: none;
 
             &:hover {
