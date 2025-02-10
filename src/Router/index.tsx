@@ -10,8 +10,8 @@ import NavStyle from "./Nav.module.scss";
 import { FiMenu, FiX } from "solid-icons/fi";
 
 // Lazy loading pages
-const Home = lazy(() => import("../Pages/Home/HomePage"));
-const NotFound = lazy(() => import("../Pages/NotFound/NotFound"));
+const Home = import("../Pages/Home/HomePage");
+const NotFound = import("../Pages/NotFound/NotFound");
 
 const Footer = () => {
   const socialIcons: any = {
