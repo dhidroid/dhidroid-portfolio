@@ -41,9 +41,6 @@ const Footer = () => {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                color: "black",
-              }}
             >
               <Icon size={24} />
             </A>
@@ -94,26 +91,26 @@ const Nav = (props: any) => {
 
 const RouterPage: Component = () => {
   return (
-    // <Suspense
-    //   fallback={
-    //     <div
-    //         style={{
-    //         display: "flex",
-    //         "align-items": "center",
-    //         "justify-content": "center",
-    //         height: "100vh",
-    //         width: "100vw",
-    //       }}
-    //     >
-    //       <BallTriangle type={SpinnerType.puff} color="#5F28FD" />
-    //     </div>
-    //   }
-    // >
+    <Suspense
+      fallback={
+        <div
+          style={{
+            display: "flex",
+            "align-items": "center",
+            "justify-content": "center",
+            height: "100vh",
+            width: "100vw",
+          }}
+        >
+          <BallTriangle type={SpinnerType.puff} color="#5F28FD" />
+        </div>
+      }
+    >
       <Router root={Nav}>
         <Route path="/" component={Home} />
         <Route path="*" component={NotFound} />
       </Router>
-    // </Suspense>
+    </Suspense>
   );
 };
 
