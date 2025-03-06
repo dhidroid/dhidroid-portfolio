@@ -1,0 +1,103 @@
+/* Footer Container */
+.footer {
+  background: #f8f9fa;
+  padding: 40px 10%;
+  text-align: left;
+  border-top: 3px solid #70c74d;
+}
+
+/* Flex Container */
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Contact Section */
+.contact {
+  font-size: 16px;
+  color: #333;
+}
+
+.contact .logo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.contact p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* CTA Section */
+.ctaSection h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.tryBtn {
+  background: #70c74d;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.watchDemo {
+  background: none;
+  border: 1px solid #333;
+  padding: 10px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+/* Platform Section */
+.platforms {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.platforms p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+
+.icons {
+  display: flex;
+  gap: 15px;
+  font-size: 20px;
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .buttons {
+    justify-content: center;
+  }
+
+  .platforms {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
