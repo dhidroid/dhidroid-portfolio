@@ -2,16 +2,23 @@ import React from "react";
 import { Helmet } from 'react-helmet'
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { RxPlus } from "react-icons/rx";
-import { data, Link } from "react-router";
+import { Link } from "react-router";
 import styles from './styles/Hero.module.css'
 import ServiceStyle from './styles/Service.module.css'
+import AboutStyle from './styles/About.module.css'
 import { SiMaterialdesignicons } from "react-icons/si";
 import { MdDeveloperMode } from "react-icons/md";
 import { FaFirefoxBrowser } from "react-icons/fa6";
 import { ServiceCard } from "../../components/Cards";
 import { BsArrowRight } from "react-icons/bs";
+import CtaButton from "../../components/button/ctaButton";
+
+
 const HomePage: React.FC = () => {
 
+  const skillsCarocils = [
+    "ReactNative", "JavaScript", "TypeScript", "Git & Github", "Figma UI/UX Design", "Golang(begginer)", "Android", "Ios App Dev", "ReactJS", "Jest unitTesting", "SEO & Content Writing (Begginer)", "Trainner (Junior)"
+  ]
   const serviceData = [
     {
       icon: SiMaterialdesignicons,
@@ -30,6 +37,9 @@ const HomePage: React.FC = () => {
     }
   ];
 
+  const AboutData =
+    "passionate mobile app and backend developer specializing in React Native, Go, and cloud services. I have expertise in UI/UX design, Firebase, CI/CD, SEO, and content writing. Additionally, I have experience with basic native app development using Kotlin (Jetpack Compose) for Android and Swift for iOS. I love solving complex challenges and crafting seamless user experiences!";
+
   const clients = [
     "https://avatar.iran.liara.run/public/boy?username=Ash",
     "https://avatar.iran.liara.run/public/girl?username=Jane",
@@ -37,7 +47,7 @@ const HomePage: React.FC = () => {
   ]
 
   return (
-    <div>
+    <React.Fragment>
       <Helmet>
         <title>Dhidroid - home</title>
       </Helmet>
@@ -55,6 +65,7 @@ const HomePage: React.FC = () => {
               </center>
             </div>
           </div>
+
           {/* clients */}
           <div className={styles.clientsContainer}>
             <div style={{ fontSize: "24px", fontWeight: "bold" }}>2 +</div>
@@ -91,7 +102,7 @@ const HomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* carocils */}
+          {/*skills carocils */}
         </div>
       </div>
 
@@ -122,7 +133,36 @@ const HomePage: React.FC = () => {
 
 
       {/* about me session */}
-      <div></div>
+      <div className={AboutStyle.aboutContainer}>
+        {/* left */}
+        <div style={{ width: "40%", marginRight: "20px", height: "90%", justifyContent: "center", alignItems: "center", alignContent: "center" }}>
+          {/* exp card */}
+          <div className={AboutStyle.card}>
+            <span className={AboutStyle.name}>DHINESHKUMAR</span>
+            <div className={AboutStyle.content}>
+              <span className={AboutStyle.experience}>12</span>
+              <span className={AboutStyle.subtitle}>Month's of Experience</span>
+            </div>
+          </div>
+        </div>
+
+        {/* right */}
+        <div style={{ width: "50%" }}>
+          <div>
+            <p><span>-</span> About Me</p>
+            <h1>Who is <span>DhineshKumar<br /> Thirupathi ? </span></h1>
+          </div>
+          <p style={{ textAlign: "justify" }}>{AboutData}</p>
+
+
+          {/* button */}
+          <div style={{ display: "flex", flexDirection: "row", }}>
+            <div>
+              <CtaButton colour={"black"} title="Download CV" onPress={() => alert("downloading......")} />
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* education & work */}
 
@@ -141,7 +181,8 @@ const HomePage: React.FC = () => {
 
 
       {/* quots card */}
-    </div>);
+    </React.Fragment >
+  );
 };
 
 export default HomePage;

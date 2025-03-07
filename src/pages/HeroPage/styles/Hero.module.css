@@ -1,8 +1,11 @@
 /* Root styles */
 .container {
-    height: 65vh;
+    height: 80vh;
     margin-top: 50px;
     padding: 0px 20px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }
 
 /* Hero container */
@@ -45,7 +48,8 @@
 .clientsContainer {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .clientImageContainer {
@@ -162,7 +166,7 @@
     .heroContentContainer {
         flex-direction: column;
         text-align: center;
-        margin:100px 0px
+        margin: 100px 0px
     }
 
     .heroContentContainer div h1 {

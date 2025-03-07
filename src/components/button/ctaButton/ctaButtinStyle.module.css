@@ -1,0 +1,20 @@
+a {
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
+    color: black;
+    border-radius: 100px;
+    padding: 2px 1px;
+    padding-right: 10px;
+}
+
+a:hover {
+    color: var(--secondary-color);
+}

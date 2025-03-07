@@ -89,15 +89,9 @@
 
     .serviceCardContainer {
         display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
+        flex-direction: column;
         padding-bottom: 15px;
     }
-
-    /* .serviceCardContainer::-webkit-scrollbar {
-        height: 6px;
-    } */
 }
 
 @media (max-width: 480px) {
