@@ -5,39 +5,30 @@
     align-items: center;
     padding: 10px 24px;
     position: fixed;
-    top: 10px;
-    /* Reduced gap from the top */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 1100px;
-    height: 60px;
-    /* Adjusted height */
-    /* background-color: #111; */
-    border-radius: 40px;
-    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    top: 0;
+    left: 0;
+    width: 100%;
     z-index: 1000;
-    color: black;
+    transition: transform 0.3s ease-in-out, background 0.3s ease-in-out;
 }
 
-/* Hide nav on scroll down */
+/* Hide navbar on scroll down */
 .hidden {
-    transform: translateX(-50%) translateY(-100%);
-    top: 0
+    transform: translateY(-100%);
 }
 
 /* Blur effect when scrolling */
 .scrolled {
-    background: rgba(17, 17, 17, 0.7);
-    backdrop-filter: blur(8px);
-    color: white;
+    background-color: red;
 }
 
 /* Logo */
 .logo {
     font-size: 18px;
-    /* Slightly adjusted */
     font-weight: bold;
+    font-family: var(--secondaryFont, sans-serif);
+    cursor: pointer;
+    color: var(--text-black, black);
 }
 
 /* Navigation Links */
@@ -57,6 +48,11 @@
     text-decoration: none;
     font-weight: 500;
     transition: opacity 0.3s ease-in-out;
+    color: var(--text-black, black);
+}
+
+.link:active {
+    text-decoration: underline;
 }
 
 .link:hover {
@@ -65,26 +61,27 @@
 
 /* CTA Button */
 .cta {
-    background-color: #333;
+    background-color: var(--primary-color);
     padding: 8px 18px;
     border-radius: 20px;
     text-decoration: none;
-    color: white;
+    color: var(--text-white, white);
     font-weight: 500;
     transition: background-color 0.3s ease-in-out;
+    font-family: var(--secondaryFont, sans-serif);
+    margin-right: 50px;
 }
 
 .cta:hover {
-    background-color: #555;
+    background-color: darkblue;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav {
-        width: 95%;
+        width: 100%;
         padding: 8px 16px;
         height: 55px;
-        /* Adjusted height for mobile */
     }
 
     .navLinks {

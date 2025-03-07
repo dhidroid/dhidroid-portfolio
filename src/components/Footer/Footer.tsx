@@ -19,12 +19,12 @@ const Footer = () => {
       <div className={styles.container}>
         {/* Left Section - Contact Info */}
         <div className={styles.contact}>
-          <div className={styles.logo}>Dk Portfolio</div>
+          <div className={styles.logo}>Dhidroid</div>
           <p>
-            <IoIosMail /> hello@dkportfolio.com
+            <IoIosMail /> hello@mail.com
           </p>
           <p>
-            <IoIosCall /> +91 98765 43210
+            <IoIosCall /> +91 00000 00000
           </p>
         </div>
 
@@ -33,20 +33,11 @@ const Footer = () => {
           <h3>Get started with my services now</h3>
           <div className={styles.buttons}>
             <button className={styles.tryBtn}>Hire Me</button>
-            <button className={styles.watchDemo}>View Projects</button>
           </div>
         </div>
       </div>
 
-      {/* Platform Availability */}
-      <div className={styles.platforms}>
-        <p>
-          <IoMdCheckmarkCircleOutline /> Available on all platforms
-        </p>
-        <div className={styles.icons}>
-          <FaWindows /> <FaApple /> <FaLinux /> <FaChrome /> <FaAndroid />
-        </div>
-      </div>
+     
     </footer>
   );
 };

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import styles from "./Header.module.css";
 
 const Header = () => {
   const [hidden, setHidden] = useState(false);
   const [scrolling, setScrolling] = useState(false);
   let lastScrollY = 0;
-
+  const navigation = useNavigate()
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
@@ -28,42 +28,43 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+
+  const Links = [{
+    title: "Home",
+    link: '/'
+  }, {
+    title: "Service",
+    link: "/service"
+  }, {
+    title: "About",
+    link: "/about"
+  }, {
+    title: "Project",
+    link: "/project"
+  }]
   return (
     <nav
-      className={`${styles.nav} ${hidden ? styles.hidden : ""} ${
-        scrolling ? styles.scrolled : ""
-      }`}
+      className={`${styles.nav} ${hidden ? styles.hidden : ""} ${scrolling ? styles.scrolled : ""
+        }`}
     >
       {/* Logo */}
-      <div className={styles.logo}>DhiDrid</div>
+      <div onClick={() => navigation("/")} className={styles.logo}>Dhidroid</div>
 
       {/* Navigation Links */}
       <ul className={styles.navLinks}>
-        <li className={styles.navItem}>
-          <Link to="/" className={styles.link}>
-            Home
-          </Link>
-        </li>
-        <li className={styles.navItem}>
-          <Link to="/service" className={styles.link}>
-            Service
-          </Link>
-        </li>
-        <li className={styles.navItem}>
-          <Link to="/portfolio" className={styles.link}>
-            Portfolio
-          </Link>
-        </li>
-        <li className={styles.navItem}>
-          <Link to="/case-studies" className={styles.link}>
-            Case Studies
-          </Link>
-        </li>
+        {Links.map((data, index) => (
+          <li key={index} className={styles.navItem}>
+            <Link to={data.link} className={styles.link}>
+              {data.title}
+            </Link>
+          </li>
+        ))}
+
       </ul>
 
       {/* CTA Button */}
       <a href="tel:" className={styles.cta}>
-        Contact Us
+        Contact
       </a>
     </nav>
   );

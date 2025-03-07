@@ -1,9 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  background-color: var(--backgroud-color);
+  font-family: var(--primaryFont);
+}
+
+:root {
+  --primary-color: #5315FC;
+  --secondary-color: #A99DFF;
+  --backgroud-color: #F5F5F5;
+  --text-black: #161616;
+  --text-white: #F5F5F5;
+  --highlight-color: #7D57EA;
 
 
+  --primaryFont: "Urbanist",
+    sans-serif;
+  --secondaryFont: "Space Grotesk",
+    sans-serif;
+  --therestyFont: "Poppins",
+    sans-serif;
 }
 
 a {
@@ -11,6 +33,7 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
