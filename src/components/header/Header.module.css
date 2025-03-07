@@ -10,6 +10,7 @@
     width: 100%;
     z-index: 1000;
     transition: transform 0.3s ease-in-out, background 0.3s ease-in-out;
+
 }
 
 /* Hide navbar on scroll down */
@@ -19,7 +20,7 @@
 
 /* Blur effect when scrolling */
 .scrolled {
-    background-color: red;
+    --webkit-filter: blur(30px);
 }
 
 /* Logo */
