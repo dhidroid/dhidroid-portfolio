@@ -1,0 +1,230 @@
+/* Base styles (default for larger screens) */
+.image {
+    background-image: url("../../assets/my-pic.png");
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+}
+
+/* Root styles */
+.container {
+    height: 65vh;
+    margin-top: 50px;
+    padding: 0px 20px;
+}
+
+/* Hero container */
+.heroContentContainer {
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    /* Stack elements on smaller screens */
+    text-align: center;
+}
+
+.heroContentContainer div h1 {
+    font-size: 60px;
+    text-align: center;
+}
+
+.heroContentContainer div h1 span {
+    padding: 5px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    display: inline-block;
+    transform: rotate(-3deg);
+    transition: transform 0.3s ease-in-out;
+}
+
+.heroContentContainer div span {
+    padding: 2px 5px;
+    background-color: var(--primary-color);
+    color: white;
+    display: inline-block;
+}
+
+.heroContentContainer div h1 span:hover {
+    transform: rotate(0deg);
+}
+
+/* Clients */
+.clientsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.clientImageContainer {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--text-white);
+    position: relative;
+}
+
+.clientImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.plusIcon {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: var(--text-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #6A6A6A;
+    margin-left: -10px;
+    border: 2px solid white;
+}
+
+/* CTA Button */
+.ctaButtonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.portfolioButtonContainer {
+    background-color: white;
+    border-radius: 50px;
+    padding: 5px 5px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.portfolioButton {
+    padding: 5px 25px;
+    background-color: var(--primary-color);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--text-white);
+    flex-wrap: wrap;
+}
+
+.portfolioButton span {
+    background-color: var(--text-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+}
+
+.hiremeButton {
+    padding: 5px 35px;
+    border: 1px solid black;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+}
+
+/* ========================= */
+/* Responsive Design Starts */
+/* ========================= */
+
+/* Tablets (max-width: 1024px) */
+@media screen and (max-width: 1024px) {
+    .container {
+        height: auto;
+        margin-top: 30px;
+        padding: 0px 15px;
+    }
+
+    .heroContentContainer div h1 {
+        font-size: 45px;
+    }
+
+    /* .portfolioButton {
+        padding: 5px 20px;
+    } */
+
+    .hiremeButton {
+        padding: 5px 30px;
+    }
+}
+
+/* Mobile devices (max-width: 768px) */
+@media screen and (max-width: 768px) {
+    .heroContentContainer {
+        flex-direction: column;
+        text-align: center;
+        margin:100px 0px
+    }
+
+    .heroContentContainer div h1 {
+        font-size: 35px;
+    }
+
+    .heroContentContainer div h1 span {
+        padding: 5px 15px;
+    }
+
+    .clientsContainer {
+        align-items: center;
+    }
+
+    .clientImageContainer {
+        height: 35px;
+        width: 35px;
+    }
+
+    .plusIcon {
+        height: 35px;
+        width: 35px;
+        font-size: 16px;
+    }
+
+    .portfolioButtonContainer {
+        flex-direction: row;
+        gap: 3px;
+    }
+
+    .portfolioButton {
+        font-size: 14px;
+    }
+
+    .hiremeButton {
+        font-size: 14px;
+    }
+}
+
+/* Small mobile devices (max-width: 480px) */
+@media screen and (max-width: 480px) {
+    .heroContentContainer div h1 {
+        font-size: 28px;
+    }
+
+    .heroContentContainer div h1 span {
+        padding: 5px 10px;
+    }
+
+    .portfolioButton {
+        font-size: 12px;
+    }
+
+    .hiremeButton {
+        font-size: 12px;
+    }
+}

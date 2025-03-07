@@ -1,0 +1,111 @@
+.serviceContainer {
+    height: 80vh;
+    background-color: var(--highlight-color);
+    padding: 20px;
+    color: var(--text-white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.serviceinnerContainer {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+/* Title */
+.serviceinnerContainer h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    font-family: var(--secondaryFont);
+}
+
+.serviceinnerContainer h1 span {
+    /* color: var(--primary-color); */
+}
+
+/* Button */
+.serviceinnerContainer a {
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--text-white);
+    color: black;
+    border-radius: 100px;
+    padding: 2px 1px;
+    padding-right: 10px;
+}
+
+.serviceinnerContainer a:hover {
+    color: var(--secondary-color);
+}
+
+/* Service Cards */
+.serviceCardContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .serviceContainer {
+        height: auto;
+        padding: 40px 20px;
+    }
+
+    .serviceCardContainer {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .serviceinnerContainer {
+        text-align: center;
+    }
+
+    .serviceinnerContainer h1 {
+        font-size: 1.8rem;
+    }
+
+    .serviceCardContainer {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 15px;
+    }
+
+    /* .serviceCardContainer::-webkit-scrollbar {
+        height: 6px;
+    } */
+}
+
+@media (max-width: 480px) {
+    .serviceinnerContainer h1 {
+        font-size: 1.5rem;
+    }
+
+    .serviceCardContainer {
+        gap: 10px;
+    }
+}

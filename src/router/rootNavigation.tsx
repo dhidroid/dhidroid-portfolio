@@ -20,7 +20,11 @@ export const Router = () => {
               <HomeScreen />
             }
           />
-          <Route path="*" element={<PageNotFound />} />
+          <Route path="*" element={
+            <Suspense fallback={<Loader />}>
+              <PageNotFound />
+            </Suspense>
+          } />
         </Routes>
         <Footer />
       </div>
