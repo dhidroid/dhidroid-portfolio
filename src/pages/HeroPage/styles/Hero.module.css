@@ -1,11 +1,3 @@
-/* Base styles (default for larger screens) */
-.image {
-    background-image: url("../../assets/my-pic.png");
-    height: 100%;
-    width: 100%;
-    background-repeat: no-repeat;
-}
-
 /* Root styles */
 .container {
     height: 65vh;

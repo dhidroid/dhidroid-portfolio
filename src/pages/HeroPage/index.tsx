@@ -55,10 +55,6 @@ const HomePage: React.FC = () => {
               </center>
             </div>
           </div>
-
-          {/* image  */}
-          <div className={styles.image} />
-
           {/* clients */}
           <div className={styles.clientsContainer}>
             <div style={{ fontSize: "24px", fontWeight: "bold" }}>2 +</div>
