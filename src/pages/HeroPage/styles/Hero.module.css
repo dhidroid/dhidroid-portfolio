@@ -136,6 +136,24 @@
     color: black;
 }
 
+.marquee{
+    background-color: var(--thersty-color);
+    gap: 20px
+}
+
+.marquee p{
+    gap: 30px;
+    margin-right: 20px;
+    font-weight: 900;
+    font-size: 2rem;
+    font-family: var(--secondaryFont);
+    margin: 0px 30px;
+}
+
+.marquee p:hover {
+    color: var(--primary-color);
+    transform: rotate(-2deg);
+}
 /* ========================= */
 /* Responsive Design Starts */
 /* ========================= */

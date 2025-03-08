@@ -1,0 +1,126 @@
+.mainContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: var(--secondary-color);
+    width: 70%;
+    border-radius: 30px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* Responsive Layout */
+@media (max-width: 1024px) {
+    .mainContainer {
+        width: 90%;
+        /* Increase width for tablets */
+        flex-direction: column;
+        /* Stack content vertically */
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mainContainer {
+        width: 95%;
+        /* Almost full width on smaller screens */
+        padding: 15px;
+    }
+}
+
+.left {}
+
+.image {
+    height: 20rem;
+    border-radius: 20px;
+    max-width: 28rem;
+    object-fit: cover;
+}
+
+/* Responsive Image */
+@media (max-width: 1024px) {
+    .image {
+        height: 16rem;
+        max-width: 24rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .image {
+        height: 14rem;
+        max-width: 100%;
+    }
+}
+
+.right {
+    text-align: left;
+}
+
+.right div {
+    flex-direction: row;
+    display: flex;
+    text-align: left;
+    justify-content: left;
+}
+
+.catagreeContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* Allow wrapping */
+    gap: 10px;
+    color: white;
+    font-family: var(--secondaryFont);
+    justify-content: center;
+}
+
+/* Responsive Category Text */
+.catagreeText {
+    background-color: var(--summerGlow-color);
+    padding: 5px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    /* Prevent breaking */
+    font-size: 14px;
+}
+
+/* Adjust font size for smaller screens */
+@media (max-width: 768px) {
+    .catagreeText {
+        font-size: 12px;
+    }
+}
+
+.title {
+    color: var(--text-white);
+    font-weight: 500;
+    margin: -10px 0px;
+    font-family: var(--therestyFont);
+    text-align: left;
+}
+
+/* Responsive Title */
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.2rem;
+    }
+}
+
+.des {
+    color: var(--text-white);
+    font-family: var(--therestyFont);
+    text-align: left;
+    font-size: 1rem;
+}
+
+/* Responsive Description */
+@media (max-width: 768px) {
+    .des {
+        font-size: 0.9rem;
+    }
+}

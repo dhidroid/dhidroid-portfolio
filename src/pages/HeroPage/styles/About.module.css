@@ -5,7 +5,7 @@
     align-items: center;
     padding: 20px;
     gap: 20px;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -30,6 +30,20 @@
 
 .card:hover {
     transform: rotate(-2deg);
+}
+
+
+.right {
+    width: 50%
+}
+
+.right div h1 span {
+    color: var(--primary-color);
+    font-family: var(--secondaryFont);
+}
+
+.right div h1 span:hover{
+    text-decoration: underline;
 }
 
 .name {
@@ -97,6 +111,10 @@
     .rightContainer {
         text-align: center;
     }
+
+    .right {
+        width: fit-content;
+    }
 }
 
 @media (max-width: 600px) {
@@ -115,5 +133,9 @@
     .name {
         left: -10px;
         font-size: 2rem;
+    }
+
+    .right {
+        width: fit-content;
     }
 }

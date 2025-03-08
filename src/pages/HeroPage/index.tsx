@@ -2,11 +2,12 @@ import React from "react";
 import { Helmet } from 'react-helmet'
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { RxPlus } from "react-icons/rx";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import styles from './styles/Hero.module.css'
 import ServiceStyle from './styles/Service.module.css'
 import AboutStyle from './styles/About.module.css'
 import EduStyle from './styles/WorkExp.module.css'
+import ProjectStyle from './styles/Projects.module.css'
 import { SiMaterialdesignicons } from "react-icons/si";
 import { MdDeveloperMode } from "react-icons/md";
 import { FaFirefoxBrowser } from "react-icons/fa6";
@@ -16,8 +17,11 @@ import CtaButton from "../../components/button/ctaButton";
 import EducationCard from "../../components/Cards/EducationWorkCard";
 import { SiWorkplace } from "react-icons/si";
 import { FaGraduationCap } from "react-icons/fa6";
+import ProjectCard from "../../components/Cards/ProjectsCard";
+import Marquee from "react-fast-marquee";
 
 const HomePage: React.FC = () => {
+  const navigation = useNavigate();
 
   const skillsCarocils = [
     "ReactNative", "JavaScript", "TypeScript", "Git & Github", "Figma UI/UX Design", "Golang(begginer)", "Android", "Ios App Dev", "ReactJS", "Jest unitTesting", "SEO & Content Writing (Begginer)", "Trainner (Junior)"
@@ -91,6 +95,30 @@ const HomePage: React.FC = () => {
     }
   ]
 
+  const ProjectData = [
+    {
+      title: "React Js - Landing Page",
+      des: "A modern and responsive landing page built with React.js, focusing on UI/UX and performance.",
+      image: "https://i.pinimg.com/736x/19/fd/ac/19fdace8c542abbfbce68a09b7d1e434.jpg",
+      catagrees: ["Web Dev", "JavaScript", "UI/UX"],
+      link: "https://github.com/dhidroid/"
+    },
+    {
+      title: "React Native - Event Mobile App",
+      des: "A React Native-based event app with an intuitive design for seamless user experience.",
+      image: "https://i.pinimg.com/736x/5b/b5/65/5bb565e7df13daaba127eb06bbf6c9cc.jpg",
+      catagrees: ["Mobile App", "React Native", "UI/UX"],
+      link: "https://github.com/dhidroid/"
+    },
+    {
+      title: "React Native Boilerplate v78.0",
+      des: "A scalable React Native boilerplate with pre-configured features for rapid development.",
+      image: "https://i.pinimg.com/736x/4a/b0/2e/4ab02e5da39a9d9957bb81a31a46bf14.jpg",
+      catagrees: ["React Native", "JavaScript", "Mobile Dev"],
+      link: "https://github.com/dhidroid/"
+    }
+  ];
+
 
   return (
     <React.Fragment>
@@ -149,6 +177,11 @@ const HomePage: React.FC = () => {
           </div>
 
           {/*skills carocils */}
+          <Marquee gradient pauseOnClick pauseOnHover className={styles.marquee} >
+            {skillsCarocils.map((data) => (
+              <p>{data}</p>
+            ))}
+          </Marquee>
         </div>
       </div>
 
@@ -193,7 +226,7 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* right */}
-        <div style={{ width: "50%" }}>
+        <div className={AboutStyle.right}>
           <div>
             <p><span>-</span> About Me</p>
             <h1>Who is <span>DhineshKumar<br /> Thirupathi ? </span></h1>
@@ -227,6 +260,24 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* my latest project */}
+      <div className={ProjectStyle.projectContainer}>
+        {/* title */}
+        <div className={ProjectStyle.Projecttitle}>
+          <div className={ProjectStyle.innterTitleContainer}>
+            <h1>My latest <span>Projects</span></h1>
+            <CtaButton title="Projects" onPress={() => navigation('/projects')} />
+          </div>
+        </div>
+
+        {/* data */}
+        <div className={ProjectStyle.cardContainer} >
+          {ProjectData?.map((data, index) => (
+            <div key={index} className={ProjectStyle.card} style={{ marginBottom: "20px" }}>
+              <ProjectCard link={data.link} projectDes={data.des} projectTitle={data.title} projectImage={data.image} catagrees={data.catagrees} onPress={data.onPress} />
+            </div>
+          ))}
+        </div>
+      </div>
 
 
       {/* freelacing plans */}

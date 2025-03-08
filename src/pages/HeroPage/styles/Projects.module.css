@@ -1,0 +1,86 @@
+.projectContainer {
+    padding: 15px 20px;
+    background-color: var(--highlight-color);
+}
+
+.Projecttitle {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center align for better responsiveness */
+    text-align: center;
+    gap: 10px;
+}
+
+.Projecttitle::before {
+    content: "Latest Projects";
+    position: absolute;
+    font-size: clamp(3rem, 10vw, 8rem);
+    /* Adjust size dynamically */
+    font-weight: 900;
+    color: rgba(211, 211, 211, 0.4);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    white-space: nowrap;
+    opacity: 0.15;
+    /* Reduced opacity for better contrast */
+    font-family: var(--secondaryFont);
+}
+
+.Projecttitle h1 {
+    font-family: var(--secondaryFont);
+    color: var(--text-white);
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 5rem);
+    /* Scales based on screen size */
+    position: relative;
+    z-index: 1;
+}
+
+.cardContainer {
+    overflow-y: auto;
+    position: relative;
+    overflow: visible;
+    align-items: center;
+}
+
+.card {
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.Projecttitle h1 span {
+    /* color: var(--primary-color); */
+}
+
+.innterTitleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 10px;
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+    .innterTitleContainer {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .Projecttitle::before {
+        font-size: 3rem;
+        /* Reduce background text size on smaller screens */
+    }
+
+    .Projecttitle h1 {
+        font-size: 3rem;
+    }
+}
