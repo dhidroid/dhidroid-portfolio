@@ -177,11 +177,11 @@ const HomePage: React.FC = () => {
           </div>
 
           {/*skills carocils */}
-          <Marquee gradient pauseOnClick pauseOnHover className={styles.marquee} >
+          {/* <Marquee gradient pauseOnClick pauseOnHover className={styles.marquee} >
             {skillsCarocils.map((data) => (
               <p>{data}</p>
             ))}
-          </Marquee>
+          </Marquee> */}
         </div>
       </div>
 
