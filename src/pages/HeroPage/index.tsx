@@ -60,16 +60,16 @@ const HomePage: React.FC = () => {
         duration: "2024 - Present",
         link: "https://www.natobotics.com/"
       }, {
-          title: "Fiverr & upwork",
-          des: "Frelancing Mobile & Web Developemnt",
-          duration: "2024 - 2024",
-          link: "https://www.upwork.com/freelancers/~012206f0135b314031/"
-        },
-        {
+        title: "Fiverr & upwork",
+        des: "Frelancing Mobile & Web Developemnt",
+        duration: "2024 - 2024",
+        link: "https://www.upwork.com/freelancers/~012206f0135b314031/"
+      },
+      {
         title: "Algojaxon Global Soft Private Limited",
-          des: "Full stack web development & Mobile App Dev",
+        des: "Full stack web development & Mobile App Dev",
         duration: "2023 -2023",
-          link:"https://www.linkedin.com/company/algojaxon-global-soft-private-limited"
+        link: "https://www.linkedin.com/company/algojaxon-global-soft-private-limited"
       }]
     },
     {
@@ -90,6 +90,8 @@ const HomePage: React.FC = () => {
       ]
     }
   ]
+
+
   return (
     <React.Fragment>
       <Helmet>
@@ -217,12 +219,11 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* card */}
-        <div className={EduStyle.EduCard} style={{ }}>
+        <div className={EduStyle.EduCard} style={{}}>
           {WorkExpData.map((data, index) => (
             <EducationCard key={index} Icon={data.icon} data={data.exp} mainTitle={data.type} />
           ))}
         </div>
-
       </div>
 
       {/* my latest project */}
