@@ -1,0 +1,111 @@
+.Educontainer {
+    height: auto;
+    padding: 20px;
+    position: relative;
+    text-align: center;
+}
+
+.title {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Large screen styles */
+.title::before {
+    content: "Education & Work";
+    position: absolute;
+    font-size: 10rem;
+    /* Adjust size for large screens */
+    font-weight: 900;
+    color: lightgray;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    white-space: nowrap;
+    opacity: 0.2;
+}
+
+.title p {
+    z-index: 1;
+    font-size: 1rem;
+    color: gray;
+}
+
+.title h1 {
+    font-family: var(--secondaryFont);
+    font-size: 3rem;
+    font-weight: bold;
+    z-index: 2;
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+}
+
+.title h1 span {
+    color: var(--primary-color);
+}
+
+.title h1 span:hover {
+    text-decoration: underline;
+}
+
+.EduCard {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .title::before {
+        font-size: 5rem;
+        /* Reduce size for tablets */
+        top: 40%;
+    }
+
+    .EduCard {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: space-between;
+        align-self: center
+    }
+}
+
+@media (max-width: 768px) {
+    .Educontainer {
+        padding: 15px;
+    }
+
+    .EduCard {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: space-between;
+        align-self: center
+    }
+
+    .title {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .title::before {
+        font-size: 3rem;
+        /* Reduce size for mobile */
+        top: 30%;
+        opacity: 0.1;
+    }
+
+    .title h1 {
+        font-size: 2rem;
+        /* Reduce heading size */
+    }
+
+    .title p {
+        font-size: 0.9rem;
+    }
+}

@@ -6,13 +6,16 @@ import { Link } from "react-router";
 import styles from './styles/Hero.module.css'
 import ServiceStyle from './styles/Service.module.css'
 import AboutStyle from './styles/About.module.css'
+import EduStyle from './styles/WorkExp.module.css'
 import { SiMaterialdesignicons } from "react-icons/si";
 import { MdDeveloperMode } from "react-icons/md";
 import { FaFirefoxBrowser } from "react-icons/fa6";
 import { ServiceCard } from "../../components/Cards";
 import { BsArrowRight } from "react-icons/bs";
 import CtaButton from "../../components/button/ctaButton";
-
+import EducationCard from "../../components/Cards/EducationWorkCard";
+import { SiWorkplace } from "react-icons/si";
+import { FaGraduationCap } from "react-icons/fa6";
 
 const HomePage: React.FC = () => {
 
@@ -46,6 +49,47 @@ const HomePage: React.FC = () => {
     "https://avatar.iran.liara.run/public/boy?username=Reena",
   ]
 
+
+  const WorkExpData = [
+    {
+      type: "Work Expeience",
+      icon: SiWorkplace,
+      exp: [{
+        title: "Natobotics",
+        des: "ReactNative Developer - (android/ios)",
+        duration: "2024 - Present",
+        link: "https://www.natobotics.com/"
+      }, {
+          title: "Fiverr & upwork",
+          des: "Frelancing Mobile & Web Developemnt",
+          duration: "2024 - 2024",
+          link: "https://www.upwork.com/freelancers/~012206f0135b314031/"
+        },
+        {
+        title: "Algojaxon Global Soft Private Limited",
+          des: "Full stack web development & Mobile App Dev",
+        duration: "2023 -2023",
+          link:"https://www.linkedin.com/company/algojaxon-global-soft-private-limited"
+      }]
+    },
+    {
+      type: "Education",
+      icon: FaGraduationCap,
+      exp: [{
+        title: "RP Sarathi Insitute of Technology - Salem",
+        des: "Bachelor of Technology - Information Technology",
+        duration: "2020 - 2024",
+        link: "https://rpsit.ac.in/"
+      },
+      {
+        title: "Gov Higher Sec School - Dharmapuri",
+        des: "Mathematics and ComputerSience",
+        duration: "2017 - 2020",
+        link: "https://schools.org.in/dharmapuri/33050205902/ghss-laligam.html"
+      }
+      ]
+    }
+  ]
   return (
     <React.Fragment>
       <Helmet>
@@ -165,6 +209,21 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* education & work */}
+      <div className={EduStyle.Educontainer}>
+        {/* title */}
+        <div className={EduStyle.title}>
+          <p><span>-</span> Education & Work</p>
+          <h1>My <span>Education</span> & <span>Work Experience</span></h1>
+        </div>
+
+        {/* card */}
+        <div className={EduStyle.EduCard} style={{ }}>
+          {WorkExpData.map((data, index) => (
+            <EducationCard key={index} Icon={data.icon} data={data.exp} mainTitle={data.type} />
+          ))}
+        </div>
+
+      </div>
 
       {/* my latest project */}
 

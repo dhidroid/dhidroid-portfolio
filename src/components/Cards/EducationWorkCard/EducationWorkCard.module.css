@@ -1,0 +1,99 @@
+.container {
+    padding: 10px 20px;
+    background-color: white;
+    width: 40%;
+    border-radius: 15px;
+}
+
+/* Responsive: Ensure proper width */
+@media (max-width: 1024px) {
+    .container {
+        width: 60%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 10px;
+    }
+}
+
+/* Title Container */
+.titleContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(147, 147, 147, 0.543);
+    justify-content: center;
+    padding-bottom: 10px;
+}
+
+.iconContainer {
+    background-color: var(--highlight-color);
+    padding: 10px 20px;
+    border-radius: 100px;
+}
+
+.titleContainer h1 {
+    font-family: var(--secondaryFont);
+    color: var(--highlight-color);
+    font-size: 1.5rem;
+}
+
+/* Data Container */
+.dataContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Responsive: Change data layout for small screens */
+@media (max-width: 768px) {
+    .dataContainer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .dataTitle {
+        text-align: center;
+    }
+}
+
+/* Data Inner Container */
+.dataInnerContainer {
+    margin-top: 20px;
+}
+
+.dataTitle {
+    text-align: left;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.dataDes {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 300;
+}
+
+/* Date Container */
+.dataDateContainer {
+    background-color: wheat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 15px;
+    border-radius: 50px;
+    align-self: center;
+    font-size: 0.9rem;
+}
+
+/* Responsive: Adjust date container for mobile */
+@media (max-width: 768px) {
+    .dataDateContainer {
+        /* width: 80%; */
+        padding: 5px;
+    }
+}
