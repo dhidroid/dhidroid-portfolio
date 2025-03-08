@@ -8,6 +8,7 @@ import ServiceStyle from './styles/Service.module.css'
 import AboutStyle from './styles/About.module.css'
 import EduStyle from './styles/WorkExp.module.css'
 import ProjectStyle from './styles/Projects.module.css'
+import ContactStyle from './styles/Contact.module.css'
 import { SiMaterialdesignicons } from "react-icons/si";
 import { MdDeveloperMode } from "react-icons/md";
 import { FaFirefoxBrowser } from "react-icons/fa6";
@@ -18,6 +19,16 @@ import EducationCard from "../../components/Cards/EducationWorkCard";
 import { SiWorkplace } from "react-icons/si";
 import { FaGraduationCap } from "react-icons/fa6";
 import ProjectCard from "../../components/Cards/ProjectsCard";
+import { MdAlternateEmail } from "react-icons/md";
+import { FaWhatsapp } from "react-icons/fa";
+import { FaPhoneAlt } from "react-icons/fa";
+import { BsCalendarWeek } from "react-icons/bs";
+import { IoLogoInstagram } from "react-icons/io5";
+import { FaLinkedin } from "react-icons/fa";
+import { FaBluesky } from "react-icons/fa6";
+import { FaGithub } from "react-icons/fa";
+import { BiLogoTelegram } from "react-icons/bi";
+
 import Marquee from "react-fast-marquee";
 
 const HomePage: React.FC = () => {
@@ -54,6 +65,54 @@ const HomePage: React.FC = () => {
   ]
 
 
+  const ContactIcons = [
+    {
+      name: "mail",
+      Icon: MdAlternateEmail,
+      link: "mailto:dhinesh4668@outlook.com"
+    }, {
+      name: "whatsapp",
+      Icon: FaWhatsapp,
+      link: "https://wa.me/+919150507538?text=Hello%2C%20I%E2%80%99m%20interested%20in%20your%20services."
+    }, {
+      name: "Appointment",
+      Icon: BsCalendarWeek,
+      link: "https://calendly.com/dhinesh4668/30min"
+    },
+    {
+      name: "Phone",
+      Icon: FaPhoneAlt,
+      link: "tel:+9150507538"
+    }
+  ]
+
+  const SocialMedia = [
+    {
+      name: "linkedin",
+      Icon: FaLinkedin,
+      link: "https://www.linkedin.com/in/dhineshkumar-thirupathi-🌐-00aa8b1a5"
+    },
+    {
+      name: "insta",
+      Icon: IoLogoInstagram,
+      link: "https://instagram.com/dhidroid"
+    },
+    {
+      name: "Github",
+      Icon: FaGithub,
+      link: "https://github.com/dhidroid"
+    },
+    {
+      name: "blueSky",
+      Icon: FaBluesky,
+      link: "https://bsky.app/"
+    },
+    {
+      name: "telegram",
+      Icon: BiLogoTelegram,
+      link: "https://telegram.org/"
+    }
+  ]
   const WorkExpData = [
     {
       type: "Work Expeience",
@@ -279,11 +338,58 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-
       {/* freelacing plans */}
 
       {/* contact */}
+      <div className={ContactStyle.container}>
+        {/* title */}
+        <div className={ContactStyle.title}>
+          <h1>
+            Start a <span>Conversation</span>
+          </h1>
+        </div>
 
+        {/* content */}
+        <div className={ContactStyle.content}>
+          <div className={ContactStyle.textBlock}>
+            <h1>Let’s Build Something Great Together!</h1>
+            <p>
+              Are you looking to build a high-performance mobile app, enhance your
+              small-scale product’s UI design, develop a website, or get reliable
+              tech support? I specialize in crafting user-friendly mobile and web
+              applications using React Native, MERN stack, and other cutting-edge
+              technologies. Let’s discuss how I can help bring your ideas to life.
+            </p>
+          </div>
+
+          <div className={ContactStyle.linksContainer}>
+            <div className={ContactStyle.iconContainer}>
+              {ContactIcons?.map((data, index) => (
+                <div
+                  className={ContactStyle.icon}
+                  key={index}
+                  onClick={() => window.open(`${data.link}`)}
+                >
+                  <data.Icon color={"white"} size={30} />
+                </div>
+              ))}
+            </div>
+
+            <div className={ContactStyle.socialContainer}>
+              <p>Follow Me !</p>
+              {SocialMedia?.map((data, index) => (
+                <div
+                  className={ContactStyle.icon}
+                  key={index}
+                  onClick={() => window.open(`${data.link}`)}
+                >
+                  <data.Icon color={"white"} size={30} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* testomonieal */}
 
