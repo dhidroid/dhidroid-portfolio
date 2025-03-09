@@ -1,0 +1,90 @@
+.container {
+    height: auto;
+    padding: 20px;
+    position: relative;
+    text-align: left;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.title {
+    position: relative;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title div {
+    position: relative;
+    z-index: 1;
+}
+
+.BlogCard {
+    display: flex;
+    flex-direction: row;
+    overflow-y: auto;
+}
+
+.title::before {
+    content: "From My Blog Post";
+    position: absolute;
+    font-size: 10rem;
+    font-weight: 900;
+    color: lightgray;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    white-space: nowrap;
+    opacity: 0.2;
+    font-family: var(--secondaryFont);
+}
+
+
+.title h1 {
+    font-family: var(--secondaryFont);
+}
+
+.title h1 span {
+    font-size: 4rem;
+    color: var(--primary-color);
+    z-index: 1;
+    position: relative;
+}
+
+.title h1 span:hover {
+    text-decoration: underline;
+}
+
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .title::before {
+        font-size: 4rem;
+        top: 40%;
+    }
+
+    
+}
+
+@media (max-width: 768px) {
+    .title {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .title::before {
+        font-size: 3rem;
+        top: 30%;
+        opacity: 0.1;
+    }
+
+    .title h1 {
+        font-size: 2rem;
+    }
+
+    .title p {
+        font-size: 0.9rem;
+    }
+}

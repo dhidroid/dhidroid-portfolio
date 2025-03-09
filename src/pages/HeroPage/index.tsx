@@ -9,175 +9,17 @@ import AboutStyle from './styles/About.module.css'
 import EduStyle from './styles/WorkExp.module.css'
 import ProjectStyle from './styles/Projects.module.css'
 import ContactStyle from './styles/Contact.module.css'
-import { SiMaterialdesignicons } from "react-icons/si";
-import { MdDeveloperMode } from "react-icons/md";
-import { FaFirefoxBrowser } from "react-icons/fa6";
+import BlogStyle from './styles/blog.module.css'
 import { ServiceCard } from "../../components/Cards";
 import { BsArrowRight } from "react-icons/bs";
 import CtaButton from "../../components/button/ctaButton";
 import EducationCard from "../../components/Cards/EducationWorkCard";
-import { SiWorkplace } from "react-icons/si";
-import { FaGraduationCap } from "react-icons/fa6";
 import ProjectCard from "../../components/Cards/ProjectsCard";
-import { MdAlternateEmail } from "react-icons/md";
-import { FaWhatsapp } from "react-icons/fa";
-import { FaPhoneAlt } from "react-icons/fa";
-import { BsCalendarWeek } from "react-icons/bs";
-import { IoLogoInstagram } from "react-icons/io5";
-import { FaLinkedin } from "react-icons/fa";
-import { FaBluesky } from "react-icons/fa6";
-import { FaGithub } from "react-icons/fa";
-import { BiLogoTelegram } from "react-icons/bi";
-
-import Marquee from "react-fast-marquee";
+import HomeBlogCard from "../../components/Cards/HomeBlogCards";
+import { AboutData, BlogData, ContactIcons, ProjectData, SocialMedia, WorkExpData, clients, serviceData } from './helpers/index'
 
 const HomePage: React.FC = () => {
   const navigation = useNavigate();
-
-  const skillsCarocils = [
-    "ReactNative", "JavaScript", "TypeScript", "Git & Github", "Figma UI/UX Design", "Golang(begginer)", "Android", "Ios App Dev", "ReactJS", "Jest unitTesting", "SEO & Content Writing (Begginer)", "Trainner (Junior)"
-  ]
-  const serviceData = [
-    {
-      icon: SiMaterialdesignicons,
-      title: "UI/UX Design",
-      des: "Crafting user-friendly and visually appealing designs for web and mobile apps."
-    },
-    {
-      icon: MdDeveloperMode,
-      title: "Cross Platform App Dev",
-      des: "Building high-performance apps that run seamlessly on Android and iOS."
-    },
-    {
-      icon: FaFirefoxBrowser,
-      title: "Web Development",
-      des: "Developing responsive and dynamic websites with modern technologies."
-    }
-  ];
-
-  const AboutData =
-    "passionate mobile app and backend developer specializing in React Native, Go, and cloud services. I have expertise in UI/UX design, Firebase, CI/CD, SEO, and content writing. Additionally, I have experience with basic native app development using Kotlin (Jetpack Compose) for Android and Swift for iOS. I love solving complex challenges and crafting seamless user experiences!";
-
-  const clients = [
-    "https://avatar.iran.liara.run/public/boy?username=Ash",
-    "https://avatar.iran.liara.run/public/girl?username=Jane",
-    "https://avatar.iran.liara.run/public/boy?username=Reena",
-  ]
-
-
-  const ContactIcons = [
-    {
-      name: "mail",
-      Icon: MdAlternateEmail,
-      link: "mailto:dhinesh4668@outlook.com"
-    }, {
-      name: "whatsapp",
-      Icon: FaWhatsapp,
-      link: "https://wa.me/+919150507538?text=Hello%2C%20I%E2%80%99m%20interested%20in%20your%20services."
-    }, {
-      name: "Appointment",
-      Icon: BsCalendarWeek,
-      link: "https://calendly.com/dhinesh4668/30min"
-    },
-    {
-      name: "Phone",
-      Icon: FaPhoneAlt,
-      link: "tel:+9150507538"
-    }
-  ]
-
-  const SocialMedia = [
-    {
-      name: "linkedin",
-      Icon: FaLinkedin,
-      link: "https://www.linkedin.com/in/dhineshkumar-thirupathi-🌐-00aa8b1a5"
-    },
-    {
-      name: "insta",
-      Icon: IoLogoInstagram,
-      link: "https://instagram.com/dhidroid"
-    },
-    {
-      name: "Github",
-      Icon: FaGithub,
-      link: "https://github.com/dhidroid"
-    },
-    {
-      name: "blueSky",
-      Icon: FaBluesky,
-      link: "https://bsky.app/"
-    },
-    {
-      name: "telegram",
-      Icon: BiLogoTelegram,
-      link: "https://telegram.org/"
-    }
-  ]
-  const WorkExpData = [
-    {
-      type: "Work Expeience",
-      icon: SiWorkplace,
-      exp: [{
-        title: "Natobotics",
-        des: "ReactNative Developer - (android/ios)",
-        duration: "2024 - Present",
-        link: "https://www.natobotics.com/"
-      }, {
-        title: "Fiverr & upwork",
-        des: "Frelancing Mobile & Web Developemnt",
-        duration: "2024 - 2024",
-        link: "https://www.upwork.com/freelancers/~012206f0135b314031/"
-      },
-      {
-        title: "Algojaxon Global Soft Private Limited",
-        des: "Full stack web development & Mobile App Dev",
-        duration: "2023 -2023",
-        link: "https://www.linkedin.com/company/algojaxon-global-soft-private-limited"
-      }]
-    },
-    {
-      type: "Education",
-      icon: FaGraduationCap,
-      exp: [{
-        title: "RP Sarathi Insitute of Technology - Salem",
-        des: "Bachelor of Technology - Information Technology",
-        duration: "2020 - 2024",
-        link: "https://rpsit.ac.in/"
-      },
-      {
-        title: "Gov Higher Sec School - Dharmapuri",
-        des: "Mathematics and ComputerSience",
-        duration: "2017 - 2020",
-        link: "https://schools.org.in/dharmapuri/33050205902/ghss-laligam.html"
-      }
-      ]
-    }
-  ]
-
-  const ProjectData = [
-    {
-      title: "React Js - Landing Page",
-      des: "A modern and responsive landing page built with React.js, focusing on UI/UX and performance.",
-      image: "https://i.pinimg.com/736x/19/fd/ac/19fdace8c542abbfbce68a09b7d1e434.jpg",
-      catagrees: ["Web Dev", "JavaScript", "UI/UX"],
-      link: "https://github.com/dhidroid/"
-    },
-    {
-      title: "React Native - Event Mobile App",
-      des: "A React Native-based event app with an intuitive design for seamless user experience.",
-      image: "https://i.pinimg.com/736x/5b/b5/65/5bb565e7df13daaba127eb06bbf6c9cc.jpg",
-      catagrees: ["Mobile App", "React Native", "UI/UX"],
-      link: "https://github.com/dhidroid/"
-    },
-    {
-      title: "React Native Boilerplate v78.0",
-      des: "A scalable React Native boilerplate with pre-configured features for rapid development.",
-      image: "https://i.pinimg.com/736x/4a/b0/2e/4ab02e5da39a9d9957bb81a31a46bf14.jpg",
-      catagrees: ["React Native", "JavaScript", "Mobile Dev"],
-      link: "https://github.com/dhidroid/"
-    }
-  ];
-
 
   return (
     <React.Fragment>
@@ -393,8 +235,37 @@ const HomePage: React.FC = () => {
 
       {/* testomonieal */}
 
-
       {/* blogs */}
+      <div className={BlogStyle.container}>
+        <div>
+          {/* title */}
+          <div className={BlogStyle.title}>
+            <h1>My <br />
+              <span>Blog Post</span>
+            </h1>
+
+            <div>
+              <CtaButton title="View My Blogs" onPress={() => navigation('/bloglist')} />
+            </div>
+
+          </div>
+
+          {/* blog posts */}
+          <div className={BlogStyle.BlogCard} >
+            {BlogData?.map((data, index) => (
+              <div key={index}>
+                <HomeBlogCard
+                  BlogImage={data.blogImage}
+                  BlogTitle={data.blogTitle}
+                  Category={data.categoree}
+                  author="DhineshKumar"
+                  date={new Date()}
+                  onPress={() => window.open(`${data.link}`)} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
 
       {/* quots card */}

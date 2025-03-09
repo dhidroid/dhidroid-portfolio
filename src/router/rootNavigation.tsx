@@ -9,27 +9,29 @@ import { BlogPage } from "../pages";
 // Lazy load the HomePage component
 const HomeScreen = React.lazy(() => import("../pages/HeroPage/index"));
 
+
+function BlogCreate() {
+  React.useEffect(() => {
+    window.location.href = "https://dhidroid.sanity.studio/"
+  })
+
+  return (
+    <center>
+      <Loader />
+    </center>
+  )
+}
 export const Router = () => {
+
   return (
     <Suspense fallback={<Loader />}>
       <div>
         <Header />
         <Routes>
-          <Route
-            path="/"
-            element={
-              <HomeScreen />
-            }
-          />
-          <Route path="*" element={
-            <Suspense fallback={<Loader />}>
-              <PageNotFound />
-            </Suspense>
-          } />
-
-          <Route path="/blog/:id" element={
-            <BlogPage />
-          } />
+          <Route path="/" element={<HomeScreen />}/>
+          <Route path="*" element={<Suspense fallback={<Loader />}><PageNotFound /></Suspense>} />
+          <Route path="/blog/:id" element={<BlogPage />} />
+          <Route path="/createblog" element={<BlogCreate />} />
         </Routes>
         <Footer />
       </div>
