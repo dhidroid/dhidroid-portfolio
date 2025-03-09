@@ -1,16 +1,9 @@
 import React from "react";
 import styles from "./Footer.module.css";
-import {
-  FaWindows,
-  FaApple,
-  FaLinux,
-  FaChrome,
-  FaAndroid,
-} from "react-icons/fa";
+
 import {
   IoIosMail,
   IoIosCall,
-  IoMdCheckmarkCircleOutline,
 } from "react-icons/io";
 
 const Footer = () => {
@@ -20,11 +13,11 @@ const Footer = () => {
         {/* Left Section - Contact Info */}
         <div className={styles.contact}>
           <div className={styles.logo}>Dhidroid</div>
-          <p>
-            <IoIosMail /> hello@mail.com
+          <p >
+            <IoIosMail /> dhinesh4668@outlook.com
           </p>
           <p>
-            <IoIosCall /> +91 00000 00000
+            <IoIosCall /> +91 91505 07530
           </p>
         </div>
 
@@ -32,12 +25,12 @@ const Footer = () => {
         <div className={styles.ctaSection}>
           <h3>Get started with my services now</h3>
           <div className={styles.buttons}>
-            <button className={styles.tryBtn}>Hire Me</button>
+            <button onClick={() => window.open("tel:+919150507538")} className={styles.tryBtn}>Hire Me</button>
           </div>
         </div>
       </div>
 
-     
+
     </footer>
   );
 };
