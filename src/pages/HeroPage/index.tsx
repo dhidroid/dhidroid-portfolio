@@ -24,8 +24,37 @@ const HomePage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>Dhidroid - home</title>
+        {/* Primary Meta Tags */}
+        <title>Dhidroid - Home</title>
+        <meta name="description" content="DhineshKumar Thirupathi - A skilled web and mobile app developer specializing in React Native, TypeScript, and GoLang. Explore my services, projects, and blog posts." />
+        <meta name="keywords" content="React Native, TypeScript, GoLang, Web Developer, Mobile App Developer, MERN Stack, Software Engineer, DhineshKumar Thirupathi, Dhidroid" />
+        <meta name="author" content="DhineshKumar Thirupathi" />
+        <meta name="robots" content="index, follow" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Dhidroid - Home" />
+        <meta property="og:description" content="Explore the portfolio of DhineshKumar Thirupathi, a React Native and web developer with expertise in TypeScript and GoLang." />
+        <meta property="og:image"
+        // content="https://yourwebsite.com/your-preview-image.jpg"
+        />
+        <meta property="og:url" content="https://dhidroid.vercel.app/" />
+        <meta property="og:site_name" content="Dhidroid" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Dhidroid - Home" />
+        <meta name="twitter:description" content="Explore the portfolio of DhineshKumar Thirupathi, a React Native and web developer with expertise in TypeScript and GoLang." />
+        <meta name="twitter:image"
+        // content="https://yourwebsite.com/your-preview-image.jpg"
+        />
+        <meta name="twitter:creator" content="@dhidroid" />
+        <meta name="insta:creator" content="dhidroid" />
+
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" />
       </Helmet>
+
 
       {/* hero page */}
       <div className={styles.container}>
