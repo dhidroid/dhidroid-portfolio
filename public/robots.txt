@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /createblog/
+Disallow: /api/
+Allow: /
+
+Sitemap: https://dhidroid.vercel.app/sitemap.xml
