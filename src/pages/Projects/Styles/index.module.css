@@ -1,0 +1,92 @@
+.container {
+    height: auto;
+    position: relative;
+    text-align: center;
+}
+
+.header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5% 0%;
+}
+
+.header h1 {
+    font-family: var(--secondaryFont);
+}
+
+.header p {
+    text-align: center;
+    align-self: center;
+    align-content: center;
+}
+
+.header span {
+    font-family: var(--secondaryFont);
+    color: var(--primary-color);
+    font-weight: 800;
+}
+
+.header::before {
+    content: "My Projects";
+    position: absolute;
+    font-size: 10rem;
+    /* Adjust size for large screens */
+    font-weight: 900;
+    color: lightgray;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    white-space: nowrap;
+    opacity: 0.2;
+    font-family: var(--secondaryFont);
+}
+
+.content {
+    background-color: var(--highlight-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 100px 16px;
+    overflow-y: auto;
+}
+
+.content div {
+    overflow-y: auto;
+    position: relative;
+    overflow: visible;
+    align-items: center;
+}
+
+.cardWrapper {
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+
+
+    .header::before {
+        font-size: 5rem;
+        overflow: hidden;
+    }
+
+    .header h1 {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .header::before {
+        overflow: hidden;
+        font-size: 4rem;
+    }
+}

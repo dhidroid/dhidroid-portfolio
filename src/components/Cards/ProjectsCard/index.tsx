@@ -16,24 +16,24 @@ const ProjectCard: React.FC<Props> = ({ projectImage, projectDes, projectTitle, 
         // main container
         <div className={Style.mainContainer}>
             {/* left image */}
-            <div onClick={() => window.open(link)} className={Style.left}>
+            <div className={Style.left}>
                 <img className={Style.image} src={projectImage} alt={projectImage} />
             </div>
 
             {/* right content */}
-            <div onClick={() => window.open(link)} className={Style.right}>
+            <div className={Style.right}>
                 {/* catagree */}
                 <div className={Style.catagreeContainer}>
                     {catagrees?.map((data, index) => (
-                        <p className={Style.catagreeText} key={index}>{data}</p>
+                        <p className={Style.catagreeText} key={index}>{data || data.title}</p>
                     ))}
                 </div>
                 {/* title */}
-                <h1 onClick={() => window.open(link)} className={Style.title}>{projectTitle}</h1>
-                <p onClick={() => window.open(link)} className={Style.des}>{projectDes}</p>
+                <h1 className={Style.title}>{projectTitle}</h1>
+                <p className={Style.des}>{projectDes}</p>
 
                 <div>
-                    <CtaButton title="View Details" onPress={onPress} />
+                    <CtaButton title="View Details" onPress={() => window.open(link)} />
                 </div>
             </div>
         </div>

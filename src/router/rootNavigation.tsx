@@ -6,6 +6,8 @@ import Footer from "../components/Footer/Footer";
 import PageNotFound from "../components/404Page/PageNotFound";
 import { BlogPage } from "../pages";
 import UndertheDev from "../components/404Page/UndertheDev";
+import Projects from "../pages/Projects";
+import BlogList from "../pages/BlogPage/BlogList";
 
 // Lazy load the HomePage component
 const HomeScreen = React.lazy(() => import("../pages/HeroPage/index"));
@@ -33,6 +35,8 @@ export const Router = () => {
           <Route path="*" element={<Suspense fallback={<Loader />}><UndertheDev /></Suspense>} />
           <Route path="/blog/:id" element={<BlogPage />} />
           <Route path="/createblog" element={<BlogCreate />} />
+          <Route path="/project" element={<Projects />} />
+          <Route path="/bloglist" element={<BlogList />} />
         </Routes>
         <Footer />
       </div>

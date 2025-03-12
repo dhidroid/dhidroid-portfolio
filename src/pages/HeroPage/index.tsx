@@ -195,7 +195,7 @@ const HomePage: React.FC = () => {
         <div className={ProjectStyle.Projecttitle}>
           <div className={ProjectStyle.innterTitleContainer}>
             <h1>My latest <span>Projects</span></h1>
-            <CtaButton title="Projects" onPress={() => navigation('/projects')} />
+            <CtaButton title="Projects" onPress={() => navigation('/project')} />
           </div>
         </div>
 
