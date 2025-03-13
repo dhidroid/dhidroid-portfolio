@@ -6,8 +6,10 @@ import { GoDotFill } from 'react-icons/go'
 import { Helmet } from 'react-helmet'
 import HomeBlogCard from '../../../components/Cards/HomeBlogCards'
 import moment from 'moment'
+import { useNavigate } from 'react-router'
 
 const BlogList = () => {
+    const navigation = useNavigate()
     const [loading, setLoading] = useState(false)
     const [category, setCategory] = useState([])
     const [blogData, setBlogData] = useState([])
@@ -111,13 +113,15 @@ const BlogList = () => {
 
                     {/* blogs  */}
                     <div className={style.blogContainer}>
-                        {blogData.map((data) => (
+                        {blogData.map((data, index) => (
                             <HomeBlogCard
                                 color={"white"}
                                 BlogImage={data.mainImage.asset.url}
                                 BlogTitle={data.title} Category=''
                                 author={data.author.name}
-                                date={moment(data.publishedAt).format("DD MMM YYYY")} onPress={() => { }} key={''} />
+                                date={moment(data?.publishedAt).format("DD MMM YYYY")} onPress={() => {
+                                    navigation(`/blog/${data.slug.current}`)
+                                }} key={index} />
                         ))}
 
                     </div>
