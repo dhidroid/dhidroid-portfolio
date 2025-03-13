@@ -1,0 +1,14 @@
+.container {
+    height: 100vh;
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+}
+
+.titleContainer {}
+
+.titleContainer h1 {
+    font-family: var(--secondaryFont);
+}
+
+.innerContainer {}
