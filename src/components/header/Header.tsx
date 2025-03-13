@@ -58,6 +58,12 @@ const Header = () => {
             </Link>
           </li>
         ))}
+        {menuOpen && (
+          <a href="tel:" className={`${styles.cta} ${styles.mobileOnly}`}>
+            Contact
+          </a>
+        )}
+
 
       </ul>
 

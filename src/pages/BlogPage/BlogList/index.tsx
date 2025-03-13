@@ -113,14 +113,14 @@ const BlogList = () => {
 
                     {/* blogs  */}
                     <div className={style.blogContainer}>
-                        {blogData.map((data, index) => (
+                        {blogData.map((data, index): any => (
                             <HomeBlogCard
                                 color={"white"}
                                 BlogImage={data.mainImage.asset.url}
                                 BlogTitle={data.title} Category=''
                                 author={data.author.name}
                                 date={moment(data?.publishedAt).format("DD MMM YYYY")} onPress={() => {
-                                    navigation(`/blog/${data.slug.current}`)
+                                    navigation(`/blog/${data.slug.current}`, { state: { slug: data?.slug?.current } })
                                 }} key={index} />
                         ))}
 

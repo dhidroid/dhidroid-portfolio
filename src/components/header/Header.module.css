@@ -85,6 +85,10 @@
         .mobileOnly {
             display: none;
         }
+
+        .menuOpen {
+            display: none;
+        }
     }
 
     /* Responsive Design */
