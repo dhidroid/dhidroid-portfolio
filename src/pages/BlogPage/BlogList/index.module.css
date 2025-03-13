@@ -1,14 +1,84 @@
 .container {
-    height: 100vh;
+
+    height: fit-content;
     margin-top: 5%;
-    display: flex;
     justify-content: center;
 }
 
-.titleContainer {}
+.titleContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+}
 
 .titleContainer h1 {
     font-family: var(--secondaryFont);
 }
 
-.innerContainer {}
+.innerContainer {
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.categoryContainer {
+    display: flex;
+    overflow-y: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    scroll-behavior: auto;
+    align-content: center;
+    align-self: center;
+    white-space: nowrap;
+    padding: 0px 20px;
+
+}
+
+.categoryContainer p {
+    background-color: var(--text-white);
+    color: var(--summerGlow-color);
+    font-weight: bold;
+    font-family: var(--secondaryFont);
+    cursor: pointer;
+}
+
+.categoryContainer p.active {
+    padding: 5px 10px;
+    background-color: var(--summerGlow-color);
+    color: var(--text-white);
+    box-sizing: border-box;
+    border-radius: 100px;
+    text-transform: capitalize;
+    white-space: nowrap;
+    flex: 0 0 auto;
+    cursor: pointer;
+    /* Makes it clear it's clickable */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.blogContainer {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(3, 1fr)); */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    padding: 50px 0px;
+    background-color: var(--highlight-color);
+
+}
+
+@media (max-width: 768px) {
+    .blogContainer {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .blogContainer {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

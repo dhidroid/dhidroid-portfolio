@@ -15,11 +15,11 @@ interface Props {
 }
 
 const HomeBlogCard: React.FC<Props> = ({
-    BlogImage, BlogTitle, Category, author, date, onPress
+    BlogImage, BlogTitle, Category, author, date, onPress, color
 }) => {
     const [isHovered, setIsHovered] = useState(false);
     return (
-        <div onClick={onPress} className={Style.container}>
+        <div style={{ color: color }} onClick={onPress} className={Style.container}>
             <div
                 className={Style.imageContainer}
                 onMouseEnter={() => setIsHovered(true)}

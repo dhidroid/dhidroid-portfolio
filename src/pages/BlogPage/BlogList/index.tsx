@@ -1,58 +1,129 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Loader from '../../../components/loader/Loader'
 import style from './index.module.css'
 import { client } from '../../../senity/senity'
 import { GoDotFill } from 'react-icons/go'
+import { Helmet } from 'react-helmet'
+import HomeBlogCard from '../../../components/Cards/HomeBlogCards'
+import moment from 'moment'
 
 const BlogList = () => {
-    const [loading, setLoading] = React.useState(false)
-    const [category, setCategory] = React.useState([])
-    const [blogData, setBlogData] = React.useState([])
+    const [loading, setLoading] = useState(false)
+    const [category, setCategory] = useState([])
+    const [blogData, setBlogData] = useState([])
+    const [activeCategory, setActiveCategory] = useState('all')
 
-    React.useEffect(() => {
-        fetchCatagory();
-        fetchBlogData();
-    }, [])
+    useEffect(() => {
+        fetchCategory();
+        fetchBlogData(activeCategory);
+    }, [activeCategory])
 
-    const fetchCatagory = async () => {
+    const fetchCategory = async () => {
         setLoading(true)
         try {
             const fetchData = await client.fetch(`*[_type == "category"]`);
             setCategory(fetchData)
         } catch (err) {
-            console.log(err)
+            console.error(err)
         } finally {
             setLoading(false)
         }
     }
 
-    const fetchBlogData = async () => {
-        setLoading(true)
+    const fetchBlogData = async category => {
+        setLoading(true);
         try {
-            const fetchData = await client.fetch(`*[_type == "post"]`);
+            let query = `
+            *[_type == "post"${category !== 'all' ? ` && "${category}" in categories[]->title` : ''}] {
+                title,
+                slug {
+                    current
+                },
+                mainImage {
+                    asset -> {
+                        _id,
+                        url
+                    },
+                    alt
+                },
+                author -> {
+                    name,
+                    image {
+                        asset -> {
+                            _id,
+                            url
+                        }
+                    }
+                },
+                categories[] -> { title },
+                publishedAt
+            }`;
+
+            const fetchData = await client.fetch(query);
             setBlogData(fetchData);
-            console.log(fetchData)
         } catch (error) {
-            console.log(error)
+            console.error(error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
+
+
+
     if (loading) {
         return <Loader />
     }
-    return (
-        <div className={style.container}>
-            {/* title */}
-            <div className={style.titleContainer}>
-                <h1>Blogs List</h1>
-                <p>Home
-                    <GoDotFill />
-                    <span>My Blog List</span></p>
-            </div>
 
-            <div className={style.innerContainer}></div>
-        </div>
+    return (
+        <React.Fragment>
+            <Helmet></Helmet>
+            <div className={style.container}>
+                {/* Title */}
+                <div className={style.titleContainer}>
+                    <h1>Blogs List</h1>
+                    <p>Home <GoDotFill /> <span>My Blog List</span></p>
+                </div>
+
+                {/* Inner container */}
+                <div className={style.innerContainer}>
+
+                    <div className={style.categoryContainer}>
+                        {/* "All" Category */}
+                        <p
+                            className={activeCategory === 'all' ? style.active : ''}
+                            onClick={() => setActiveCategory('all')}
+                        >
+                            All
+                        </p>
+
+                        {/* Dynamic categories */}
+                        {category.map((data) => (
+                            <p
+                                key={data._id} // Ensure each element has a unique key
+                                className={activeCategory === data.title ? style.active : ''}
+                                onClick={() => setActiveCategory(data.title)}
+                            >
+                                {data.title}
+                            </p>
+                        ))}
+                    </div>
+
+
+                    {/* blogs  */}
+                    <div className={style.blogContainer}>
+                        {blogData.map((data) => (
+                            <HomeBlogCard
+                                color={"white"}
+                                BlogImage={data.mainImage.asset.url}
+                                BlogTitle={data.title} Category=''
+                                author={data.author.name}
+                                date={moment(data.publishedAt).format("DD MMM YYYY")} onPress={() => { }} key={''} />
+                        ))}
+
+                    </div>
+                </div>
+            </div>
+        </React.Fragment>
     )
 }
 
