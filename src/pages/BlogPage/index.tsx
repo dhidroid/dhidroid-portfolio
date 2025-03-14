@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { client } from "../../senity/senity";
 import Loader from "../../components/loader/Loader";
+import Helmet from "react-helmet";
+import styles from "./BlogDetails.module.css";
 
 const BlogPage = () => {
     const location = useLocation();
-    const passedSlug = location.state?.slug; // Get slug from state
+    const passedSlug = location.state?.slug;
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -19,9 +21,11 @@ const BlogPage = () => {
                     body[]{
                         _type == "block" => {
                             "style": style,
+                            "listItem": listItem,
                             "children": children[]{
                                 "text": text,
-                                "marks": marks
+                                "marks": marks,
+                                "href": select(marks[0] == "link" => markDefs[0].href, null)
                             }
                         },
                         _type == "image" => {
@@ -33,7 +37,7 @@ const BlogPage = () => {
                         asset -> { url },
                         alt
                     },
-                    author -> { name },
+                    author -> { name, image { asset -> { url } } },
                     categories[] -> { title },
                     publishedAt
                 }`;
@@ -51,80 +55,84 @@ const BlogPage = () => {
     }, [passedSlug]);
 
     if (loading) return <Loader />;
-    if (!blog) return (
-        <center>
-            <p>Blog not found!</p>
-        </center>
-       
-    );
+    if (!blog) return <center><p>Blog not found!</p></center>;
 
-    // ✅ Prevent `map` error by checking if `blog.body` exists
     const renderContent = (body) => {
         if (!body || !Array.isArray(body)) return <p>No content available.</p>;
 
         return body.map((block, index) => {
-            if (block.style === "h2") {
+            if (block.listItem === "bullet") {
                 return (
-                    <h2 key={index} style={{ fontSize: "1.8em", marginTop: "20px" }}>
-                        {block.children?.map((child, i) => (
-                            <span key={i} style={{
-                                fontWeight: child.marks?.includes("strong") ? "bold" : "normal",
-                                fontStyle: child.marks?.includes("em") ? "italic" : "normal"
-                            }}>
-                                {child.text}
-                            </span>
+                    <ul key={index} style={{ paddingLeft: "20px" }}>
+                        {block.children.map((child, i) => (
+                            <li key={i} className={styles.blogText}>{child.text}</li>
                         ))}
-                    </h2>
+                    </ul>
                 );
-            } else if (block.style === "normal") {
-                return (
-                    <p key={index} style={{ fontSize: "1.2em", lineHeight: "1.8", marginBottom: "16px" }}>
-                        {block.children?.map((child, i) => (
-                            <span key={i} style={{
-                                fontWeight: child.marks?.includes("strong") ? "bold" : "normal",
-                                fontStyle: child.marks?.includes("em") ? "italic" : "normal"
-                            }}>
-                                {child.text}
-                            </span>
-                        ))}
-                    </p>
-                );
+            } else if (block.style) {
+                switch (block.style) {
+                    case "h1":
+                        return <h1 key={index} className={styles.blogTitle}>{block.children.map(child => child.text)}</h1>;
+                    case "h2":
+                        return <h2 key={index} className={styles.blogTitle}>{block.children.map(child => child.text)}</h2>;
+                    case "blockquote":
+                        return <blockquote key={index} style={{ fontStyle: "italic", borderLeft: "4px solid #ccc", paddingLeft: "10px" }}>{block.children.map(child => child.text)}</blockquote>;
+                    case "normal":
+                        return <p key={index} className={styles.blogText}>
+                            {block.children.map((child, i) => (
+                                child.marks?.includes("em")
+                                    ? <em key={i}>{child.text}</em>
+                                    : child.href
+                                        ? <a key={i} href={child.href} target="_blank" rel="noopener noreferrer">{child.text}</a>
+                                        : child.text
+                            ))}
+                        </p>;
+                    default:
+                        return null;
+                }
             } else if (block.imageUrl) {
-                return (
-                    <img
-                        key={index}
-                        src={block.imageUrl}
-                        alt={block.alt || "Blog image"}
-                        style={{ width: "100%", borderRadius: "8px", margin: "20px 0" }}
-                    />
-                );
+                return <img key={index} src={block.imageUrl} alt={block.alt || "Blog image"} className={styles.responsiveImage} />;
             }
             return null;
         });
     };
 
     return (
-        <div style={{ maxWidth: "800px", margin: "auto", padding: "20px", fontFamily: "Georgia, serif",  marginTop: "10%" }}>
-            {blog.mainImage && (
-                <img
-                    src={blog.mainImage.asset.url}
-                    alt={blog.mainImage.alt || "Main blog image"}
-                    style={{ width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "10px" }}
-                />
-            )}
-
-            <h1 style={{ fontSize: "2.5em", marginTop: "20px" }}>{blog.title}</h1>
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "10px", color: "#555" }}>
-                <p style={{ fontWeight: "bold", marginRight: "10px" }}>By {blog.author?.name}</p>
-                <p>{new Date(blog.publishedAt).toLocaleDateString()}</p>
+        <>
+            <Helmet>
+                <title>{blog.title} | DhineshKumar Thirupathi</title>
+                <meta name="description" content={blog.body?.[0]?.children?.map(child => child.text).join(" ").substring(0, 150) || "Read an interesting blog on " + blog.title} />
+                <meta name="keywords" content={["dhidroid", "dhineshkumar", "dhineshkumar thirupathi", ...(blog.categories?.map(cat => cat.title) || [])].join(", ")} />
+                <meta name="author" content="DhineshKumar Thirupathi" />
+                <meta name="robots" content="index, follow" />
+                <meta property="og:title" content={blog.title} />
+                <meta property="og:image" content={blog.mainImage?.asset?.url} />
+                <meta property="og:description" content={blog.body?.[0]?.children?.map(child => child.text).join(" ").substring(0, 150)} />
+            </Helmet>
+            <div className={styles.blogContainer}>
+                <center>
+                    <h1 className={styles.blogTitle}>Blogs</h1>
+                    <p className={styles.blogDetails}>Blog Details - <span>{blog.title}</span></p>
+                </center>
             </div>
-
-            <p style={{ fontSize: "1.1em", fontWeight: "bold", color: "#888" }}>
-                Categories: {blog.categories?.map(cat => cat.title).join(", ")}
-            </p>
-
-            <div style={{ marginTop: "20px" }}>{renderContent(blog.body)}</div>
-        </div>
+            <div className={styles.blogContent}>
+                {blog.mainImage && <img src={blog.mainImage.asset.url} alt={blog.mainImage.alt || "Main blog image"} className={styles.blogImage} />}
+                <h1 className={styles.blogTitle}>{blog.title}</h1>
+                <div className={styles.authorContainer}>
+                    {blog.author?.image?.asset?.url && <img src={blog.author.image.asset.url} alt="Author" className={styles.authorImage} />}
+                    <div>
+                        <p style={{ fontWeight: "bold", margin: "0" }}>By {blog.author?.name}</p>
+                        <p style={{ margin: "0", fontSize: "0.9em" }}>{new Date(blog.publishedAt).toLocaleDateString()}</p>
+                    </div>
+                </div>
+                <div>
+                    {blog.categories?.map((cat, index) => (
+                        <span key={index} className={styles.categoryTag}>{cat.title}</span>
+                    ))}
+                </div>
+                <div>{renderContent(blog.body)}</div>
+            </div>
+        </>
     );
 };
 
