@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { client } from "../../senity/senity";
 import Loader from "../../components/loader/Loader";
 import Helmet from "react-helmet";
 import styles from "./BlogDetails.module.css";
+import { FaFacebook, FaLinkedin, FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { IoShareOutline } from "react-icons/io5";
+import { RiTwitterXFill } from "react-icons/ri";
 
 const BlogPage = () => {
     const location = useLocation();
+    const { slug } = useParams();
     const passedSlug = location.state?.slug;
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    console.log("preview data <-------------><---------------->", slug || passedSlug);
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const query = `*[_type == "post" && slug.current == "${passedSlug}"][0] {
+                const query = `*[_type == "post" && slug.current == "${slug || passedSlug}"][0] {
                     title,
                     slug { current },
                     body[]{
@@ -51,11 +56,27 @@ const BlogPage = () => {
             }
         };
 
-        if (passedSlug) fetchData();
-    }, [passedSlug]);
+        if (slug || passedSlug) fetchData();
+    }, [slug, passedSlug]);
 
     if (loading) return <Loader />;
     if (!blog) return <center><p>Blog not found!</p></center>;
+
+    const shareUrl = window.location.href;
+
+    const shareBlog = () => {
+        const shareData = {
+            title: blog.title,
+            text: "Check out this blog: " + blog.title,
+            url: window.location.href
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData).catch((error) => console.error("Error sharing:", error));
+        } else {
+            alert("Sharing is not supported on this browser.");
+        }
+    };
 
     const renderContent = (body) => {
         if (!body || !Array.isArray(body)) return <p>No content available.</p>;
@@ -126,11 +147,30 @@ const BlogPage = () => {
                     </div>
                 </div>
                 <div>
-                    {blog.categories?.map((cat, index) => (
+                    {blog?.categories?.map((cat, index) => (
                         <span key={index} className={styles.categoryTag}>{cat.title}</span>
                     ))}
                 </div>
-                <div>{renderContent(blog.body)}</div>
+                {/* social media */}
+                <div className={styles.socialShare}>
+                    <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer">
+                        <FaFacebook size={35} className={styles.shareIcon} />
+                    </a>
+
+                    <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(blog.title)}`} target="_blank" rel="noopener noreferrer">
+                        <RiTwitterXFill size={35} className={styles.shareIcon} />
+                    </a>
+                    <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer">
+                        <FaLinkedin size={35} className={styles.shareIcon} />
+                    </a>
+                    <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(blog.title + " " + shareUrl)}`} target="_blank" rel="noopener noreferrer">
+                        <FaWhatsapp size={35} className={styles.shareIcon} />
+                    </a>
+                    <a onClick={shareBlog} target="_blank" rel="noopener noreferrer">
+                        <IoShareOutline size={35} className={styles.shareIcon} />
+                    </a>
+                </div>
+                <div>{renderContent(blog?.body)}</div>
             </div>
         </>
     );

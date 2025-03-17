@@ -33,7 +33,7 @@ export const Router = () => {
         <Routes>
           <Route path="/" element={<HomeScreen />} />
           <Route path="*" element={<Suspense fallback={<Loader />}><UndertheDev /></Suspense>} />
-          <Route path="/blog/:id" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPage />} />
           <Route path="/createblog" element={<BlogCreate />} />
           <Route path="/project" element={<Projects />} />
           <Route path="/bloglist" element={<BlogList />} />
