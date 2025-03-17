@@ -5,25 +5,39 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dhidroid</title>
+  <title>Dhidroid - Top Mobile & Web Developer</title>
 
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Dhidroid - Developer Portfolio and Blog Links" />
-  <meta name="keywords" content="Dhidroid, Developer, Portfolio, Blog, Links, Software Development" />
+  <meta name="description"
+    content="Dhidroid - Top Freelance Mobile & Web Developer in Tamil Nadu (Dharmapuri, Salem, Coimbatore). Expert in Android, iOS, React Native, Web Development, UI/UX (Figma), and IT Support." />
+  <meta name="keywords"
+    content="Dhidroid, Freelance Developer, Tamil Nadu, Dharmapuri, Salem, Coimbatore, Android Development, iOS Development, React Native, Web Development, UI UX Design, Figma, IT Support, Software Developer, MERN Stack, Mobile App Developer" />
   <meta name="author" content="Dhidroid" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="English" />
+  <meta name="geo.region" content="IN-TN" />
+  <meta name="geo.placename" content="Dharmapuri, Salem, Coimbatore, Tamil Nadu, India" />
+  <meta name="geo.position" content="11.8589,78.1570" />
+  <meta name="ICBM" content="11.8589,78.1570" />
 
   <!-- Open Graph Meta Tags for Social Media -->
-  <meta property="og:title" content="Dhidroid - Links" />
-  <meta property="og:description" content="Explore Dhidroid's portfolio, blogs, and social media links." />
+  <meta property="og:title" content="Dhidroid - Top Mobile & Web Developer in Tamil Nadu" />
+  <meta property="og:description"
+    content="Expert in Android, iOS, React Native, Web Development, UI/UX (Figma), and IT Support. Serving clients from Dharmapuri, Salem, and Coimbatore." />
   <meta property="og:image" content="/images/og-image.png" /> <!-- Replace with actual image -->
-  <meta property="og:url" content="https://yourdomain.com/links" />
+  <meta property="og:url" content="https://dhidroid.web.app/links" />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_IN" />
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Dhidroid - Links" />
-  <meta name="twitter:description" content="Discover Dhidroid's latest blogs, projects, and social connections." />
+  <meta name="twitter:title" content="Dhidroid - Top Mobile & Web Developer in Tamil Nadu" />
+  <meta name="twitter:description"
+    content="Freelance Mobile & Web Developer specializing in Android, iOS, React Native, Web Development, UI/UX (Figma), and IT Support. Available in Dharmapuri, Salem, and Coimbatore." />
   <meta name="twitter:image" content="/images/twitter-image.png" /> <!-- Replace with actual image -->
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://dhidroid.vercel.app/links" />
 
   <!-- Social Media Profile Links -->
   <link rel="me" href="https://instagram.com/dhidroid" />
@@ -32,10 +46,9 @@
   <link rel="me" href="https://github.com/dhidroid" />
   <link rel="me" href="https://bsky.app/profile/dhidroid" />
 
-
   <meta name="google-site-verification" content="CcystvkW3vIDCIT12LjM_bZI2NNpOZRKpxW_MNutVJg" />
 
-  <!-- tags manager -->
+  <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
         'gtm.start':
@@ -44,6 +57,36 @@
         j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
           'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
     })(window, document, 'script', 'dataLayer', 'GTM-PHSF6C48');</script>
+
+  <script>
+    // Disable right-click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable Inspect Element shortcuts
+    document.addEventListener('keydown', function (event) {
+      if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'i' || event.key === 'I' || event.key === 'j' || event.key === 'J')) {
+        event.preventDefault();
+      }
+      if (event.key === "F12" || (event.ctrlKey && event.shiftKey && event.key === "I")) {
+        event.preventDefault();
+      }
+    });
+
+    // Detect if DevTools is open
+    (function () {
+      let devtools = { open: false, orientation: null };
+      let threshold = 160;
+      setInterval(function () {
+        let widthThreshold = window.outerWidth - window.innerWidth > threshold;
+        let heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        if (widthThreshold || heightThreshold) {
+          devtools.open = true;
+          alert('DevTools detected! Please close it to continue.');
+          window.location.reload();
+        }
+      }, 1000);
+    })();
+  </script>
 
 </head>
 
