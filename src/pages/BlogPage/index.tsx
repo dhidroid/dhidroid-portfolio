@@ -59,56 +59,6 @@ const BlogPage = () => {
             alert("Sharing is not supported on this browser.");
         }
     };
-    // const renderContent = (body) => {
-    //     if (!body || !Array.isArray(body)) return <p>No content available.</p>;
-
-    //     return body.map((block, index) => {
-    //         if (block._type === "block") {
-    //             if (block.listItem === "bullet") {
-    //                 return (
-    //                     <ul key={index} style={{ paddingLeft: "20px" }}>
-    //                         {block.children.map((child, i) => (
-    //                             <li key={i} className={styles.blogText}>{child.text}</li>
-    //                         ))}
-    //                     </ul>
-    //                 );
-    //             } else if (block.style) {
-    //                 switch (block.style) {
-    //                     case "h1": return <h1 key={index} className={styles.blogTitle}>{block.children.map(child => child.text)}</h1>;
-    //                     case "h2": return <h2 key={index} className={styles.blogTitle}>{block.children.map(child => child.text)}</h2>;
-    //                     case "blockquote": return <blockquote key={index} className={styles.quote}>{block.children.map(child => child.text)}</blockquote>;
-    //                     case "blockquote":
-    //                         return <blockquote key={index} style={{ fontStyle: "italic", borderLeft: "4px solid #ccc", paddingLeft: "10px" }}>{block.children.map(child => child.text)}</blockquote>;
-    //                     case "normal":
-    //                         return <p key={index} className={styles.blogText}>
-    //                             {block.children.map((child, i) => (
-    //                                 child.marks?.includes("em")
-    //                                     ? <em key={i}>{child.text}</em>
-    //                                     : child.href
-    //                                         ? <a key={i} href={child.href} target="_blank" rel="noopener noreferrer">{child.text}</a>
-    //                                         : child.text
-    //                             ))}
-    //                         </p>;
-    //                     default: return <p key={index} className={styles.blogText}>{block.children.map(child => child.text)}</p>;
-    //                 }
-    //             } else if (block._type === "image") {
-    //                 return <img key={index} src={block.asset.url} alt={block.alt || "Blog image"} className={styles.responsiveImage} />;
-    //             } else if (block._type === "code") {
-    //                 return (
-    //                     <div key={index} className={styles.codeBlock}>
-    //                         <CopyToClipboard text={block.code}>
-    //                             <button className={styles.copyButton}>Copy</button>
-    //                         </CopyToClipboard>
-    //                         <SyntaxHighlighter language={block.language || "javascript"} style={darcula}>
-    //                             {block.code}
-    //                         </SyntaxHighlighter>
-    //                     </div>
-    //                 );
-    //             }
-    //             return null;
-    //         }
-    //     });
-    // };
 
     // render item
     const renderContent = (body) => {

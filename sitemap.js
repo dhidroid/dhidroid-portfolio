@@ -11,7 +11,9 @@ const links = [
     { url: '/', changefreq: 'daily', priority: 1.0 },
     { url: '/about', changefreq: 'monthly', priority: 0.8 },
     { url: '/services', changefreq: 'monthly', priority: 0.8 },
-    { url: '/contact', changefreq: 'monthly', priority: 0.7 },
+    { url: '/bloglist', changefreq: 'monthly', priority: 0.7 },
+    {url: "project", changefreq: "monthly", priority: 0.7},
+    {url: "blog/:slug", changefreq: "daily", priority: 0.7},
 ];
 
 const sitemapPath = join(__dirname, 'public', 'sitemap.xml');

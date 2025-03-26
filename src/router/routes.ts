@@ -4,9 +4,9 @@ import { Route } from "react-router-dom";
 const PageURL = [
   "/",
   "/about",
-  "/services",
   "/contact",
-  "/products/:id", 
+  "/blog/:id",
+  "/project" 
 ];
 
 export default PageURL;
