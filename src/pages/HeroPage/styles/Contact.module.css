@@ -15,7 +15,7 @@
 }
 
 .title::before {
-    content: "Contact Me";
+    /* content: "Contact"; */
     position: absolute;
     font-size: 10rem;
     font-weight: 900;
@@ -27,16 +27,19 @@
     white-space: nowrap;
     opacity: 0.2;
     font-family: var(--secondaryFont);
+    overflow: hidden
 }
 
 .title h1 {
     font-family: var(--secondaryFont);
     font-size: 2rem;
+    z-index: 1
 }
 
 .title h1 span {
     color: var(--primary-color);
     text-decoration: underline;
+    z-index: 1
 }
 
 .content {
@@ -83,6 +86,11 @@
 
 /* Responsive Design */
 @media (min-width: 768px) {
+    .title::before {
+        font-size: 5rem;
+        overflow: hidden;
+    }
+
     .content {
         flex-direction: row;
         justify-content: space-between;
@@ -98,6 +106,7 @@
 @media (max-width: 480px) {
     .title::before {
         font-size: 5rem;
+        overflow: hidden;
     }
 
     .title h1 {

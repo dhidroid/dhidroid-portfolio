@@ -177,8 +177,7 @@ const HomePage: React.FC = () => {
       <div className={EduStyle.Educontainer}>
         {/* title */}
         <div className={EduStyle.title}>
-          <p><span>-</span> Education & Work</p>
-          <h1>My <span>Education</span> & <span>Work Experience</span></h1>
+          <h1>My <span>Work Experience</span></h1>
         </div>
 
         {/* card */}

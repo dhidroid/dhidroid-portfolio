@@ -105,8 +105,7 @@
     justify-content: center;
     align-items: center;
 }
-
-/* Responsive Design */
+/* 
 @media (max-width: 768px) {
     .container {
         padding: 5px 10px;
@@ -166,4 +165,4 @@
     .authorContainer {
         flex-direction: column;
     }
-}
+} */

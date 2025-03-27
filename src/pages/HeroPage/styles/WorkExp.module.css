@@ -14,7 +14,7 @@
 
 /* Large screen styles */
 .title::before {
-    content: "Education & Work";
+    content: "Work Experience";
     position: absolute;
     font-size: 10rem;
     font-weight: 900;
@@ -31,6 +31,7 @@
     z-index: 1;
     font-size: 1rem;
     color: gray;
+    z-index: 1;
 }
 
 .title h1 {
@@ -40,21 +41,27 @@
     z-index: 2;
     position: relative;
     transition: transform 0.3s ease-in-out;
+    z-index: 1;
 }
 
 .title h1 span {
     color: var(--primary-color);
+    z-index: 1;
 }
 
 .title h1 span:hover {
     text-decoration: underline;
+    z-index: 1;
 }
 
 .EduCard {
     display: flex;
     flex-direction: row;
     gap: 10px;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    z-index: 1;   
 }
 
 /* Responsive styles */
