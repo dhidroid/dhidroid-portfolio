@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import styles from "./Header.module.css";
 import { FiMenu, FiX } from "react-icons/fi"; // Icons for menu toggle
-
+import DhiDroidLogo from '../../assets/logo.svg'
 const Header = () => {
   const [hidden, setHidden] = useState(false);
   const [scrolling, setScrolling] = useState(false);
@@ -42,7 +42,10 @@ const Header = () => {
   return (
     <nav className={`${styles.nav} ${hidden ? styles.hidden : ""} ${scrolling ? styles.scrolled : ""}`}>
       {/* Logo */}
-      <div onClick={() => navigate("/")} className={styles.logo}>Dhidroid</div>
+      <div onClick={() => navigate("/")} className={styles.logo}>
+        <img src={DhiDroidLogo} alt="Dhidroid Logo" style={{height: 50, width: 50, gap: "20px", marginRight: 10, borderRadius: 50}} />
+        Dhidroid
+        </div>
 
       {/* Menu Button (Mobile) */}
       <div className={styles.menuButton} onClick={() => setMenuOpen(!menuOpen)}>

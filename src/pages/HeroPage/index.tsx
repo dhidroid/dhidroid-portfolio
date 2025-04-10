@@ -246,7 +246,6 @@ const HomePage: React.FC = () => {
             </div>
 
             <div className={ContactStyle.socialContainer}>
-              <p>Follow Me !</p>
               {SocialMedia?.map((data, index) => (
                 <div
                   className={ContactStyle.icon}

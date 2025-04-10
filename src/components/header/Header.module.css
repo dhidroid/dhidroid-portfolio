@@ -32,6 +32,9 @@
         font-family: var(--secondaryFont, sans-serif);
         cursor: pointer;
         color: var(--text-black, black);
+        justify-content: center;
+        align-items: center;
+        display: flex;
     }
 
     /* Navigation Links */

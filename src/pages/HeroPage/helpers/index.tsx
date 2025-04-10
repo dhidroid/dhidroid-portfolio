@@ -1,7 +1,6 @@
-import { BiLogoTelegram } from "react-icons/bi";
 import { BsCalendarWeek } from "react-icons/bs";
-import { FaFirefoxBrowser, FaGithub, FaGraduationCap, FaLinkedin, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
-import { FaBluesky } from "react-icons/fa6";
+import { FaFirefoxBrowser, FaGithub, FaLinkedin, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { IoLogoInstagram } from "react-icons/io";
 import { MdAlternateEmail, MdDeveloperMode } from "react-icons/md";
 import { SiMaterialdesignicons, SiWorkplace } from "react-icons/si";
@@ -79,15 +78,10 @@ export const SocialMedia = [
         link: "https://github.com/dhidroid"
     },
     {
-        name: "blueSky",
-        Icon: FaBluesky,
-        link: "https://bsky.app/"
+        name: "Twitter",
+        Icon: FaXTwitter,
+        link: "https://x.com/@dhidroid"
     },
-    {
-        name: "telegram",
-        Icon: BiLogoTelegram,
-        link: "https://telegram.org/"
-    }
 ]
 
 
