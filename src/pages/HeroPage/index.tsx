@@ -24,10 +24,10 @@ const HomePage: React.FC = () => {
   const navigation = useNavigate();
 
 
-  useEffect(()=>{
+  seEffect(()=>{
 	  (async function () {
 		const cal = await getCalApi({"namespace":"30min"});
-		cal("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
+		cal("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#5315FC"},"dark":{"cal-brand":"#5315FC"}},"hideEventTypeDetails":false,"layout":"month_view"});
 	  })();
 	}, [])
 
