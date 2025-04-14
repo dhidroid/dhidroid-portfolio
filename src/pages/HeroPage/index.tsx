@@ -90,9 +90,11 @@ const HomePage: React.FC = () => {
           <div className={styles.ctaButtonContainer}>
             <div className={styles.portfolioButtonContainer}>
               <Link
-                to={"#"}
+                to={"#"} onClick={() => {
+                  window.open("https://cal.com/dhidroid/30min?overlayCalendar=true&layout=month_view")
+                }}
                 className={styles.portfolioButton}>
-                Portfolio
+                Book a Meeting
                 <span>
                   <AiOutlineArrowRight color="black" size={20} />
                 </span>
@@ -100,8 +102,11 @@ const HomePage: React.FC = () => {
 
               <Link
                 to={"#"}
+                onClick={() => {
+                  window.location.href = "tel:+919150507538";
+                }}
                 className={styles.hiremeButton}>
-                Hire Me
+                Contact Me
               </Link>
             </div>
           </div>
