@@ -115,7 +115,6 @@ const BlogList = () => {
                     <div className={style.blogContainer}>
                         {blogData.map((data, index): any => (
                             <HomeBlogCard
-                                color={"white"}
                                 BlogImage={data.mainImage.asset.url}
                                 BlogTitle={data.title} Category=''
                                 author={data.author.name}
