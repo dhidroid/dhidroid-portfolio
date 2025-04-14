@@ -83,7 +83,6 @@ const BlogList = () => {
                 {/* Title */}
                 <div className={style.titleContainer}>
                     <h1>Blogs List</h1>
-                    <p>Home <GoDotFill /> <span>My Blog List</span></p>
                 </div>
 
                 {/* Inner container */}
@@ -112,7 +111,23 @@ const BlogList = () => {
 
 
                     {/* blogs  */}
+                    {blogData.length === 0 && (
+                        <div style={{
+                            alignContent: "center",
+                             display: "flex",
+                             alignItems: "center",
+                             justifyContent: "center",
+                             flexDirection: "column",
+                             marginTop: "20px",
+                             fontSize: "20px",
+                             height: "50vh"
+                        }} className={style.noBlogs}>
+                            <h1>No Blogs Found</h1>
+                        </div>
+                    )}
+                    {/* blog container */}
                     <div className={style.blogContainer}>
+                        {/* blog card */}
                         {blogData.map((data, index): any => (
                             <HomeBlogCard
                                 BlogImage={data.mainImage.asset.url}

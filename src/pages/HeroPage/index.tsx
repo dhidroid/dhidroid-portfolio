@@ -16,7 +16,7 @@ import CtaButton from "../../components/button/ctaButton";
 import EducationCard from "../../components/Cards/EducationWorkCard";
 import ProjectCard from "../../components/Cards/ProjectsCard";
 import HomeBlogCard from "../../components/Cards/HomeBlogCards";
-import { AboutData, BlogData, ContactIcons, ProjectData, SocialMedia, WorkExpData, clients, serviceData } from './helpers/index'
+import { AboutData, BlogData, ContactIcons, ProjectData, ResumeLink, SocialMedia, WorkExpData, clients, serviceData } from './helpers/index'
 import { getCalApi } from "@calcom/embed-react";
 import MyProfileCard from '../../assets/profile card.png'
 
@@ -125,13 +125,6 @@ const HomePage: React.FC = () => {
               </Link>
             </div>
           </div>
-
-          {/*skills carocils */}
-          {/* <Marquee gradient pauseOnClick pauseOnHover className={styles.marquee} >
-            {skillsCarocils.map((data) => (
-              <p>{data}</p>
-            ))}
-          </Marquee> */}
         </div>
       </div>
 
@@ -185,7 +178,7 @@ const HomePage: React.FC = () => {
           {/* button */}
           <div style={{ display: "flex", flexDirection: "row", }}>
             <div>
-              <CtaButton colour={"black"} title="Download CV" onPress={() => alert("downloading......")} />
+              <CtaButton colour={"black"} title="View My Resume :)" onPress={() => window.open(ResumeLink)} />
             </div>
           </div>
         </div>

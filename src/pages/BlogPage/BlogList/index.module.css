@@ -22,7 +22,9 @@
     align-items: center;
 }
 
-
+.categoryContainer::-webkit-scrollbar {
+    display: none;
+}
 
 .categoryContainer {
     display: flex;
@@ -35,15 +37,17 @@
     align-self: center;
     white-space: nowrap;
     padding: 0px 20px;
-
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
 }
 
 .categoryContainer p {
-    background-color: var(--text-white);
+    /* background-color: var(--text-white); */
     color: var(--summerGlow-color);
     font-weight: bold;
     font-family: var(--secondaryFont);
     cursor: pointer;
+
 }
 
 .categoryContainer p.active {

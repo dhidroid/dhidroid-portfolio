@@ -9,6 +9,8 @@ import { SiMaterialdesignicons, SiWorkplace } from "react-icons/si";
 export const skillsCarocils = [
     "ReactNative", "JavaScript", "TypeScript", "Git & Github", "Figma UI/UX Design", "Golang(begginer)", "Android", "Ios App Dev", "ReactJS", "Jest unitTesting", "SEO & Content Writing (Begginer)", "Trainner (Junior)"
 ]
+
+export const ResumeLink = "https://1drv.ms/w/c/6393B3F980D8B1AE/Ea6x2ID5s5MggGP6UAAAAAABuBDRXoY2GZ6XrsTvSEdHnQ?e=vFRsYg"
 export const serviceData = [
     {
         icon: SiMaterialdesignicons,
@@ -29,7 +31,7 @@ export const serviceData = [
 
 
 export const AboutData: string =
-    "passionate mobile app and backend developer specializing in React Native, Go, and cloud services. I have expertise in UI/UX design, Firebase, CI/CD, SEO, and content writing. Additionally, I have experience with basic native app development using Kotlin (Jetpack Compose) for Android and Swift for iOS. I love solving complex challenges and crafting seamless user experiences!";
+    "I'm a passionate mobile app and backend developer specializing in React Native, Go, and cloud services. With a strong focus on crafting seamless user experiences, I bring a unique blend of skills in UI/UX design, Firebase, CI/CD, and SEO. My journey also includes hands-on experience in native app development using Kotlin (Jetpack Compose) for Android and Swift for iOS. \n  I thrive on solving complex challenges and building performant, scalable applications that not only work well but feel great to use. Whether it’s shipping pixel-perfect UIs or optimizing backend logic, I’m all about creating tech that makes a difference.";
 
 
 export const clients: string[] = [

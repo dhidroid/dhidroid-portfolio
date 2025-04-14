@@ -96,9 +96,6 @@ const Projects = () => {
         {/* Title */}
         <div className={styles.header}>
           <h1>Projects</h1>
-          <p>Home
-            <GoDotFill />
-            <span>My Latest Projects</span></p>
         </div>
 
         {/* Content */}

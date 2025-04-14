@@ -86,6 +86,7 @@
     white-space: nowrap;
     /* Prevent breaking */
     font-size: 14px;
+    color: white
 }
 
 /* Adjust font size for smaller screens */
