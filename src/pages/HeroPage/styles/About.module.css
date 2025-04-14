@@ -11,11 +11,6 @@
 
 /* Left Container */
 .card {
-    background-color: var(--primary-color, #5c42c7);
-    color: white;
-    width: 100%;
-    max-width: 300px;
-    height: 300px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -25,7 +20,7 @@
     text-align: center;
     padding: 19px;
     overflow: hidden;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out; 
 }
 
 .card:hover {

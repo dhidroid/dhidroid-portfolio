@@ -52,7 +52,7 @@ export const ContactIcons = [
     }, {
         name: "Appointment",
         Icon: BsCalendarWeek,
-        link: "https://calendly.com/dhinesh4668/30min"
+        link: "https://cal.com/dhidroid/30min"
     },
     {
         name: "Phone",

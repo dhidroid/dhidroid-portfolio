@@ -1,62 +1,137 @@
 /* Footer Container */
 .footer {
-  margin-top: 20px;
-  background: #f8f9fa;
-  padding: 40px 10%;
-  text-align: left;
-  border-top: 5px solid var(--highlight-color);
+  background: var(--primary-color);
+  padding: 40px 5%;
+  position: relative;
+  overflow: hidden;
+  color: var(--text-white);
+  font-family: Arial, sans-serif;
 }
 
 /* Flex Container */
 .container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* Contact Section */
-.contact {
-  font-size: 16px;
-  color: #333;
+.contactSection, .locationsSection {
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 30px;
 }
 
-.contact .logo {
-  font-size: 20px;
+.contactSection h3, .locationsSection h3 {
   font-weight: bold;
-  margin-bottom: 10px;
-  font-family: var(--secondaryFont);
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-family: var(--therestyFont);
 }
 
-.contact p {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.email, .phone {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.copyright {
+  font-size: 14px;
+  margin-top: 30px;
 }
 
 /* CTA Section */
-.ctaSection h3 {
-  font-size: 18px;
+.ctaSection {
+  flex: 2;
+  text-align: center;
+  min-width: 300px;
+  margin-bottom: 30px;
+  font-family: var(--secondaryFont);
 }
 
-.tryBtn {
-  background: var(--primary-color);
-  color: white;
-  padding: 10px 18px;
+.heading {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.ctaButton {
+  background: var(--backgroud-color);
+  color:var(--primary-color);
+  padding: 12px 30px;
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
+  font-size: 16px;
   cursor: pointer;
-  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  font-family: var(--secondaryFont);
+}
+
+.terms {
+  font-size: 14px;
+}
+
+/* Locations */
+.location {
+  margin-bottom: 20px;
+}
+
+.location p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+/* Social Icons */
+.socialIcons {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.icon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Big Text at Bottom */
+.bigText {
+  font-size: 100px;
+  font-weight: bolder;
+  line-height: 0.9;
+  position: relative;
+  z-index: 1;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  letter-spacing: -5px;
+  color: var(--thersty-color);
+  margin-bottom: -70px;
+  overflow: visible;
+  font-family: var(--secondaryFont);
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .container {
     flex-direction: column;
-    text-align: center;
   }
-
-  .buttons {
+  
+  .contactSection, .ctaSection, .locationsSection {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .bigText {
+    font-size: 50px;
+  }
+  
+  .socialIcons {
     justify-content: center;
   }
 }

@@ -28,7 +28,7 @@
 }
 
 .title::before {
-    content: "From My Blog Post";
+    content: "My Blog Post";
     position: absolute;
     font-size: 10rem;
     font-weight: 900;

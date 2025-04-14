@@ -18,18 +18,18 @@ import ProjectCard from "../../components/Cards/ProjectsCard";
 import HomeBlogCard from "../../components/Cards/HomeBlogCards";
 import { AboutData, BlogData, ContactIcons, ProjectData, SocialMedia, WorkExpData, clients, serviceData } from './helpers/index'
 import { getCalApi } from "@calcom/embed-react";
-
+import MyProfileCard from '../../assets/profile card.png'
 
 const HomePage: React.FC = () => {
   const navigation = useNavigate();
 
 
-  useEffect(()=>{
-	  (async function () {
-		const cal = await getCalApi({"namespace":"30min"});
-		cal("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#5315FC"},"dark":{"cal-brand":"#5315FC"}},"hideEventTypeDetails":false,"layout":"month_view"});
-	  })();
-	}, [])
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi({ "namespace": "30min" });
+      cal("ui", { "cssVarsPerTheme": { "light": { "cal-brand": "#5315FC" }, "dark": { "cal-brand": "#5315FC" } }, "hideEventTypeDetails": false, "layout": "month_view" });
+    })();
+  }, [])
 
   return (
     <React.Fragment>
@@ -100,7 +100,7 @@ const HomePage: React.FC = () => {
           <div className={styles.ctaButtonContainer}>
             <div className={styles.portfolioButtonContainer}>
               <Link
-                to={"#"} 
+                to={"#"}
                 onClick={(e) => {
                   // window.open("https://cal.com/dhidroid/30min?overlayCalendar=true&layout=month_view")
                   e.preventDefault()
@@ -140,13 +140,13 @@ const HomePage: React.FC = () => {
         {/* title */}
         <div className={ServiceStyle.serviceinnerContainer}>
           <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-            <h1>My <span>Services</span></h1>
-            <a>
+            <h1>The <span>Stack I Bring ⚡️</span></h1>
+            {/* <a>
               <div style={{ backgroundColor: "#5315FC", display: "flex", justifyContent: "center", alignItems: "center", padding: "10px", borderRadius: "100px" }}>
                 <BsArrowRight color="white" />
               </div>
-              View All Service
-            </a>
+              Explore My Stack
+            </a> */}
           </div>
 
         </div>
@@ -165,14 +165,14 @@ const HomePage: React.FC = () => {
       <div className={AboutStyle.aboutContainer}>
         {/* left */}
         <div style={{ width: "40%", marginRight: "20px", height: "90%", justifyContent: "center", alignItems: "center", alignContent: "center" }}>
-          {/* exp card */}
           <div className={AboutStyle.card}>
-            <span className={AboutStyle.name}>DHINESHKUMAR</span>
-            <div className={AboutStyle.content}>
-              <span className={AboutStyle.experience}>12</span>
-              <span className={AboutStyle.subtitle}>Month's of Experience</span>
-            </div>
+            <img style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "fill"
+            }} src={MyProfileCard} alt="dhineshkumar-thirupathi" />
           </div>
+
         </div>
 
         {/* right */}
@@ -182,8 +182,6 @@ const HomePage: React.FC = () => {
             <h1>Who is <span>DhineshKumar<br /> Thirupathi ? </span></h1>
           </div>
           <p style={{ textAlign: "justify" }}>{AboutData}</p>
-
-
           {/* button */}
           <div style={{ display: "flex", flexDirection: "row", }}>
             <div>
