@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@404pagez/react": "^0.1.1",
+    "@calcom/embed-react": "^1.5.2",
     "@portabletext/react": "^3.2.1",
     "@sanity/client": "^6.28.3",
     "@sanity/image-url": "^1.1.0",

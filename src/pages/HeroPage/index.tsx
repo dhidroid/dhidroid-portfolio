@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from 'react-helmet'
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { RxPlus } from "react-icons/rx";
@@ -17,9 +17,19 @@ import EducationCard from "../../components/Cards/EducationWorkCard";
 import ProjectCard from "../../components/Cards/ProjectsCard";
 import HomeBlogCard from "../../components/Cards/HomeBlogCards";
 import { AboutData, BlogData, ContactIcons, ProjectData, SocialMedia, WorkExpData, clients, serviceData } from './helpers/index'
+import { getCalApi } from "@calcom/embed-react";
+
 
 const HomePage: React.FC = () => {
   const navigation = useNavigate();
+
+
+  useEffect(()=>{
+	  (async function () {
+		const cal = await getCalApi({"namespace":"30min"});
+		cal("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
+	  })();
+	}, [])
 
   return (
     <React.Fragment>
@@ -90,9 +100,14 @@ const HomePage: React.FC = () => {
           <div className={styles.ctaButtonContainer}>
             <div className={styles.portfolioButtonContainer}>
               <Link
-                to={"#"} onClick={() => {
-                  window.open("https://cal.com/dhidroid/30min?overlayCalendar=true&layout=month_view")
+                to={"#"} 
+                onClick={(e) => {
+                  // window.open("https://cal.com/dhidroid/30min?overlayCalendar=true&layout=month_view")
+                  e.preventDefault()
                 }}
+                data-cal-namespace="30min"
+                data-cal-link="dhidroid/30min"
+                data-cal-config='{"layout":"month_view"}'
                 className={styles.portfolioButton}>
                 Book a Meeting
                 <span>
