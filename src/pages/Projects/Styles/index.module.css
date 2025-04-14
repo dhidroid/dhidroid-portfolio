@@ -45,7 +45,7 @@
 }
 
 .content {
-    background-color: var(--highlight-color);
+    /* background-color: var(--highlight-color); */
     display: flex;
     justify-content: center;
     align-items: center;
