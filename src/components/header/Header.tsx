@@ -34,8 +34,8 @@ const Header = () => {
   const Links = [
     { title: "Home", link: "/" },
     { title: "Blogs", link: "/bloglist" },
-    { title: "Service", link: "/service" },
-    { title: "About", link: "/about" },
+    // { title: "Service", link: "/service" },
+    // { title: "About", link: "/about" },
     { title: "Project", link: "/project" },
   ];
 
