@@ -24,7 +24,7 @@ const HomePage: React.FC = () => {
   const navigation = useNavigate();
 
 
-  seEffect(()=>{
+  useEffect(()=>{
 	  (async function () {
 		const cal = await getCalApi({"namespace":"30min"});
 		cal("ui", {"cssVarsPerTheme":{"light":{"cal-brand":"#5315FC"},"dark":{"cal-brand":"#5315FC"}},"hideEventTypeDetails":false,"layout":"month_view"});
