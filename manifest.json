@@ -1,0 +1,107 @@
+{
+    "name": "Dhidroid - Top Mobile & Web Developer in Tamil Nadu",
+    "short_name": "Dhidroid",
+    "description": "Dhineshkumar Thirupathi - Expert in React Native, Android, iOS, Web Development, UI/UX Design and IT Support in Tamil Nadu",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "orientation": "portrait-primary",
+    "dir": "ltr",
+    "lang": "en-US",
+    "categories": ["business", "developer", "portfolio", "technology"],
+    "icons": [
+      {
+        "src": "/icons/icon-72x72.png",
+        "sizes": "72x72",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/icons/icon-96x96.png",
+        "sizes": "96x96",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/icons/icon-128x128.png",
+        "sizes": "128x128",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/icons/icon-144x144.png",
+        "sizes": "144x144",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/icons/icon-152x152.png",
+        "sizes": "152x152",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/icons/icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/icons/icon-384x384.png",
+        "sizes": "384x384",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/icons/icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "/screenshots/screenshot1.jpg",
+        "sizes": "1280x720",
+        "type": "image/jpeg",
+        "platform": "wide",
+        "label": "Dhidroid Portfolio Homepage"
+      },
+      {
+        "src": "/screenshots/screenshot2.jpg",
+        "sizes": "1280x720",
+        "type": "image/jpeg",
+        "platform": "wide",
+        "label": "Dhidroid Projects Showcase"
+      }
+    ],
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "shortcuts": [
+      {
+        "name": "Contact Dhidroid",
+        "short_name": "Contact",
+        "description": "Contact Dhineshkumar for your project",
+        "url": "/contact",
+        "icons": [
+          {
+            "src": "/icons/contact-icon-96x96.png",
+            "sizes": "96x96"
+          }
+        ]
+      },
+      {
+        "name": "View Portfolio",
+        "short_name": "Portfolio",
+        "description": "See Dhidroid's development projects",
+        "url": "/portfolio",
+        "icons": [
+          {
+            "src": "/icons/portfolio-icon-96x96.png",
+            "sizes": "96x96"
+          }
+        ]
+      }
+    ]
+  }
