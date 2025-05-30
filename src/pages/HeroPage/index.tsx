@@ -192,11 +192,15 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* card */}
-        <div className={EduStyle.EduCard} style={{}}>
-          {WorkExpData.map((data, index) => (
-            <EducationCard key={index} Icon={data.icon} data={data.exp} mainTitle={data.type} />
-          ))}
-        </div>
+        <center style={{
+          marginBottom: 50
+        }}>
+          <div className={EduStyle.EduCard} style={{}}>
+            {WorkExpData.map((data, index) => (
+              <EducationCard key={index} Icon={data.icon} data={data.exp} mainTitle={data.type} />
+            ))}
+          </div>
+        </center>
       </div>
 
       {/* my latest project */}
