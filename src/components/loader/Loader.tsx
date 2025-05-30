@@ -1,5 +1,7 @@
+import Lottie from "lottie-react";
 import React from "react";
-import { InfinitySpin } from "react-loader-spinner";
+// import { InfinitySpin } from "react-loader-spinner";
+import { LoaderAnimation } from "../../assets";
 
 const Loader = (): React.JSX.Element => {
   return (
@@ -11,7 +13,17 @@ const Loader = (): React.JSX.Element => {
         height: "100vh",
       }}
     >
-      <InfinitySpin width="200" color="#5315FC" />
+      {/* <InfinitySpin width="200" color="#5315FC" /> */}
+      <center>
+      {/* <Loader /> */}
+      <Lottie animationData={LoaderAnimation}  style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        width: "20%",
+      }} loop={true}/>
+    </center>
     </div>
   );
 };

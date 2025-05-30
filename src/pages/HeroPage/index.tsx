@@ -1,3 +1,4 @@
+"use strect"
 import React, { useEffect } from "react";
 import { Helmet } from 'react-helmet'
 import { AiOutlineArrowRight } from "react-icons/ai";
@@ -11,7 +12,6 @@ import ProjectStyle from './styles/Projects.module.css'
 import ContactStyle from './styles/Contact.module.css'
 import BlogStyle from './styles/blog.module.css'
 import { ServiceCard } from "../../components/Cards";
-import { BsArrowRight } from "react-icons/bs";
 import CtaButton from "../../components/button/ctaButton";
 import EducationCard from "../../components/Cards/EducationWorkCard";
 import ProjectCard from "../../components/Cards/ProjectsCard";

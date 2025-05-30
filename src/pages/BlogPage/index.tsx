@@ -108,9 +108,9 @@ const BlogPage = () => {
                         <CopyToClipboard text={block.code}>
                             <button className={styles.copyButton}>Copy</button>
                         </CopyToClipboard>
-                        <SyntaxHighlighter language={block.language || "javascript"} style={darcula}>
+                        {/* <SyntaxHighlighter language={block.language || "javascript"} style={darcula}>
                             {block.code}
-                        </SyntaxHighlighter>
+                        </SyntaxHighlighter> */}
                     </div>
                 );
             } else if (block._type === "image") {

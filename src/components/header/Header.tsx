@@ -33,9 +33,9 @@ const Header = () => {
 
   const Links = [
     { title: "Home", link: "/" },
-    { title: "Blogs", link: "/bloglist" },
+    // { title: "Blogs", link: "/bloglist" },
     // { title: "Service", link: "/service" },
-    { title: "About", link: "/about" },
+    // { title: "About", link: "/about" },
     { title: "Project", link: "/project" },
   ];
 
@@ -43,7 +43,7 @@ const Header = () => {
     <nav className={`${styles.nav} ${hidden ? styles.hidden : ""} ${scrolling ? styles.scrolled : ""}`}>
       {/* Logo */}
       <div onClick={() => navigate("/")} className={styles.logo}>
-        <img src={DhiDroidLogo} alt="Dhidroid Logo" style={{height: 50, width: 50, gap: "20px", marginRight: 10, borderRadius: 50}} />
+        <img src={DhiDroidLogo} alt="Dhidroid Logo" style={{height: 20, width: 20, gap: "20px", marginRight: 10, borderRadius: 50}} />
         Dhidroid
         </div>
 
