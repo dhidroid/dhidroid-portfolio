@@ -1,8 +1,6 @@
 "use strect"
 import React, { useEffect } from "react";
-import { Helmet } from 'react-helmet'
-import { AiOutlineArrowRight } from "react-icons/ai";
-import { RxPlus } from "react-icons/rx";
+// import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router";
 import styles from './styles/Hero.module.css'
 import ServiceStyle from './styles/Service.module.css'
@@ -16,9 +14,13 @@ import CtaButton from "../../components/button/ctaButton";
 import EducationCard from "../../components/Cards/EducationWorkCard";
 import ProjectCard from "../../components/Cards/ProjectsCard";
 import HomeBlogCard from "../../components/Cards/HomeBlogCards";
-import { AboutData, BlogData, ContactIcons, ProjectData, ResumeLink, SocialMedia, WorkExpData, clients, serviceData } from './helpers/index'
+import { AboutData, BlogData, ContactIcons, ProjectData, ResumeLink, SocialMedia, WorkExpData, serviceData } from './helpers/index'
 import { getCalApi } from "@calcom/embed-react";
 import MyProfileCard from '../../assets/profile card.png'
+import { AnimatedTooltip } from "../../components";
+import { clientData } from "../../utils/Data/HeroData";
+import {AiOutlineArrowRight} from 'react-icons/ai'
+
 
 const HomePage: React.FC = () => {
   const navigation = useNavigate();
@@ -31,17 +33,15 @@ const HomePage: React.FC = () => {
     })();
   }, [])
 
+
   return (
     <React.Fragment>
-      <Helmet>
-        {/* Primary Meta Tags */}
+      {/* <Helmet>
         <title>Dhidroid - Home</title>
         <meta name="description" content="DhineshKumar Thirupathi - A skilled web and mobile app developer specializing in React Native, TypeScript, and GoLang. Explore my services, projects, and blog posts." />
         <meta name="keywords" content="React Native, TypeScript, GoLang, Web Developer, Mobile App Developer, MERN Stack, Software Engineer, DhineshKumar Thirupathi, Dhidroid" />
         <meta name="author" content="DhineshKumar Thirupathi" />
         <meta name="robots" content="index, follow" />
-
-        {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Dhidroid - Home" />
         <meta property="og:description" content="Explore the portfolio of DhineshKumar Thirupathi, a React Native and web developer with expertise in TypeScript and GoLang." />
@@ -51,7 +51,6 @@ const HomePage: React.FC = () => {
         <meta property="og:url" content="https://dhidroid.vercel.app/" />
         <meta property="og:site_name" content="Dhidroid" />
 
-        {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Dhidroid - Home" />
         <meta name="twitter:description" content="Explore the portfolio of DhineshKumar Thirupathi, a React Native and web developer with expertise in TypeScript and GoLang." />
@@ -60,10 +59,8 @@ const HomePage: React.FC = () => {
         />
         <meta name="twitter:creator" content="@dhidroid" />
         <meta name="insta:creator" content="dhidroid" />
-
-        {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
-      </Helmet>
+      </Helmet> */}
 
 
       {/* hero page */}
@@ -80,20 +77,16 @@ const HomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* clients */}
-          <div className={styles.clientsContainer}>
-            <div style={{ fontSize: "24px", fontWeight: "bold" }}>2 +</div>
-            <div style={{ fontSize: "14px", color: "#555" }}>Happy Clients</div>
-            <div style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
-              {clients.map((src, index) => (
-                <div key={index} className={styles.clientImageContainer} style={{ marginLeft: index === 0 ? "0px" : "-20px" }}>
-                  <img src={src} className={styles.clientImage} alt="client" style={{}} />
-                </div>
-              ))}
-              <div className={styles.plusIcon}>
-                <RxPlus />
-              </div>
-            </div>
+          <div style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: "50px",
+            width: "100%",
+            marginTop: "50px"
+          }}>
+            <AnimatedTooltip items={clientData} />
           </div>
 
           {/* cta button */}
@@ -114,7 +107,6 @@ const HomePage: React.FC = () => {
                   <AiOutlineArrowRight color="black" size={20} />
                 </span>
               </Link>
-
               <Link
                 to={"#"}
                 onClick={() => {
@@ -217,7 +209,7 @@ const HomePage: React.FC = () => {
         <div className={ProjectStyle.cardContainer} >
           {ProjectData?.map((data, index) => (
             <div key={index} className={ProjectStyle.card} style={{ marginBottom: "20px" }}>
-              <ProjectCard link={data.link} projectDes={data.des} projectTitle={data.title} projectImage={data.image} catagrees={data.catagrees} onPress={data.onPress} />
+              <ProjectCard link={data.link} projectDes={data.des} projectTitle={data.title} projectImage={data.image} catagrees={data.catagrees} />
             </div>
           ))}
         </div>

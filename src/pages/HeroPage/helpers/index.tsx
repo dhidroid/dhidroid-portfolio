@@ -109,23 +109,6 @@ export const WorkExpData = [
             link: "https://www.linkedin.com/company/algojaxon-global-soft-private-limited"
         }]
     },
-    // {
-    //     type: "Education",
-    //     icon: FaGraduationCap,
-    //     exp: [{
-    //         title: "RP Sarathi Insitute of Technology - Salem",
-    //         des: "Bachelor of Technology - Information Technology",
-    //         duration: "2020 - 2024",
-    //         link: "https://rpsit.ac.in/"
-    //     },
-    //     {
-    //         title: "Gov Higher Sec School - Dharmapuri",
-    //         des: "Mathematics and ComputerSience",
-    //         duration: "2017 - 2020",
-    //         link: "https://schools.org.in/dharmapuri/33050205902/ghss-laligam.html"
-    //     }
-    //     ]
-    // }
 ]
 
 

@@ -63,7 +63,7 @@ export function Router() {
     // Global initial loading delay
     const timer = setTimeout(() => {
       setIsInitialLoading(false);
-    }, 1500); // 1.5 seconds initial loading
+    }, 5000); 
 
     return () => clearTimeout(timer);
   }, []);

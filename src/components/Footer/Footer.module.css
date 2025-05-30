@@ -2,10 +2,12 @@
 .footer {
   background: var(--primary-color);
   padding: 40px 5%;
+  margin: 16px;
   position: relative;
   overflow: hidden;
   color: var(--text-white);
   font-family: Arial, sans-serif;
+  border-radius: 6px;
 }
 
 /* Flex Container */
@@ -59,8 +61,8 @@
 }
 
 .ctaButton {
-  background: var(--backgroud-color);
-  color:var(--primary-color);
+  /* background: var(--backgroud-color); */
+  /* color:var(--primary-color); */
   padding: 12px 30px;
   border: none;
   border-radius: 25px;

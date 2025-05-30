@@ -1,51 +1,350 @@
+/* Font Imports */
 @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-/* new font  */
 @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap');
 
-
+/* Global CSS Variables for Dark UI Theme */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  background-color: var(--backgroud-color);
-  font-family: var(--primaryFont);
-}
-
-:root {
-  /* primary color */
+  /* Primary Colors */
   --primary-color: #5315FC;
   --secondary-color: #A99DFF;
-  --backgroud-color: #f1f1ff;
-  --thersty-color: rgb(210, 204, 252);
+  --tertiary-color: rgb(210, 204, 252);
+  --primary-light: #7B47FF;
+  --primary-dark: #3F0BD9;
+  --primary-muted: #5315FC80;
+  --primary-hover: #6B2EFF;
+  --primary-active: #4A12E6;
+  --primary-focus: #5315FC40;
 
-  /* secondary color */
+  /* Background Colors */
+  --background-color: #0A0A0F;
+  --bg-primary: #0A0A0F;
+  --bg-secondary: #141420;
+  --bg-tertiary: #1E1E2E;
+  --bg-surface: #252538;
+  --bg-card: #2D2D42;
+  --bg-disabled: #2A2A3D;
+
+  /* Text Colors */
   --text-black: #161616;
   --text-white: #F5F5F5;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8B8CC;
+  --text-muted: #8A8AA3;
+  --text-disabled: #5C5C70;
   --highlight-color: #7D57EA;
   --summerGlow-color: #161342;
 
-  --primaryFont: "Urbanist",
-    sans-serif;
-  --secondaryFont: "Space Grotesk",
-    sans-serif;
-  --therestyFont: "Poppins",
-    sans-serif;
+  /* Accent Colors */
+  --success: #22C55E;
+  --success-light: #4ADE80;
+  --success-dark: #16A34A;
+  --warning: #F59E0B;
+  --warning-light: #FBD464;
+  --warning-dark: #D97706;
+  --error: #EF4444;
+  --error-light: #F87171;
+  --error-dark: #DC2626;
+  --info: #3B82F6;
+  --info-light: #60A5FA;
+  --info-dark: #2563EB;
+
+  /* Border Colors */
+  --border-light: #3A3A4F;
+  --border-medium: #4A4A63;
+  --border-strong: #6B6B85;
+
+  /* Shadow Colors */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  --shadow-primary: 0 4px 14px 0 rgba(83, 21, 252, 0.25);
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --primaryFont: "Urbanist", sans-serif;
+  --secondaryFont: "Space Grotesk", sans-serif;
+  --tertiaryFont: "Poppins", sans-serif;
+  --font-family-sans: var(--primaryFont);
+  --font-family-mono: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+/* Base Styles */
+* {
+  box-sizing: border-box;
 }
 
-a:hover {
-  color: #535bf2;
+html {
+  font-family: var(--primaryFont);
+  line-height: 1.5;
+  font-weight: 400;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   margin: 0;
+  padding: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: inherit;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+/* Utility Classes */
+.bg-primary {
+  background-color: var(--bg-primary);
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.bg-tertiary {
+  background-color: var(--bg-tertiary);
+}
+
+.bg-surface {
+  background-color: var(--bg-surface);
+}
+
+.bg-card {
+  background-color: var(--bg-card);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-disabled {
+  color: var(--text-disabled);
+}
+
+.border-light {
+  border-color: var(--border-light);
+}
+
+.border-medium {
+  border-color: var(--border-medium);
+}
+
+.border-strong {
+  border-color: var(--border-strong);
+}
+
+.accent-primary {
+  color: var(--primary);
+}
+
+.accent-success {
+  color: var(--success);
+}
+
+.accent-warning {
+  color: var(--warning);
+}
+
+.accent-error {
+  color: var(--error);
+}
+
+.accent-info {
+  color: var(--info);
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  background-color: var(--primary-active);
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-card);
+  border-color: var(--border-strong);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+/* Card Styles */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* Input Styles */
+.input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-focus);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Status Indicators */
+.status-success {
+  color: var(--success);
+  background-color: color-mix(in srgb, var(--success) 10%, transparent);
+}
+
+.status-warning {
+  color: var(--warning);
+  background-color: color-mix(in srgb, var(--warning) 10%, transparent);
+}
+
+.status-error {
+  color: var(--error);
+  background-color: color-mix(in srgb, var(--error) 10%, transparent);
+}
+
+.status-info {
+  color: var(--info);
+  background-color: color-mix(in srgb, var(--info) 10%, transparent);
+}
+
+/* Scrollbar Styles */
+/* ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+} */
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+/* Selection Styles */
+::selection {
+  background-color: var(--primary-muted);
+  color: var(--text-primary);
+}
+
+/* Focus Visible */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }

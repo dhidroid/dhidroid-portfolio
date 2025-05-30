@@ -21,6 +21,11 @@
     .scrolled {
         background-color: rgba(255, 255, 255, 0.8);
         backdrop-filter: blur(5px);
+        color: black
+    }
+
+    .scrolled .link {
+        color: black
     }
 
 
@@ -31,7 +36,6 @@
         font-weight: bold;
         font-family: var(--secondaryFont, sans-serif);
         cursor: pointer;
-        color: var(--text-black, black);
         justify-content: center;
         align-items: center;
         display: flex;
@@ -48,13 +52,17 @@
 
     .navItem {
         font-size: 15px;
+        font-weight: 500;
+        font-family: var(--secondaryFont, sans-serif);
+        cursor: pointer;
+        transition: opacity 0.3s ease-in-out;
     }
 
     .link {
         text-decoration: none;
         font-weight: 500;
         transition: opacity 0.3s ease-in-out;
-        color: var(--text-black, black);
+        color: var(--text-white);
     }
 
     .link:hover {
@@ -104,7 +112,7 @@
         /* Show menu button on mobile */
         .menuButton {
             display: block;
-            color: var(--text-black, black);
+            color: var(--text-black);
         }
 
         /* Hide navigation links by default */
