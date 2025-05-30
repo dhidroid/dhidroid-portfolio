@@ -5,10 +5,12 @@ import { FaInstagram, FaLinkedin, } from "react-icons/fa";
 import { SiPeerlist } from "react-icons/si";
 import { useEffect } from "react";
 import { getCalApi } from "@calcom/embed-react";
+import { FaSquareGithub } from "react-icons/fa6";
 
 const Footer = () => {
 
   const SocialIcon = [
+    {name: FaSquareGithub, link: "https://github.com/dhidroid"},
     {name: FaInstagram, link: "https://instagram.com/dhidroid"},
     {name: FaLinkedin, link: "https://www.linkedin.com/in/dhineshkumar-thirupathi-🌐-00aa8b1a5"},
     {name: FaXTwitter, link: "https://x.com/@dhidroid"},
