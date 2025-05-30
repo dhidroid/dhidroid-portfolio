@@ -1,6 +1,6 @@
 "use strect"
 import React, { useEffect } from "react";
-// import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from "react-router";
 import styles from './styles/Hero.module.css'
 import ServiceStyle from './styles/Service.module.css'
@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
 
   return (
     <React.Fragment>
-      {/* <Helmet>
+      <Helmet>
         <title>Dhidroid - Home</title>
         <meta name="description" content="DhineshKumar Thirupathi - A skilled web and mobile app developer specializing in React Native, TypeScript, and GoLang. Explore my services, projects, and blog posts." />
         <meta name="keywords" content="React Native, TypeScript, GoLang, Web Developer, Mobile App Developer, MERN Stack, Software Engineer, DhineshKumar Thirupathi, Dhidroid" />
@@ -60,7 +60,7 @@ const HomePage: React.FC = () => {
         <meta name="twitter:creator" content="@dhidroid" />
         <meta name="insta:creator" content="dhidroid" />
         <link rel="icon" href="/favicon.ico" />
-      </Helmet> */}
+      </Helmet>
 
 
       {/* hero page */}
