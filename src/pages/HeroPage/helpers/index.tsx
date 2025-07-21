@@ -67,7 +67,7 @@ export const SocialMedia = [
     {
         name: "linkedin",
         Icon: FaLinkedin,
-        link: "https://www.linkedin.com/in/dhineshkumar-thirupathi-🌐-00aa8b1a5"
+        link: "https://www.linkedin.com/in/dhidroid-rndev"
     },
     {
         name: "insta",

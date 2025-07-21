@@ -1,5 +1,5 @@
 import React, { Suspense, useState, useEffect } from "react";
-import { Route, Routes } from "react-router";
+import { Link, Route, Routes } from "react-router";
 import { Footer, Header } from "../components";
 import Lottie from "lottie-react";
 import { LoaderAnimation } from "../assets";
@@ -34,8 +34,41 @@ function EnhancedLoader() {
   return null;
 }
 
+
+
+const links = [
+  { label: "Home", path: "/" },
+  { label: "About", path: "/about" },
+  { label: "Projects", path: "/project" },
+  { label: "Blog List", path: "/bloglist" },
+  { label: "Create Blog", path: "/createblog" },
+  // You can also predefine slugs for example blogs
+  { label: "Sample Blog Post", path: "/blog/sample-post" },
+];
+
+export default function LinksPage() {
+  return (
+    <div className="p-6 max-w-xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">All Local Links</h1>
+      <ul className="space-y-2">
+        {links.map((link, index) => (
+          <li key={index}>
+            <Link
+              to={link.path}
+              className="text-blue-600 hover:underline"
+            >
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+
 function BlogCreate() {
-  const [isRedirecting, setIsRedirecting] = useState(true);
+  const [isRedirecting, setIsRedirecting] = useState<boolean>(true);
 
   React.useEffect(() => {
     // Add delay before redirect to show loader longer
@@ -63,7 +96,7 @@ export function Router() {
     // Global initial loading delay
     const timer = setTimeout(() => {
       setIsInitialLoading(false);
-    }, 5000); 
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -83,6 +116,7 @@ export function Router() {
           <Route path="/project" element={<Projects />} />
           <Route path="/bloglist" element={<BlogList />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/links" element={<LinksPage />} />
           <Route path="*" element={
             <Suspense fallback={<Loader />}>
               <UndertheDev />

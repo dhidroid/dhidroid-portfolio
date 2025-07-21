@@ -12,7 +12,7 @@ const Footer = () => {
   const SocialIcon = [
     {name: FaSquareGithub, link: "https://github.com/dhidroid"},
     {name: FaInstagram, link: "https://instagram.com/dhidroid"},
-    {name: FaLinkedin, link: "https://www.linkedin.com/in/dhineshkumar-thirupathi-🌐-00aa8b1a5"},
+    {name: FaLinkedin, link: "https://www.linkedin.com/in/dhidroid-rndev"},
     {name: FaXTwitter, link: "https://x.com/@dhidroid"},
     {name: SiPeerlist, link: "https://peerlist.io/dhidroid"},
   ]
@@ -56,7 +56,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      
+
       <div className={styles.bigText}>
         LET'S WORK TOGETHER
       </div>
