@@ -43,7 +43,7 @@
 
 .categoryContainer p {
     /* background-color: var(--text-white); */
-    color: var(--summerGlow-color);
+    color: var(--text-white);
     font-weight: bold;
     font-family: var(--secondaryFont);
     cursor: pointer;
