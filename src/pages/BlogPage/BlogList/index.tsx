@@ -114,13 +114,13 @@ const BlogList = () => {
                     {blogData.length === 0 && (
                         <div style={{
                             alignContent: "center",
-                             display: "flex",
-                             alignItems: "center",
-                             justifyContent: "center",
-                             flexDirection: "column",
-                             marginTop: "20px",
-                             fontSize: "20px",
-                             height: "50vh"
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                            marginTop: "20px",
+                            fontSize: "20px",
+                            height: "50vh"
                         }} className={style.noBlogs}>
                             <h1>No Blogs Found</h1>
                         </div>
@@ -128,7 +128,7 @@ const BlogList = () => {
                     {/* blog container */}
                     <div className={style.blogContainer}>
                         {/* blog card */}
-                        {blogData.map((data, index): any => (
+                        {/* {blogData.map((data, index): any => (
                             <HomeBlogCard
                                 BlogImage={data.mainImage.asset.url}
                                 BlogTitle={data.title} Category=''
@@ -136,7 +136,24 @@ const BlogList = () => {
                                 date={moment(data?.publishedAt).format("DD MMM YYYY")} onPress={() => {
                                     navigation(`/blog/${data.slug.current}`, { state: { slug: data?.slug?.current } })
                                 }} key={index} />
-                        ))}
+                        ))} */}
+                        {[...blogData]
+                            .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+                            .map((data, index) => (
+                                <HomeBlogCard
+                                    key={index}
+                                    BlogImage={data.mainImage.asset.url}
+                                    BlogTitle={data.title}
+                                    Category=''
+                                    author={data.author.name}
+                                    date={moment(data?.publishedAt).format("DD MMM YYYY")}
+                                    onPress={() => {
+                                        navigation(`/blog/${data.slug.current}`, {
+                                            state: { slug: data?.slug?.current }
+                                        });
+                                    }}
+                                />
+                            ))}
 
                     </div>
                 </div>
