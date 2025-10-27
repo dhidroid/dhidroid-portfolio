@@ -170,7 +170,7 @@ const HomePage: React.FC = () => {
           {/* button */}
           <div style={{ display: "flex", flexDirection: "row", }}>
             <div>
-              <CtaButton colour={"black"} title="View My Resume :)" onPress={() => window.open(ResumeLink)} />
+              <CtaButton title="View My Resume 😊" onPress={() => window.open(ResumeLink)} />
             </div>
           </div>
         </div>
