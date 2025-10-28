@@ -22,8 +22,56 @@ import { clientData } from "../../utils/Data/HeroData";
 import {AiOutlineArrowRight} from 'react-icons/ai'
 
 
+// Function to convert OneDrive share link to embed link
+const convertToEmbedUrl = (url: string): string => {
+  // If it's a OneDrive link, convert it to embed format
+  if (url.includes('onedrive.live.com')) {
+    // Replace 'view.aspx' with 'embed.aspx'
+    if (url.includes('view.aspx')) {
+      return url.replace('view.aspx', 'embed.aspx');
+    }
+    // If already has resid and authkey, convert to embed
+    if (url.includes('resid=') || url.includes('authkey=')) {
+      const baseUrl = url.split('?')[0];
+      const params = new URLSearchParams(url.split('?')[1]);
+      return `https://onedrive.live.com/embed?${params.toString()}`;
+    }
+  }
+  
+  // For 1drv.ms shortened links - these need to be opened in new window
+  if (url.includes('1drv.ms')) {
+    return url;
+  }
+  
+  // If it's a Google Drive link
+  if (url.includes('drive.google.com')) {
+    const fileId = url.match(/[-\w]{25,}/);
+    if (fileId) {
+      return `https://drive.google.com/file/d/${fileId[0]}/preview`;
+    }
+  }
+  
+  // For direct PDF links, return as is
+  return url;
+};
+
 // Resume Modal Component
 const ResumeModal: React.FC<{ isOpen: boolean; onClose: () => void; resumeUrl: string }> = ({ isOpen, onClose, resumeUrl }) => {
+  const [embedUrl, setEmbedUrl] = useState('');
+  const [canEmbed, setCanEmbed] = useState(true);
+
+  useEffect(() => {
+    if (isOpen) {
+      const convertedUrl = convertToEmbedUrl(resumeUrl);
+      setEmbedUrl(convertedUrl);
+      
+      // Check if it's a shortened link that can't be embedded
+      if (resumeUrl.includes('1drv.ms')) {
+        setCanEmbed(false);
+      }
+    }
+  }, [isOpen, resumeUrl]);
+
   if (!isOpen) return null;
 
   return (
@@ -34,12 +82,13 @@ const ResumeModal: React.FC<{ isOpen: boolean; onClose: () => void; resumeUrl: s
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 9999,
-        padding: '20px'
+        padding: '20px',
+        animation: 'fadeIn 0.3s ease'
       }}
       onClick={onClose}
     >
@@ -50,43 +99,218 @@ const ResumeModal: React.FC<{ isOpen: boolean; onClose: () => void; resumeUrl: s
           height: '90%',
           maxWidth: '1200px',
           backgroundColor: 'white',
-          borderRadius: '10px',
-          overflow: 'hidden'
+          borderRadius: '12px',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+          animation: 'slideUp 0.3s ease'
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            backgroundColor: '#5315FC',
-            color: 'white',
-            border: 'none',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            fontSize: '24px',
-            cursor: 'pointer',
-            zIndex: 10000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          ×
-        </button>
-        <iframe
-          src={resumeUrl}
-          style={{
-            width: '100%',
-            height: '100%',
-            border: 'none'
-          }}
-          title="Resume PDF Viewer"
-        />
+        {/* Header */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '15px 20px',
+          backgroundColor: '#5315FC',
+          color: 'white'
+        }}>
+          <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
+            Resume - DhineshKumar Thirupathi
+          </h3>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <button
+              onClick={() => window.open(resumeUrl, '_blank')}
+              style={{
+                backgroundColor: 'white',
+                color: '#5315FC',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '8px 16px',
+                fontSize: '14px',
+                cursor: 'pointer',
+                fontWeight: '600',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = '#f0f0f0';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = 'white';
+              }}
+            >
+              Open in New Tab
+            </button>
+            <button
+              onClick={onClose}
+              style={{
+                backgroundColor: 'transparent',
+                color: 'white',
+                border: '2px solid white',
+                borderRadius: '50%',
+                width: '36px',
+                height: '36px',
+                fontSize: '24px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 'bold',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+        
+        {/* Content */}
+        <div style={{ 
+          flex: 1, 
+          position: 'relative', 
+          backgroundColor: '#f5f5f5',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {canEmbed ? (
+            <>
+              <iframe
+                src={embedUrl}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  backgroundColor: 'white'
+                }}
+                title="Resume PDF Viewer"
+                allow="autoplay"
+              />
+              
+              {/* Loading/Fallback message */}
+              <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                textAlign: 'center',
+                backgroundColor: 'white',
+                padding: '30px',
+                borderRadius: '8px',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                maxWidth: '400px'
+              }}>
+                <div style={{
+                  width: '50px',
+                  height: '50px',
+                  border: '4px solid #f3f3f3',
+                  borderTop: '4px solid #5315FC',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                  margin: '0 auto 20px'
+                }}></div>
+                <p style={{ 
+                  fontSize: '16px', 
+                  color: '#333',
+                  marginBottom: '15px',
+                  fontWeight: '500'
+                }}>
+                  Loading Resume...
+                </p>
+                <p style={{ 
+                  fontSize: '13px', 
+                  color: '#666',
+                  lineHeight: '1.5'
+                }}>
+                  If the resume doesn't load within a few seconds,<br />
+                  please click "Open in New Tab" button above.
+                </p>
+              </div>
+            </>
+          ) : (
+            // Message for shortened links that can't be embedded
+            <div style={{
+              textAlign: 'center',
+              backgroundColor: 'white',
+              padding: '40px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+              maxWidth: '500px'
+            }}>
+              <div style={{
+                fontSize: '48px',
+                marginBottom: '20px'
+              }}>📄</div>
+              <h3 style={{
+                color: '#5315FC',
+                marginBottom: '15px',
+                fontSize: '20px'
+              }}>
+                Resume Ready to View
+              </h3>
+              <p style={{ 
+                fontSize: '15px', 
+                color: '#666',
+                marginBottom: '25px',
+                lineHeight: '1.6'
+              }}>
+                This resume is hosted on OneDrive. Please click the button below to view it in a new tab.
+              </p>
+              <button
+                onClick={() => window.open(resumeUrl, '_blank')}
+                style={{
+                  backgroundColor: '#5315FC',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  padding: '12px 30px',
+                  fontSize: '16px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#4012d4';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = '#5315FC';
+                }}
+              >
+                View Resume →
+              </button>
+            </div>
+          )}
+        </div>
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideUp {
+          from { 
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
@@ -108,16 +332,16 @@ const HomePage: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>DhineshKumar Thirupathi - Web & Mobile App Developer | React Native, TypeScript, GoLang</title>
-        <meta name="description" content="DhineshKumar Thirupathi (Dhidroid) - Professional React Native and web developer specializing in TypeScript, GoLang, and MERN Stack. Expert in building high-performance mobile and web applications." />
-        <meta name="keywords" content="React Native Developer, TypeScript Developer, GoLang Developer, Web Developer, Mobile App Developer, MERN Stack Developer, Software Engineer, DhineshKumar Thirupathi, Dhidroid, Frontend Developer, Full Stack Developer" />
+        <title>DhineshKumar Thirupathi - Web & Mobile App Developer | React Native, TypeScript, NodeJS</title>
+        <meta name="description" content="DhineshKumar Thirupathi (Dhidroid) - Professional React Native and web developer specializing in TypeScript, NodeJS, and MERN Stack. Expert in building high-performance mobile and web applications." />
+        <meta name="keywords" content="React Native Developer, TypeScript Developer, NodeJS Developer, Web Developer, Mobile App Developer, MERN Stack Developer, Software Engineer, DhineshKumar Thirupathi, Dhidroid, Frontend Developer, Full Stack Developer" />
         <meta name="author" content="DhineshKumar Thirupathi" />
         <meta name="robots" content="index, follow" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="DhineshKumar Thirupathi - Web & Mobile App Developer" />
-        <meta property="og:description" content="Professional React Native and web developer with expertise in TypeScript, GoLang, and MERN Stack. Building high-performance mobile and web applications." />
+        <meta property="og:description" content="Professional React Native and web developer with expertise in TypeScript, NodeJS, and MERN Stack. Building high-performance mobile and web applications." />
         <meta property="og:image" content="https://dhidroid.vercel.app/og-image.jpg" />
         <meta property="og:url" content="https://dhidroid.vercel.app/" />
         <meta property="og:site_name" content="Dhidroid Portfolio" />
@@ -128,7 +352,7 @@ const HomePage: React.FC = () => {
         <meta name="twitter:site" content="@dhidroid" />
         <meta name="twitter:creator" content="@dhidroid" />
         <meta name="twitter:title" content="DhineshKumar Thirupathi - Web & Mobile App Developer" />
-        <meta name="twitter:description" content="Professional React Native and web developer with expertise in TypeScript, GoLang, and MERN Stack." />
+        <meta name="twitter:description" content="Professional React Native and web developer with expertise in TypeScript, NodeJS, and MERN Stack." />
         <meta name="twitter:image" content="https://dhidroid.vercel.app/twitter-image.jpg" />
 
         {/* Additional SEO */}
@@ -145,8 +369,8 @@ const HomePage: React.FC = () => {
             "alternateName": "Dhidroid",
             "url": "https://dhidroid.vercel.app/",
             "jobTitle": "Web & Mobile App Developer",
-            "description": "Professional React Native and web developer specializing in TypeScript, GoLang, and MERN Stack",
-            "knowsAbout": ["React Native", "TypeScript", "GoLang", "MERN Stack", "Web Development", "Mobile App Development"],
+            "description": "Professional React Native and web developer specializing in TypeScript, NodeJS, and MERN Stack",
+            "knowsAbout": ["React Native", "TypeScript", "NodeJS", "MERN Stack", "Web Development", "Mobile App Development"],
             "sameAs": [
               "https://twitter.com/dhidroid",
               "https://instagram.com/dhidroid"
@@ -171,7 +395,7 @@ const HomePage: React.FC = () => {
             <div>
               <h1>i'm <span>DhineshKumar ,</span> Web  <br /> Mobile App Developer</h1>
               <center>
-                <p>ReactNative | <span>TypeScript</span> | GoLang </p>
+                <p>ReactNative | <span>TypeScript</span> | NodeJS </p>
               </center>
             </div>
           </div>
@@ -207,7 +431,8 @@ const HomePage: React.FC = () => {
               </Link>
               <Link
                 to={"#"}
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   window.location.href = "tel:+919150507538";
                 }}
                 className={styles.hiremeButton}>
