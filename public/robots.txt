@@ -1,6 +1,35 @@
+# robots.txt for https://dhidroid.vercel.app
+# Allow all major search engines and AI crawlers full access to public content.
+
 User-agent: *
-Disallow: /createblog/
 Disallow: /api/
+Disallow: /createblog/
 Allow: /
 
+# Explicitly allow AI crawlers
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Sitemap location
 Sitemap: https://dhidroid.vercel.app/sitemap.xml
