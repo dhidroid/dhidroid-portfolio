@@ -33,7 +33,7 @@ const Header = () => {
 
   const Links = [
     { title: "Home", link: "/" },
-    // { title: "Blogs", link: "/bloglist" },
+    { title: "Blogs", link: "/bloglist" },
     // { title: "Service", link: "/service" },
     // { title: "About", link: "/about" },
     { title: "Project", link: "/project" },
@@ -62,7 +62,7 @@ const Header = () => {
           </li>
         ))}
         {menuOpen && (
-          <a href="tel:" className={`${styles.cta} ${styles.mobileOnly}`}>
+          <a href="tel:+919150507538" className={`${styles.cta} ${styles.mobileOnly}`}>
             Contact
           </a>
         )}
@@ -71,7 +71,7 @@ const Header = () => {
       </ul>
 
       {/* CTA Button (Visible only on Desktop) */}
-      <a href="tel:" className={`${styles.cta} ${styles.desktopOnly}`}>
+      <a href="tel:+919150507538" className={`${styles.cta} ${styles.desktopOnly}`}>
         Contact
       </a>
     </nav>
