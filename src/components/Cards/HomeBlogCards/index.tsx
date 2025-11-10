@@ -10,7 +10,7 @@ interface Props {
     Category: string;
     BlogTitle: string;
     author: string;
-    date: Date;
+    date: Date | any;
     onPress: () => void
 }
 

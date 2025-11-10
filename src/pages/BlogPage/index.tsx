@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router";
+import { useLocation, useParams, useNavigate } from "react-router";
 import { client } from "../../senity/senity";
 import Loader from "../../components/loader/Loader";
 import Helmet from "react-helmet";
 import styles from "./BlogDetails.module.css";
-import { FaFacebook, FaLinkedin, FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { FaFacebook, FaLinkedin, FaWhatsapp, FaArrowLeft } from "react-icons/fa";
 import { IoShareOutline } from "react-icons/io5";
 import { RiTwitterXFill } from "react-icons/ri";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { darcula } from "react-syntax-highlighter/dist/styles";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { FiCopy, FiCheck } from "react-icons/fi";
 
 const BlogPage = () => {
     const location = useLocation();
     const { slug } = useParams();
+    const navigate = useNavigate();
     const passedSlug = location.state?.slug;
-    const [blog, setBlog] = useState(null);
+    const [blog, setBlog] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,8 +46,22 @@ const BlogPage = () => {
         if (slug || passedSlug) fetchData();
     }, [slug, passedSlug]);
 
+    const handleCopy = (code: string) => {
+        setCopiedCode(code);
+        setTimeout(() => setCopiedCode(null), 2000);
+    };
+
     if (loading) return <Loader />;
-    if (!blog) return <center><p>Blog not found!</p></center>;
+    if (!blog) {
+        return (
+            <div className={styles.notFound}>
+                <h2>Blog not found!</h2>
+                <button onClick={() => navigate("/bloglist")} className={styles.backButton}>
+                    <FaArrowLeft /> Back to Blogs
+                </button>
+            </div>
+        );
+    }
 
     const shareBlog = () => {
         const shareData = {
@@ -60,61 +77,136 @@ const BlogPage = () => {
         }
     };
 
-    // render item
-    const renderContent = (body) => {
+    // Enhanced content renderer with better styling
+    const renderContent = (body: any) => {
         if (!body || !Array.isArray(body)) return <p>No content available.</p>;
 
-        return body.map((block, index) => {
+        return body.map((block: any, index: number) => {
             if (block._type === "block") {
                 switch (block.style) {
                     case "h1":
-                        return <h1 key={index} className={styles.blogTitle}>{block.children.map(child => child.text)}</h1>;
+                        return (
+                            <h1 key={index} className={styles.contentH1}>
+                                {block.children.map((child: any) => child.text).join("")}
+                            </h1>
+                        );
                     case "h2":
-                        return <h2 key={index} className={styles.blogTitle}>{block.children.map(child => child.text)}</h2>;
+                        return (
+                            <h2 key={index} className={styles.contentH2}>
+                                {block.children.map((child: any) => child.text).join("")}
+                            </h2>
+                        );
                     case "h3":
-                        return <h3 key={index} className={styles.blogTitle}>{block.children.map(child => child.text)}</h3>;
+                        return (
+                            <h3 key={index} className={styles.contentH3}>
+                                {block.children.map((child: any) => child.text).join("")}
+                            </h3>
+                        );
+                    case "h4":
+                        return (
+                            <h4 key={index} className={styles.contentH4}>
+                                {block.children.map((child: any) => child.text).join("")}
+                            </h4>
+                        );
                     case "blockquote":
-                        return <blockquote key={index} className={styles.quote}>{block.children.map(child => child.text)}</blockquote>;
+                        return (
+                            <blockquote key={index} className={styles.quote}>
+                                {block.children.map((child: any) => child.text).join("")}
+                            </blockquote>
+                        );
                     case "normal":
+                    default:
                         return (
                             <p key={index} className={styles.blogText}>
-                                {block.children.map((child, i) => (
-                                    child.marks?.includes("em")
-                                        ? <em key={i}>{child.text}</em>
-                                        : child.marks?.includes("strong")
-                                            ? <strong key={i}>{child.text}</strong>
-                                            : child.marks?.includes("code")
-                                                ? <code key={i} className={styles.inlineCode}>{child.text}</code>
-                                                : child.href
-                                                    ? <a key={i} href={child.href} target="_blank" rel="noopener noreferrer">{child.text}</a>
-                                                    : child.text
-                                ))}
+                                {block.children.map((child: any, i: number) => {
+                                    let content = child.text;
+                                    
+                                    if (child.marks?.includes("strong")) {
+                                        content = <strong key={i}>{content}</strong>;
+                                    }
+                                    if (child.marks?.includes("em")) {
+                                        content = <em key={i}>{content}</em>;
+                                    }
+                                    if (child.marks?.includes("code")) {
+                                        content = <code key={i} className={styles.inlineCode}>{content}</code>;
+                                    }
+                                    if (child.marks?.includes("underline")) {
+                                        content = <u key={i}>{content}</u>;
+                                    }
+                                    if (child.href) {
+                                        content = (
+                                            <a 
+                                                key={i} 
+                                                href={child.href} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className={styles.link}
+                                            >
+                                                {content}
+                                            </a>
+                                        );
+                                    }
+                                    
+                                    return content;
+                                })}
                             </p>
                         );
-                    default:
-                        return <p key={index} className={styles.blogText}>{block.children.map(child => child.text)}</p>;
                 }
             } else if (block._type === "list") {
+                const ListTag = block.listItem === "bullet" ? "ul" : "ol";
                 return (
-                    <ul key={index} style={{ paddingLeft: "20px" }}>
-                        {block.children.map((child, i) => (
-                            <li key={i} className={styles.blogText}>{child.text}</li>
+                    <ListTag key={index} className={styles.list}>
+                        {block.children?.map((item: any, i: number) => (
+                            <li key={i} className={styles.listItem}>
+                                {item.text}
+                            </li>
                         ))}
-                    </ul>
+                    </ListTag>
                 );
             } else if (block._type === "code") {
+                const codeContent = block.code || "";
+                const language = block.language || "javascript";
+                
                 return (
                     <div key={index} className={styles.codeBlock}>
-                        <CopyToClipboard text={block.code}>
-                            <button className={styles.copyButton}>Copy</button>
-                        </CopyToClipboard>
-                        {/* <SyntaxHighlighter language={block.language || "javascript"} style={darcula}>
-                            {block.code}
-                        </SyntaxHighlighter> */}
+                        <div className={styles.codeHeader}>
+                            <span className={styles.codeLanguage}>{language}</span>
+                            <CopyToClipboard text={codeContent} onCopy={() => handleCopy(codeContent)}>
+                                <button className={styles.copyButton}>
+                                    {copiedCode === codeContent ? (
+                                        <>
+                                            <FiCheck /> Copied!
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FiCopy /> Copy
+                                        </>
+                                    )}
+                                </button>
+                            </CopyToClipboard>
+                        </div>
+                        <SyntaxHighlighter 
+                            language={language} 
+                            style={darcula}
+                            customStyle={{
+                                margin: 0,
+                                borderRadius: "0 0 8px 8px",
+                                fontSize: "0.9rem"
+                            }}
+                        >
+                            {codeContent}
+                        </SyntaxHighlighter>
                     </div>
                 );
             } else if (block._type === "image") {
-                return <img key={index} src={block.asset.url} alt={block.alt || "Blog image"} className={styles.responsiveImage} />;
+                return (
+                    <img 
+                        key={index} 
+                        src={block.asset?.url} 
+                        alt={block.alt || "Blog image"} 
+                        className={styles.responsiveImage} 
+                    />
+                );
             }
 
             return null;
@@ -122,53 +214,124 @@ const BlogPage = () => {
     };
 
     const shareUrl = window.location.href;
+    const readingTime = blog.body ? Math.ceil(blog.body.length / 3) : 5;
 
     return (
         <>
             <Helmet>
                 <title>{blog.title} | DhineshKumar Thirupathi</title>
-                <meta name="description" content={blog.body?.[0]?.children?.map(child => child.text).join(" ").substring(0, 150) || "Read an interesting blog on " + blog.title} />
-                <meta name="keywords" content={["dhidroid", "dhineshkumar", "dhineshkumar thirupathi", ...(blog.categories?.map(cat => cat.title) || [])].join(", ")} />
+                <meta name="description" content={blog.body?.[0]?.children?.map((child: any) => child.text).join(" ").substring(0, 150) || "Read an interesting blog on " + blog.title} />
+                <meta name="keywords" content={["dhidroid", "dhineshkumar", "dhineshkumar thirupathi", ...(blog.categories?.map((cat: any) => cat.title) || [])].join(", ")} />
                 <meta name="author" content="DhineshKumar Thirupathi" />
                 <meta name="robots" content="index, follow" />
                 <meta property="og:title" content={blog.title} />
                 <meta property="og:image" content={blog.mainImage?.asset?.url} />
-                <meta property="og:description" content={blog.body?.[0]?.children?.map(child => child.text).join(" ").substring(0, 150)} />
+                <meta property="og:description" content={blog.body?.[0]?.children?.map((child: any) => child.text).join(" ").substring(0, 150)} />
             </Helmet>
-            <div className={styles.blogContainer}>
-                <center>
-                    <h1 className={styles.blogTitle}>Blogs</h1>
-                    <p className={styles.blogDetails}>Blog Details - <span>{blog.title}</span></p>
-                </center>
-            </div>
-            <div className={styles.blogContent}>
-                {blog.mainImage && <img src={blog.mainImage.asset.url} alt={blog.mainImage.alt} className={styles.blogImage} />}
-                <h1 className={styles.blogTitle}>{blog.title}</h1>
-                <div className={styles.authorContainer}>
-                    {blog.author?.image?.asset?.url && <img src={blog.author.image.asset.url} alt="Author" className={styles.authorImage} />}
-                    <div>
-                        <p><strong>By {blog.author?.name}</strong></p>
-                        <p>{new Date(blog.publishedAt).toLocaleDateString()}</p>
+            
+            <div className={styles.pageWrapper}>
+                <div className={styles.blogContainer}>
+                    <button 
+                        onClick={() => navigate("/bloglist")} 
+                        className={styles.backButton}
+                        data-testid="back-to-blogs-button"
+                    >
+                        <FaArrowLeft /> Back to Blogs
+                    </button>
+
+                    <div className={styles.blogHeader}>
+                        <div className={styles.categoryTags}>
+                            {blog.categories?.map((cat: any, idx: number) => (
+                                <span key={idx} className={styles.categoryTag}>
+                                    {cat.title}
+                                </span>
+                            ))}
+                        </div>
+                        <h1 className={styles.blogTitle} data-testid="blog-title">{blog.title}</h1>
+                        
+                        <div className={styles.blogMeta}>
+                            <div className={styles.authorInfo}>
+                                {blog.author?.image?.asset?.url && (
+                                    <img 
+                                        src={blog.author.image.asset.url} 
+                                        alt={blog.author.name} 
+                                        className={styles.authorImage} 
+                                    />
+                                )}
+                                <div>
+                                    <p className={styles.authorName}>{blog.author?.name}</p>
+                                    <p className={styles.publishDate}>
+                                        {new Date(blog.publishedAt).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric"
+                                        })} · {readingTime} min read
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div className={styles.socialShare}>
+                                <a 
+                                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className={styles.shareIcon}
+                                    aria-label="Share on Facebook"
+                                >
+                                    <FaFacebook size={20} />
+                                </a>
+                                <a 
+                                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(blog.title)}`} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className={styles.shareIcon}
+                                    aria-label="Share on Twitter"
+                                >
+                                    <RiTwitterXFill size={20} />
+                                </a>
+                                <a 
+                                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className={styles.shareIcon}
+                                    aria-label="Share on LinkedIn"
+                                >
+                                    <FaLinkedin size={20} />
+                                </a>
+                                <a 
+                                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(blog.title + " " + shareUrl)}`} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className={styles.shareIcon}
+                                    aria-label="Share on WhatsApp"
+                                >
+                                    <FaWhatsapp size={20} />
+                                </a>
+                                <button 
+                                    onClick={shareBlog} 
+                                    className={styles.shareIcon}
+                                    aria-label="Share"
+                                >
+                                    <IoShareOutline size={20} />
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
+                    {blog.mainImage && (
+                        <div className={styles.featuredImageWrapper}>
+                            <img 
+                                src={blog.mainImage.asset.url} 
+                                alt={blog.mainImage.alt || blog.title} 
+                                className={styles.featuredImage} 
+                            />
+                        </div>
+                    )}
+
+                    <article className={styles.blogContent} data-testid="blog-content">
+                        {renderContent(blog.body)}
+                    </article>
                 </div>
-                <div className={styles.socialShare}>
-                    <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer">
-                        <FaFacebook size={35} className={styles.shareIcon} />
-                    </a>
-                    <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(blog.title)}`} target="_blank" rel="noopener noreferrer">
-                        <RiTwitterXFill size={35} className={styles.shareIcon} />
-                    </a>
-                    <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer">
-                        <FaLinkedin size={35} className={styles.shareIcon} />
-                    </a>
-                    <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(blog.title + " " + shareUrl)}`} target="_blank" rel="noopener noreferrer">
-                        <FaWhatsapp size={35} className={styles.shareIcon} />
-                    </a>
-                    <a onClick={shareBlog} className={styles.shareButton}>
-                        <IoShareOutline size={35} />
-                    </a>
-                </div>
-                <div>{renderContent(blog.body)}</div>
             </div>
         </>
     );

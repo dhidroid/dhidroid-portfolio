@@ -1,88 +1,256 @@
+/* Container */
 .container {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background: var(--bg-primary);
+}
 
-    height: fit-content;
-    margin-top: 5%;
-    justify-content: center;
+/* Header Section */
+.headerSection {
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    text-align: center;
 }
 
 .titleContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    flex-direction: column;
+    margin-bottom: 2rem;
 }
 
 .titleContainer h1 {
     font-family: var(--secondaryFont);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
 }
 
+.subtitle {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Search Container */
+.searchContainer {
+    position: relative;
+    max-width: 600px;
+    margin: 2rem auto 0;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    pointer-events: none;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3.5rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all var(--transition-fast);
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-focus);
+    background: var(--bg-card);
+}
+
+.searchInput::placeholder {
+    color: var(--text-muted);
+}
+
+/* Inner Container */
 .innerContainer {
-    justify-content: center;
-    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Category Container */
+.categoryContainer {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    margin-bottom: 2rem;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .categoryContainer::-webkit-scrollbar {
     display: none;
 }
 
-.categoryContainer {
-    display: flex;
-    overflow-y: auto;
-    flex-direction: row;
-    align-items: center;
-    gap: 20px;
-    scroll-behavior: auto;
-    align-content: center;
-    align-self: center;
-    white-space: nowrap;
-    padding: 0px 20px;
-    -ms-overflow-style: none;  
-    scrollbar-width: none;  
-}
-
-.categoryContainer p {
-    /* background-color: var(--text-white); */
-    color: var(--text-white);
-    font-weight: bold;
+.categoryButton {
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-full);
     font-family: var(--secondaryFont);
-    cursor: pointer;
-
-}
-
-.categoryContainer p.active {
-    padding: 5px 10px;
-    background-color: var(--summerGlow-color);
-    color: var(--text-white);
-    box-sizing: border-box;
-    border-radius: 100px;
+    font-size: 0.95rem;
+    font-weight: 600;
     text-transform: capitalize;
     white-space: nowrap;
-    flex: 0 0 auto;
     cursor: pointer;
-    /* Makes it clear it's clickable */
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: all var(--transition-fast);
 }
 
+.categoryButton:hover {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border-color: var(--border-medium);
+    transform: translateY(-2px);
+}
+
+.categoryButton.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-primary);
+}
+
+/* Results Info */
+.resultsInfo {
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+}
+
+.resultsInfo p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Blog Container */
 .blogContainer {
     display: grid;
-    /* grid-template-columns: repeat(auto-fit, minmax(3, 1fr)); */
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    width: 100%;
-    padding: 50px 0px;
-    /* background-color: var(--highlight-color); */
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 1rem 0 3rem;
+}
 
+/* No Blogs */
+.noBlogs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    padding: 3rem 1rem;
+}
+
+.noBlogsContent {
+    text-align: center;
+    max-width: 500px;
+}
+
+.noBlogsContent h2 {
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.noBlogsContent p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.clearSearchButton {
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.clearSearchButton:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .blogContainer {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
 }
 
 @media (max-width: 768px) {
+    .container {
+        padding: 1rem 0.5rem;
+    }
+
+    .titleContainer h1 {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .searchContainer {
+        margin: 1.5rem auto 0;
+    }
+
+    .categoryContainer {
+        gap: 0.75rem;
+        padding: 1rem 0;
+    }
+
+    .categoryButton {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
     .blogContainer {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .noBlogsContent h2 {
+        font-size: 1.5rem;
+    }
+
+    .noBlogsContent p {
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 480px) {
+    .titleContainer h1 {
+        font-size: 2rem;
+    }
+
     .blogContainer {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .searchInput {
+        padding: 0.875rem 0.875rem 0.875rem 3rem;
+        font-size: 0.95rem;
     }
 }

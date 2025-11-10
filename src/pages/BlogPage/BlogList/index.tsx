@@ -1,38 +1,53 @@
-import React, { useState, useEffect } from 'react'
-import Loader from '../../../components/loader/Loader'
-import style from './index.module.css'
-import { client } from '../../../senity/senity'
-import { GoDotFill } from 'react-icons/go'
-import { Helmet } from 'react-helmet'
-import HomeBlogCard from '../../../components/Cards/HomeBlogCards'
-import moment from 'moment'
-import { useNavigate } from 'react-router'
+import React, { useState, useEffect } from 'react';
+import Loader from '../../../components/loader/Loader';
+import style from './index.module.css';
+import { client } from '../../../senity/senity';
+import { Helmet } from 'react-helmet';
+import HomeBlogCard from '../../../components/Cards/HomeBlogCards';
+import moment from 'moment';
+import { useNavigate } from 'react-router';
+import { FiSearch } from 'react-icons/fi';
 
 const BlogList = () => {
-    const navigation = useNavigate()
-    const [loading, setLoading] = useState(false)
-    const [category, setCategory] = useState([])
-    const [blogData, setBlogData] = useState([])
-    const [activeCategory, setActiveCategory] = useState('all')
+    const navigation = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [category, setCategory] = useState<any[]>([]);
+    const [blogData, setBlogData] = useState<any[]>([]);
+    const [filteredBlogs, setFilteredBlogs] = useState<any[]>([]);
+    const [activeCategory, setActiveCategory] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetchCategory();
         fetchBlogData(activeCategory);
-    }, [activeCategory])
+    }, [activeCategory]);
+
+    useEffect(() => {
+        // Filter blogs based on search query
+        if (searchQuery.trim() === '') {
+            setFilteredBlogs(blogData);
+        } else {
+            const filtered = blogData.filter(blog =>
+                blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                blog.author?.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredBlogs(filtered);
+        }
+    }, [searchQuery, blogData]);
 
     const fetchCategory = async () => {
-        setLoading(true)
+        setLoading(true);
         try {
             const fetchData = await client.fetch(`*[_type == "category"]`);
-            setCategory(fetchData)
+            setCategory(fetchData);
         } catch (err) {
-            console.error(err)
+            console.error(err);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
-    const fetchBlogData = async category => {
+    const fetchBlogData = async (category: string) => {
         setLoading(true);
         try {
             let query = `
@@ -63,6 +78,7 @@ const BlogList = () => {
 
             const fetchData = await client.fetch(query);
             setBlogData(fetchData);
+            setFilteredBlogs(fetchData);
         } catch (error) {
             console.error(error);
         } finally {
@@ -70,82 +86,109 @@ const BlogList = () => {
         }
     };
 
-
+    const handleCategoryChange = (categoryTitle: string) => {
+        setActiveCategory(categoryTitle);
+        setSearchQuery(''); // Reset search when changing category
+    };
 
     if (loading) {
-        return <Loader />
+        return <Loader />;
     }
 
     return (
         <React.Fragment>
-            <Helmet></Helmet>
+            <Helmet>
+                <title>Blog List | DhineshKumar Thirupathi</title>
+                <meta name="description" content="Explore articles on web development, programming, and technology" />
+            </Helmet>
             <div className={style.container}>
-                {/* Title */}
-                <div className={style.titleContainer}>
-                    <h1>Blogs List</h1>
+                {/* Header Section */}
+                <div className={style.headerSection}>
+                    <div className={style.titleContainer}>
+                        <h1 data-testid="blogs-list-title">Latest Blogs</h1>
+                        <p className={style.subtitle}>
+                            Discover insights on web development, programming, and technology
+                        </p>
+                    </div>
+
+                    {/* Search Bar */}
+                    <div className={style.searchContainer}>
+                        <FiSearch className={style.searchIcon} />
+                        <input
+                            type="text"
+                            placeholder="Search blogs by title or author..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className={style.searchInput}
+                            data-testid="search-input"
+                        />
+                    </div>
                 </div>
 
                 {/* Inner container */}
                 <div className={style.innerContainer}>
-
+                    {/* Category Filter */}
                     <div className={style.categoryContainer}>
-                        {/* "All" Category */}
-                        <p
-                            className={activeCategory === 'all' ? style.active : ''}
-                            onClick={() => setActiveCategory('all')}
+                        <button
+                            className={`${style.categoryButton} ${activeCategory === 'all' ? style.active : ''}`}
+                            onClick={() => handleCategoryChange('all')}
+                            data-testid="category-all"
                         >
-                            All
-                        </p>
+                            All Posts
+                        </button>
 
-                        {/* Dynamic categories */}
                         {category.map((data) => (
-                            <p
-                                key={data._id} // Ensure each element has a unique key
-                                className={activeCategory === data.title ? style.active : ''}
-                                onClick={() => setActiveCategory(data.title)}
+                            <button
+                                key={data._id}
+                                className={`${style.categoryButton} ${activeCategory === data.title ? style.active : ''}`}
+                                onClick={() => handleCategoryChange(data.title)}
+                                data-testid={`category-${data.title}`}
                             >
                                 {data.title}
-                            </p>
+                            </button>
                         ))}
                     </div>
 
+                    {/* Blog Count */}
+                    <div className={style.resultsInfo}>
+                        <p>
+                            {searchQuery ? `Found ${filteredBlogs.length} result${filteredBlogs.length !== 1 ? 's' : ''}` : `Showing ${filteredBlogs.length} blog${filteredBlogs.length !== 1 ? 's' : ''}`}
+                        </p>
+                    </div>
 
-                    {/* blogs  */}
-                    {blogData.length === 0 && (
-                        <div style={{
-                            alignContent: "center",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            marginTop: "20px",
-                            fontSize: "20px",
-                            height: "50vh"
-                        }} className={style.noBlogs}>
-                            <h1>No Blogs Found</h1>
+                    {/* No Blogs Found */}
+                    {filteredBlogs.length === 0 && (
+                        <div className={style.noBlogs}>
+                            <div className={style.noBlogsContent}>
+                                <h2>No Blogs Found</h2>
+                                <p>
+                                    {searchQuery
+                                        ? `No results found for "${searchQuery}"`
+                                        : 'No blogs available in this category'}
+                                </p>
+                                {searchQuery && (
+                                    <button
+                                        onClick={() => setSearchQuery('')}
+                                        className={style.clearSearchButton}
+                                    >
+                                        Clear Search
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     )}
-                    {/* blog container */}
+
+                    {/* Blog Container */}
                     <div className={style.blogContainer}>
-                        {/* blog card */}
-                        {/* {blogData.map((data, index): any => (
-                            <HomeBlogCard
-                                BlogImage={data.mainImage.asset.url}
-                                BlogTitle={data.title} Category=''
-                                author={data.author.name}
-                                date={moment(data?.publishedAt).format("DD MMM YYYY")} onPress={() => {
-                                    navigation(`/blog/${data.slug.current}`, { state: { slug: data?.slug?.current } })
-                                }} key={index} />
-                        ))} */}
-                        {[...blogData]
+                        {[...filteredBlogs]
                             .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
                             .map((data, index) => (
                                 <HomeBlogCard
                                     key={index}
-                                    BlogImage={data.mainImage.asset.url}
+                                    BlogImage={data.mainImage?.asset?.url || 'https://via.placeholder.com/400x250'}
                                     BlogTitle={data.title}
-                                    Category=''
-                                    author={data.author.name}
+                                    Category={data.categories?.[0]?.title || ''}
+                                    author={data.author?.name || 'Anonymous'}
                                     date={moment(data?.publishedAt).format("DD MMM YYYY")}
                                     onPress={() => {
                                         navigation(`/blog/${data.slug.current}`, {
@@ -154,12 +197,11 @@ const BlogList = () => {
                                     }}
                                 />
                             ))}
-
                     </div>
                 </div>
             </div>
         </React.Fragment>
-    )
-}
+    );
+};
 
-export default BlogList
+export default BlogList;
