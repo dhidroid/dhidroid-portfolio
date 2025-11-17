@@ -20,6 +20,7 @@ import MyProfileCard from '../../assets/profile card.png'
 import { AnimatedTooltip } from "../../components";
 import { clientData } from "../../utils/Data/HeroData";
 import {AiOutlineArrowRight} from 'react-icons/ai'
+import SkillsStyle from './styles/Skills.module.css'
 
 
 // Function to convert OneDrive share link to embed link
@@ -460,6 +461,7 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
+      {/* skills  */}
 
       {/* about me session */}
       <div className={AboutStyle.aboutContainer}>

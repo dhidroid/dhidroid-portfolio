@@ -1,85 +1,128 @@
-/* Root styles */
+/* HERO CONTAINER — Finpay Style */
 .container {
     height: 100vh;
-    margin-top: 50px;
     padding: 0px 20px;
+    display: flex;
     justify-content: center;
     align-items: center;
-    display: flex;
+    margin-top: 0;
+
+    /* Deep Gradient Background like uploaded design */
+    background: radial-gradient(
+        circle at 50% 20%,
+        var(--primary-dark) 0%,
+        var(--summerGlow-color) 40%,
+        #000 100%
+    );
+    position: relative;
+    overflow: hidden;
 }
 
-/* Hero container */
+/* Soft Fog/White Fade Bottom */
+.container::after {
+    content: "";
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255,255,255,0.07),
+        rgba(255,255,255,0.15)
+    );
+    filter: blur(40px);
+    z-index: 1;
+}
+
+/* Floating big blurred rings */
+.container::before {
+    content: "";
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 900px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--primary-color) 40%, transparent) 0%,
+        transparent 70%
+    );
+    opacity: 0.2;
+    filter: blur(40px);
+    z-index: 0;
+}
+
+/* HERO CONTENT — refined layout */
 .heroContentContainer {
-    justify-content: center;
-    align-items: center;
-    align-content: center;
+    z-index: 3;
     display: flex;
     flex-direction: column;
-    /* Stack elements on smaller screens */
     text-align: center;
 }
 
+/* Title */
 .heroContentContainer div h1 {
-    font-size: 60px;
-    text-align: center;
+    font-size: 64px;
+    font-family: var(--secondaryFont);
+    color: var(--text-white);
+    font-weight: 700;
+    line-height: 1.1;
+
+    /* Slight letter spacing like design */
+    letter-spacing: -1px;
 }
 
+/* Highlighted Name Tag */
 .heroContentContainer div h1 span {
-    padding: 5px 20px;
-    background-color: var(--primary-color);
+    padding: 8px 22px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
     color: white;
     display: inline-block;
-    transform: rotate(-3deg);
-    transition: transform 0.3s ease-in-out;
-}
+    border-radius: 12px;
 
-.heroContentContainer div span {
-    padding: 2px 5px;
-    background-color: var(--primary-color);
-    color: white;
-    display: inline-block;
+    /* subtle skew like uploaded design */
+    transform: skew(-9deg);
+    transition: 0.2s ease-in-out;
+    box-shadow: 0 6px 20px rgba(83, 21, 252, 0.35);
 }
 
 .heroContentContainer div h1 span:hover {
-    transform: rotate(0deg);
+    transform: skew(2deg);
 }
 
-/* Clients */
-.clientsContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
+/* Subtitle (React Native | TS | NodeJS) */
+.heroContentContainer center p {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-secondary);
 }
 
-.clientImageContainer {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 2px solid var(--text-white);
-    position: relative;
+.heroContentContainer center p span {
+    color: white;
+    padding: 8px 22px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    font-weight: 600;
+
+    display: inline-block;
+    transform: skew(-3deg);
+    transition: 0.2s ease-in-out;
+    box-shadow: 0 6px 20px rgba(83, 21, 252, 0.35);
 }
 
-.clientImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.heroContentContainer center p span:hover {
+    transform: skew(10deg);
 }
 
+/* CLIENT TOOLTIP ROW */
+.clientsContainer,
+.clientImageContainer,
 .plusIcon {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    background-color: var(--text-white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 18px;
-    color: #6A6A6A;
-    margin-left: -10px;
-    border: 2px solid white;
+    z-index: 3;
 }
 
 /* CTA Button */
@@ -93,152 +136,92 @@
 .portfolioButtonContainer {
     background-color: white;
     border-radius: 50px;
-    padding: 5px 5px;
+    padding: 6px 10px;
+    backdrop-filter: blur(20px);
     display: flex;
-    gap: 5px;
-    align-items: center;
-    flex-wrap: wrap;
+    gap: 10px;
 }
 
+/* Main CTA Button */
 .portfolioButton {
-    padding: 5px 25px;
-    background-color: var(--primary-color);
+    padding: 10px 32px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
     border-radius: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    gap: 10px;
-    text-decoration: none;
     font-weight: bold;
     color: var(--text-white);
-    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: 0.25s;
+    box-shadow: var(--shadow-primary);
 }
 
+.portfolioButton:hover {
+    transform: translateY(-3px);
+}
+
+/* Arrow Icon circle */
 .portfolioButton span {
     background-color: var(--text-white);
+    border-radius: 50%;
+    height: 34px;
+    width: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    height: 30px;
-    width: 30px;
 }
 
+/* Contact Me Button */
 .hiremeButton {
     padding: 5px 35px;
-    border: 1px solid black;
+    border: 1px solid var(--primary-color);
     border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     font-weight: bold;
-    color: black;
-}
-
-.marquee{
-    background-color: var(--thersty-color);
-    gap: 20px
-}
-
-.marquee p{
-    gap: 30px;
-    margin-right: 20px;
-    font-weight: 900;
-    font-size: 2rem;
-    font-family: var(--secondaryFont);
-    margin: 0px 30px;
-}
-
-.marquee p:hover {
+    font-family: var(--primaryFont);
     color: var(--primary-color);
-    transform: rotate(-2deg);
 }
+
+.hiremeButton:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+
 /* ========================= */
-/* Responsive Design Starts */
+/* Responsive Media Queries */
 /* ========================= */
 
-/* Tablets (max-width: 1024px) */
-@media screen and (max-width: 1024px) {
-    .container {
-        height: auto;
-        margin-top: 30px;
-        padding: 0px 15px;
-    }
-
+@media (max-width: 1024px) {
     .heroContentContainer div h1 {
-        font-size: 45px;
-    }
-
-    /* .portfolioButton {
-        padding: 5px 20px;
-    } */
-
-    .hiremeButton {
-        padding: 5px 30px;
+        font-size: 48px;
     }
 }
 
-/* Mobile devices (max-width: 768px) */
-@media screen and (max-width: 768px) {
-    .heroContentContainer {
-        flex-direction: column;
-        text-align: center;
-        margin: 100px 0px
-    }
-
+@media (max-width: 768px) {
     .heroContentContainer div h1 {
-        font-size: 35px;
+        font-size: 38px;
     }
 
-    .heroContentContainer div h1 span {
-        padding: 5px 15px;
-    }
-
-    .clientsContainer {
-        align-items: center;
-    }
-
-    .clientImageContainer {
-        height: 35px;
-        width: 35px;
-    }
-
-    .plusIcon {
-        height: 35px;
-        width: 35px;
-        font-size: 16px;
-    }
-
-    .portfolioButtonContainer {
-        flex-direction: row;
-        gap: 3px;
-    }
-
-    .portfolioButton {
-        font-size: 14px;
-    }
-
+    .portfolioButton,
     .hiremeButton {
+        padding: 8px 24px;
         font-size: 14px;
     }
 }
 
-/* Small mobile devices (max-width: 480px) */
-@media screen and (max-width: 480px) {
+@media (max-width: 480px) {
     .heroContentContainer div h1 {
-        font-size: 28px;
+        font-size: 30px;
     }
 
-    .heroContentContainer div h1 span {
-        padding: 5px 10px;
-    }
-
-    .portfolioButton {
-        font-size: 12px;
-    }
-
+    .portfolioButton,
     .hiremeButton {
+        padding: 6px 18px;
         font-size: 12px;
     }
 }
