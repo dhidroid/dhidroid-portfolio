@@ -43,13 +43,19 @@ const Header = () => {
     <nav className={`${styles.nav} ${hidden ? styles.hidden : ""} ${scrolling ? styles.scrolled : ""}`}>
       {/* Logo */}
       <div onClick={() => navigate("/")} className={styles.logo}>
-        <img src={DhiDroidLogo} alt="Dhidroid Logo" style={{height: 20, width: 20, gap: "20px", marginRight: 10, borderRadius: 50}} />
+        <img src={DhiDroidLogo} alt="Dhidroid Logo" style={{ height: 20, width: 20, gap: "20px", marginRight: 10, borderRadius: 50 }} />
         Dhidroid
-        </div>
+      </div>
 
       {/* Menu Button (Mobile) */}
-      <div className={styles.menuButton} onClick={() => setMenuOpen(!menuOpen)}>
-        {menuOpen ? <FiX size={25} /> : <FiMenu size={25} />}
+      <div
+        className={styles.menuButton}
+        onClick={() => {
+          setMenuOpen(!menuOpen);
+          document.body.style.overflow = !menuOpen ? "hidden" : "auto";
+        }}
+      >
+        {menuOpen ? <FiX size={25} color={scrolling ? "black" : "white"} /> : <FiMenu size={25} color={scrolling ? "black" : "white"} />}
       </div>
 
       {/* Navigation Links (Desktop & Mobile) */}
