@@ -99,14 +99,14 @@
 }
 
 /* Subtitle (React Native | TS | NodeJS) */
-.heroContentContainer center p {
+.heroContentContainer div p {
     margin-top: 20px;
-    font-size: 20px;
+    font-size: 1rem;
     font-weight: 500;
     color: var(--text-secondary);
 }
 
-.heroContentContainer center p span {
+.heroContentContainer div p span {
     color: white;
     padding: 8px 22px;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
@@ -144,6 +144,7 @@
     backdrop-filter: blur(20px);
     display: flex;
     gap: 10px;
+    z-index: 2;
 }
 
 /* Main CTA Button */
@@ -159,10 +160,6 @@
     text-decoration: none;
     transition: 0.25s;
     box-shadow: var(--shadow-primary);
-}
-
-.portfolioButton:hover {
-    transform: translateY(-3px);
 }
 
 /* Arrow Icon circle */

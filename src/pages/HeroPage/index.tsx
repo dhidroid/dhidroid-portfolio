@@ -21,7 +21,6 @@ import MyProfileCard from '../../assets/profile card.png'
 import { AnimatedTooltip } from "../../components";
 import { clientData } from "../../utils/Data/HeroData";
 import {AiOutlineArrowRight} from 'react-icons/ai'
-import SkillsStyle from './styles/Skills.module.css'
 
 
 // Function to convert OneDrive share link to embed link
@@ -397,7 +396,7 @@ const HomePage: React.FC = () => {
             <div>
               <h1>Your Vision, Our <span>Expertise</span><br />Let's Build Together</h1>
               <p className={styles.heroSubtitle}>
-                Turn your idea into a thriving digital project. With hands-on support in strategy, design, and development, we'll craft a platform that ensures your launch is nothing short of remarkable.
+                Turn your idea into a thriving <bold>Digital project</bold>. <br /> With hands-on support in <span>strategy, design, and development </span>, <br /> we'll craft a platform that ensures your launch is nothing short of remarkable.
               </p>
             </div>
           </div>
@@ -444,53 +443,6 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Programming Skills Section */}
-      <div className={SkillsStyle.skillsSection}>
-        <div className={SkillsStyle.skillsContainer}>
-          <div className={SkillsStyle.skillsHeader}>
-            <h2>My Programming <span>Arsenal</span></h2>
-            <p>Technologies I use to bring your ideas to life</p>
-          </div>
-
-          <div className={SkillsStyle.skillsGrid}>
-            {[
-              { name: 'React Native', category: 'Mobile', level: 95 },
-              { name: 'ReactJS', category: 'Web', level: 95 },
-              { name: 'TypeScript', category: 'Language', level: 90 },
-              { name: 'JavaScript', category: 'Language', level: 95 },
-              { name: 'Node.js', category: 'Backend', level: 85 },
-              { name: 'MS SQL', category: 'Database', level: 75 },
-              { name: 'Firebase', category: 'Cloud', level: 90 },
-              { name: 'GCP', category: 'Cloud', level: 70 },
-              { name: 'Azure', category: 'Cloud', level: 65 },
-              { name: 'Android Studio', category: 'Mobile', level: 80 },
-              { name: 'iOS Swift', category: 'Mobile', level: 75 },
-              { name: 'Figma', category: 'Design', level: 85 },
-              { name: 'UI/UX Design', category: 'Design', level: 85 },
-              { name: 'Content Writing', category: 'Content', level: 70 },
-              { name: 'Web Development', category: 'Web', level: 95 },
-              { name: 'API Development', category: 'Backend', level: 85 }
-            ].map((skill, index) => (
-              <div key={index} className={SkillsStyle.skillCard}>
-                <div className={SkillsStyle.skillHeader}>
-                  <h3>{skill.name}</h3>
-                  <span className={SkillsStyle.skillCategory}>{skill.category}</span>
-                </div>
-                <div className={SkillsStyle.skillBar}>
-                  <div
-                    className={SkillsStyle.skillProgress}
-                    style={{ width: `${skill.level}%` }}
-                  >
-                    <span className={SkillsStyle.skillPercent}>{skill.level}%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/*  services session */}
       <div className={ServiceStyle.serviceContainer}>
         {/* title */}
