@@ -20,6 +20,7 @@ const BlogPage = () => {
     const [blog, setBlog] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [copiedCode, setCopiedCode] = useState<string | null>(null);
+    const [copiedLink, setCopiedLink] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,7 +29,11 @@ const BlogPage = () => {
                 const query = `*[_type == "post" && slug.current == "${slug || passedSlug}"][0] {
                     title,
                     slug { current },
-                    body,
+                    /* resolve image urls for image blocks inside body */
+                    body[]{
+                        ..., 
+                        _type == "image" => {"asset": asset-> { url }, alt}
+                    },
                     mainImage { asset -> { url }, alt },
                     author -> { name, image { asset -> { url } } },
                     categories[] -> { title },
@@ -120,7 +125,7 @@ const BlogPage = () => {
                             <p key={index} className={styles.blogText}>
                                 {block.children.map((child: any, i: number) => {
                                     let content = child.text;
-                                    
+
                                     if (child.marks?.includes("strong")) {
                                         content = <strong key={i}>{content}</strong>;
                                     }
@@ -135,10 +140,10 @@ const BlogPage = () => {
                                     }
                                     if (child.href) {
                                         content = (
-                                            <a 
-                                                key={i} 
-                                                href={child.href} 
-                                                target="_blank" 
+                                            <a
+                                                key={i}
+                                                href={child.href}
+                                                target="_blank"
                                                 rel="noopener noreferrer"
                                                 className={styles.link}
                                             >
@@ -146,7 +151,7 @@ const BlogPage = () => {
                                             </a>
                                         );
                                     }
-                                    
+
                                     return content;
                                 })}
                             </p>
@@ -166,7 +171,7 @@ const BlogPage = () => {
             } else if (block._type === "code") {
                 const codeContent = block.code || "";
                 const language = block.language || "javascript";
-                
+
                 return (
                     <div key={index} className={styles.codeBlock}>
                         <div className={styles.codeHeader}>
@@ -185,8 +190,8 @@ const BlogPage = () => {
                                 </button>
                             </CopyToClipboard>
                         </div>
-                        <SyntaxHighlighter 
-                            language={language} 
+                        <SyntaxHighlighter
+                            language={language}
                             style={darcula}
                             customStyle={{
                                 margin: 0,
@@ -199,12 +204,20 @@ const BlogPage = () => {
                     </div>
                 );
             } else if (block._type === "image") {
+                const imgSrc = block.asset?.url || block.asset?.asset?.url || null;
+
                 return (
-                    <img 
-                        key={index} 
-                        src={block.asset?.url} 
-                        alt={block.alt || "Blog image"} 
-                        className={styles.responsiveImage} 
+                    <img
+                        key={index}
+                        src={imgSrc || undefined}
+                        alt={block.alt || "Blog image"}
+                        className={styles.responsiveImage}
+                        style={{ maxWidth: "100%", height: "auto", display: "block" }}
+                        loading="lazy"
+                        onError={(e: any) => {
+                            // hide broken images gracefully
+                            e.currentTarget.style.display = "none";
+                        }}
                     />
                 );
             }
@@ -215,6 +228,21 @@ const BlogPage = () => {
 
     const shareUrl = window.location.href;
     const readingTime = blog.body ? Math.ceil(blog.body.length / 3) : 5;
+
+    const copyLinkWithPreview = async () => {
+        const imageUrl = blog.mainImage?.asset?.url || "";
+        const sep = shareUrl.includes("?") ? "&" : "?";
+        const urlWithPreview = `${shareUrl}${sep}previewImage=${encodeURIComponent(imageUrl)}`;
+
+        try {
+            await navigator.clipboard.writeText(urlWithPreview);
+            setCopiedLink(true);
+            setTimeout(() => setCopiedLink(false), 2000);
+        } catch (err) {
+            console.error("Failed to copy:", err);
+            alert("Unable to copy link to clipboard. Please copy manually: " + urlWithPreview);
+        }
+    };
 
     return (
         <>
@@ -228,11 +256,11 @@ const BlogPage = () => {
                 <meta property="og:image" content={blog.mainImage?.asset?.url} />
                 <meta property="og:description" content={blog.body?.[0]?.children?.map((child: any) => child.text).join(" ").substring(0, 150)} />
             </Helmet>
-            
+
             <div className={styles.pageWrapper}>
                 <div className={styles.blogContainer}>
-                    <button 
-                        onClick={() => navigate("/bloglist")} 
+                    <button
+                        onClick={() => navigate("/bloglist")}
                         className={styles.backButton}
                         data-testid="back-to-blogs-button"
                     >
@@ -248,14 +276,14 @@ const BlogPage = () => {
                             ))}
                         </div>
                         <h1 className={styles.blogTitle} data-testid="blog-title">{blog.title}</h1>
-                        
+
                         <div className={styles.blogMeta}>
                             <div className={styles.authorInfo}>
                                 {blog.author?.image?.asset?.url && (
-                                    <img 
-                                        src={blog.author.image.asset.url} 
-                                        alt={blog.author.name} 
-                                        className={styles.authorImage} 
+                                    <img
+                                        src={blog.author.image.asset.url}
+                                        alt={blog.author.name}
+                                        className={styles.authorImage}
                                     />
                                 )}
                                 <div>
@@ -269,50 +297,58 @@ const BlogPage = () => {
                                     </p>
                                 </div>
                             </div>
-                            
+
                             <div className={styles.socialShare}>
-                                <a 
-                                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} 
-                                    target="_blank" 
+                                <a
+                                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className={styles.shareIcon}
                                     aria-label="Share on Facebook"
                                 >
                                     <FaFacebook size={20} />
                                 </a>
-                                <a 
-                                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(blog.title)}`} 
-                                    target="_blank" 
+                                <a
+                                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(blog.title)}`}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className={styles.shareIcon}
                                     aria-label="Share on Twitter"
                                 >
                                     <RiTwitterXFill size={20} />
                                 </a>
-                                <a 
-                                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`} 
-                                    target="_blank" 
+                                <a
+                                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className={styles.shareIcon}
                                     aria-label="Share on LinkedIn"
                                 >
                                     <FaLinkedin size={20} />
                                 </a>
-                                <a 
-                                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(blog.title + " " + shareUrl)}`} 
-                                    target="_blank" 
+                                <a
+                                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(blog.title + " " + shareUrl)}`}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className={styles.shareIcon}
                                     aria-label="Share on WhatsApp"
                                 >
                                     <FaWhatsapp size={20} />
                                 </a>
-                                <button 
-                                    onClick={shareBlog} 
+                                <button
+                                    onClick={shareBlog}
                                     className={styles.shareIcon}
                                     aria-label="Share"
                                 >
                                     <IoShareOutline size={20} />
+                                </button>
+                                <button
+                                    onClick={copyLinkWithPreview}
+                                    className={styles.shareIcon}
+                                    aria-label="Copy link with preview"
+                                    title="Copy link with preview image"
+                                >
+                                    {copiedLink ? "Copied" : "Copy link"}
                                 </button>
                             </div>
                         </div>
@@ -320,10 +356,10 @@ const BlogPage = () => {
 
                     {blog.mainImage && (
                         <div className={styles.featuredImageWrapper}>
-                            <img 
-                                src={blog.mainImage.asset.url} 
-                                alt={blog.mainImage.alt || blog.title} 
-                                className={styles.featuredImage} 
+                            <img
+                                src={blog.mainImage.asset.url}
+                                alt={blog.mainImage.alt || blog.title}
+                                className={styles.featuredImage}
                             />
                         </div>
                     )}
