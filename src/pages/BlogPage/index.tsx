@@ -14,7 +14,9 @@ import { FiCopy, FiCheck } from "react-icons/fi";
 
 const BlogPage = () => {
     const location = useLocation();
-    const { slug } = useParams();
+    const params = useParams();
+    // routes use :id in router, but some navigations/state use slug — support both
+    const slugFromParams = (params as any).slug || (params as any).id;
     const navigate = useNavigate();
     const passedSlug = location.state?.slug;
     const [blog, setBlog] = useState<any>(null);
@@ -26,7 +28,9 @@ const BlogPage = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const query = `*[_type == "post" && slug.current == "${slug || passedSlug}"][0] {
+                const resolvedSlug = slugFromParams || passedSlug;
+
+                const query = `*[_type == "post" && slug.current == "${resolvedSlug}"][0] {
                     title,
                     slug { current },
                     /* resolve image urls for image blocks inside body */
@@ -48,8 +52,9 @@ const BlogPage = () => {
             }
         };
 
-        if (slug || passedSlug) fetchData();
-    }, [slug, passedSlug]);
+        const resolvedSlug = slugFromParams || passedSlug;
+        if (resolvedSlug) fetchData();
+    }, [slugFromParams, passedSlug]);
 
     const handleCopy = (code: string) => {
         setCopiedCode(code);
