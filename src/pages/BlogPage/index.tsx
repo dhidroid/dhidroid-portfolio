@@ -30,10 +30,10 @@ const BlogPage = () => {
             try {
                 const resolvedSlug = slugFromParams || passedSlug;
 
-                const query = `*[_type == "post" && slug.current == "${resolvedSlug}"][0] {
+                // Fixed: Use Sanity's parameterized queries instead of template literals
+                const query = `*[_type == "post" && slug.current == $slug][0] {
                     title,
                     slug { current },
-                    /* resolve image urls for image blocks inside body */
                     body[]{
                         ..., 
                         _type == "image" => {"asset": asset-> { url }, alt}
@@ -43,17 +43,27 @@ const BlogPage = () => {
                     categories[] -> { title },
                     publishedAt
                 }`;
-                const response = await client.fetch(query);
+
+                // Pass the slug as a parameter
+                const response = await client.fetch(query, { slug: resolvedSlug });
+
+                console.log("Fetched blog:", response); // Debug log
                 setBlog(response);
             } catch (error) {
                 console.error("Error fetching blog:", error);
+                setBlog(null);
             } finally {
                 setLoading(false);
             }
         };
 
         const resolvedSlug = slugFromParams || passedSlug;
-        if (resolvedSlug) fetchData();
+        console.log("Resolved slug:", resolvedSlug); // Debug log
+        if (resolvedSlug) {
+            fetchData();
+        } else {
+            setLoading(false);
+        }
     }, [slugFromParams, passedSlug]);
 
     const handleCopy = (code: string) => {
@@ -252,14 +262,76 @@ const BlogPage = () => {
     return (
         <>
             <Helmet>
+                {/* Basic Meta Tags */}
                 <title>{blog.title} | DhineshKumar Thirupathi</title>
-                <meta name="description" content={blog.body?.[0]?.children?.map((child: any) => child.text).join(" ").substring(0, 150) || "Read an interesting blog on " + blog.title} />
+                <meta name="description" content={blog.body?.[0]?.children?.map((child: any) => child.text).join(" ").substring(0, 160) || "Read an interesting blog on " + blog.title} />
                 <meta name="keywords" content={["dhidroid", "dhineshkumar", "dhineshkumar thirupathi", ...(blog.categories?.map((cat: any) => cat.title) || [])].join(", ")} />
                 <meta name="author" content="DhineshKumar Thirupathi" />
-                <meta name="robots" content="index, follow" />
+                <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+                <link rel="canonical" href={window.location.href} />
+
+                {/* Open Graph / Facebook */}
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content={window.location.href} />
                 <meta property="og:title" content={blog.title} />
-                <meta property="og:image" content={blog.mainImage?.asset?.url} />
-                <meta property="og:description" content={blog.body?.[0]?.children?.map((child: any) => child.text).join(" ").substring(0, 150)} />
+                <meta property="og:description" content={blog.body?.[0]?.children?.map((child: any) => child.text).join(" ").substring(0, 160) || "Read an interesting blog on " + blog.title} />
+                <meta property="og:image" content={blog.mainImage?.asset?.url || "https://yourdomain.com/default-blog-image.jpg"} />
+                <meta property="og:image:secure_url" content={blog.mainImage?.asset?.url || "https://yourdomain.com/default-blog-image.jpg"} />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="630" />
+                <meta property="og:image:alt" content={blog.mainImage?.alt || blog.title} />
+                <meta property="og:site_name" content="DhineshKumar Thirupathi" />
+                <meta property="article:published_time" content={blog.publishedAt} />
+                <meta property="article:author" content={blog.author?.name || "DhineshKumar Thirupathi"} />
+                {blog.categories?.map((cat: any, idx: number) => (
+                    <meta key={idx} property="article:tag" content={cat.title} />
+                ))}
+
+                {/* Twitter Card */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:url" content={window.location.href} />
+                <meta name="twitter:title" content={blog.title} />
+                <meta name="twitter:description" content={blog.body?.[0]?.children?.map((child: any) => child.text).join(" ").substring(0, 160) || "Read an interesting blog on " + blog.title} />
+                <meta name="twitter:image" content={blog.mainImage?.asset?.url || "https://yourdomain.com/default-blog-image.jpg"} />
+                <meta name="twitter:image:alt" content={blog.mainImage?.alt || blog.title} />
+                <meta name="twitter:creator" content="@dhidroid" />
+                <meta name="twitter:site" content="@dhidroid" />
+
+                {/* Additional SEO Tags */}
+                <meta name="theme-color" content="#000000" />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+                {/* Schema.org JSON-LD */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BlogPosting",
+                        "headline": blog.title,
+                        "image": blog.mainImage?.asset?.url || "https://yourdomain.com/default-blog-image.jpg",
+                        "datePublished": blog.publishedAt,
+                        "dateModified": blog.publishedAt,
+                        "author": {
+                            "@type": "Person",
+                            "name": blog.author?.name || "DhineshKumar Thirupathi",
+                            "image": blog.author?.image?.asset?.url
+                        },
+                        "publisher": {
+                            "@type": "Person",
+                            "name": "DhineshKumar Thirupathi",
+                            "logo": {
+                                "@type": "ImageObject",
+                                "url": blog.author?.image?.asset?.url || "https://yourdomain.com/logo.png"
+                            }
+                        },
+                        "description": blog.body?.[0]?.children?.map((child: any) => child.text).join(" ").substring(0, 160) || "Read an interesting blog on " + blog.title,
+                        "mainEntityOfPage": {
+                            "@type": "WebPage",
+                            "@id": window.location.href
+                        },
+                        "keywords": ["dhidroid", "dhineshkumar", "dhineshkumar thirupathi", ...(blog.categories?.map((cat: any) => cat.title) || [])].join(", ")
+                    })}
+                </script>
             </Helmet>
 
             <div className={styles.pageWrapper}>
@@ -353,7 +425,7 @@ const BlogPage = () => {
                                     aria-label="Copy link with preview"
                                     title="Copy link with preview image"
                                 >
-                                    {copiedLink ? "Copied" : "Copy link"}
+                                    {copiedLink ? <FiCheck /> : <FiCopy />}
                                 </button>
                             </div>
                         </div>
