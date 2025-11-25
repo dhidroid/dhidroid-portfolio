@@ -9,6 +9,22 @@ export default {
   theme: {
     extend: {
       scrollbars: ['thin'],
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-in-out',
+        'fade-in-up': 'fadeInUp 0.8s ease-out',
+        'fade-in-down': 'fadeInDown 0.8s ease-out',
+        'fade-in-left': 'fadeInLeft 0.8s ease-out',
+        'fade-in-right': 'fadeInRight 0.8s ease-out',
+        'slide-in-up': 'slideInUp 0.6s ease-out',
+        'slide-in-down': 'slideInDown 0.6s ease-out',
+        'slide-in-left': 'slideInLeft 0.6s ease-out',
+        'slide-in-right': 'slideInRight 0.6s ease-out',
+        'zoom-in': 'zoomIn 0.5s ease-out',
+        'zoom-out': 'zoomOut 0.5s ease-out',
+        'bounce-in': 'bounceIn 0.8s ease-out',
+        'rotate-in': 'rotateIn 0.6s ease-out',
+        'scale-in': 'scaleIn 0.5s ease-out',
+      },
       keyframes: {
         'typo-fade': {
           '0%': { opacity: '0', transform: 'translateY(8px) scale(.99)' },

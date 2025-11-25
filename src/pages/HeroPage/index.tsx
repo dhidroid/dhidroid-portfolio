@@ -22,6 +22,7 @@ import WorkExpCard from "../../components/Cards/WorkExpComp";
 import { client } from "../../senity/senity";
 import ResumeModal from "./helpers/ResumeModel";
 import FlipProfileCard from "../../components/Cards/FipCard/FlipCard";
+import { ScrollAnimation } from "../../hooks/useScrollAnimation";
 
 
 const HomePage: React.FC = () => {
@@ -126,85 +127,99 @@ const HomePage: React.FC = () => {
         {/* hero page  */}
         <div>
           {/* top title container */}
-          <div className={styles.heroContentContainer}>
-            <div>
-              <h1>Your Vision, Our <span>Expertise</span><br />Let's Build Together</h1>
-              <p className={styles.heroSubtitle}>
-                Turn your idea into a thriving <strong>Digital project</strong>. <br /> With hands-on support in <span>strategy, design, and development </span>, <br /> we'll craft a platform that ensures your launch is nothing short of remarkable.
-              </p>
+          <ScrollAnimation animation="animate-fade-in-down">
+            <div className={styles.heroContentContainer}>
+              <div>
+                <h1>Your Vision, Our <span>Expertise</span><br />Let's Build Together</h1>
+                <p className={styles.heroSubtitle}>
+                  Turn your idea into a thriving <strong>Digital project</strong>. <br /> With hands-on support in <span>strategy, design, and development </span>, <br /> we'll craft a platform that ensures your launch is nothing short of remarkable.
+                </p>
+              </div>
             </div>
-          </div>
+          </ScrollAnimation>
 
           {/* animated tooltip */}
-          <div className={"flex flex-row items-center justify-center mb-12 mt-12 w-full"}>
-            <AnimatedTooltip items={clientData} />
-          </div>
+          <ScrollAnimation animation="animate-zoom-in" delay={200}>
+            <div className="flex flex-row items-center justify-center mb-8 md:mb-12 mt-8 md:mt-12 w-full px-4">
+              <AnimatedTooltip items={clientData} />
+            </div>
+          </ScrollAnimation>
 
           {/* cta button */}
-          <div className={styles.ctaButtonContainer}>
-            <div className={styles.portfolioButtonContainer}>
-              <Link
-                to={"#"}
-                onClick={(e) => {
-                  e.preventDefault()
-                }}
-                data-cal-namespace="30min"
-                data-cal-link="dhidroid/30min"
-                data-cal-config='{"layout":"month_view"}'
-                className={styles.portfolioButton}>
-                Book a Meeting
-                <span>
-                  <AiOutlineArrowRight color="black" size={20} />
-                </span>
-              </Link>
-              <Link
-                to={"#"}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = "tel:+919150507538";
-                }}
-                className={styles.hiremeButton}>
-                Contact Me
-              </Link>
+          <ScrollAnimation animation="animate-fade-in-up" delay={400}>
+            <div className={styles.ctaButtonContainer}>
+              <div className={styles.portfolioButtonContainer}>
+                <Link
+                  to={"#"}
+                  onClick={(e) => {
+                    e.preventDefault()
+                  }}
+                  data-cal-namespace="30min"
+                  data-cal-link="dhidroid/30min"
+                  data-cal-config='{"layout":"month_view"}'
+                  className={styles.portfolioButton}>
+                  Book a Meeting
+                  <span>
+                    <AiOutlineArrowRight color="black" size={20} />
+                  </span>
+                </Link>
+                <Link
+                  to={"#"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = "tel:+919150507538";
+                  }}
+                  className={styles.hiremeButton}>
+                  Contact Me
+                </Link>
+              </div>
             </div>
-          </div>
+          </ScrollAnimation>
         </div>
       </div>
+
       {/*  services session */}
       <div className={ServiceStyle.serviceContainer}>
         {/* title */}
-        <div className={ServiceStyle.serviceinnerContainer}>
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-            <h1>The <span>Stack I Bring ⚡️</span></h1>
+        <ScrollAnimation animation="animate-fade-in-up">
+          <div className={ServiceStyle.serviceinnerContainer}>
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+              <h1>The <span>Stack I Bring ⚡️</span></h1>
+            </div>
           </div>
-        </div>
+        </ScrollAnimation>
 
         {/* card */}
         <div className={ServiceStyle.serviceCardContainer}>
           {serviceData.map((data, index) => (
-            <ServiceCard key={`service-${index}`} Icon={data.icon} title={data.title} description={data.des} />
+            <ScrollAnimation 
+              key={`service-${index}`} 
+              animation="animate-fade-in-up" 
+              delay={index * 100}
+            >
+              <ServiceCard Icon={data.icon} title={data.title} description={data.des} />
+            </ScrollAnimation>
           ))}
         </div>
       </div>
 
       {/* about me session */}
-      <div className={`${AboutStyle.aboutContainer} px-100 pb-20 flex flex-row *:flex-wrap justify-center`}>
+      <div className={`${AboutStyle.aboutContainer} px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 pb-12 md:pb-20 flex flex-col lg:flex-row flex-wrap justify-center gap-6 lg:gap-0`}>
         {/* left */}
-        <div className="w-[40%] mr-5 h-[90%] justify-center items-center content-center">
-            <FlipProfileCard  />
-            {/* <img className="w-[100%] h-[100%] object-fill" src={MyProfileCard} alt="DhineshKumar Thirupathi - Web and Mobile App Developer" /> */}
-        </div>
+        <ScrollAnimation animation="animate-fade-in-left" className="w-full lg:w-[40%] lg:mr-5 h-auto flex justify-center items-center">
+          <FlipProfileCard />
+        </ScrollAnimation>
 
         {/* right */}
-        <div className={AboutStyle.right}>
-          <div className="relative text-center pb-20">
+        <ScrollAnimation animation="animate-fade-in-right" delay={200} className={`${AboutStyle.right} w-full lg:w-[55%]`}>
+          <div className="relative text-center pb-12 md:pb-20">
             {/* Background large text */}
-            <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10rem] font-black text-gray-300 opacity-20 whitespace-nowrap select-none pointer-events-none">
+            <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black text-gray-300 opacity-20 whitespace-nowrap select-none pointer-events-none">
               About Me
             </span>
 
             {/* Foreground content */}
-            <h1 className="relative z-20 text-left text-3xl font-bold font-secondary transition-transform duration-300 ease-in-out">
+            <h1 className="relative z-20 text-left text-2xl sm:text-3xl md:text-4xl font-bold font-secondary transition-transform duration-300 ease-in-out px-2">
               Who is{" "}
               <span className="text-primary hover:underline">
                 DhineshKumar<br />Thirupathi ?
@@ -212,52 +227,66 @@ const HomePage: React.FC = () => {
             </h1>
           </div>
 
+          <div className="px-2">
+            {about.split("\n").map((line, index) => (
+              <p className="text-justify text-base md:text-lg mb-2" key={index}>{line}</p>
+            ))}
+          </div>
 
-          {about.split("\n").map((line, index) => (
-            <p className="text-justify text-[18px]" key={index}>{line}<br /></p>
-          ))}
           {/* button */}
-          <div className="flex flex-row mt-10" >
+          <div className="flex flex-row mt-6 md:mt-10 px-2">
             <CtaButton title="View My Resume 😊" onPress={() => setIsResumeModalOpen(true)} />
           </div>
-        </div>
+        </ScrollAnimation>
       </div>
 
       {/* education & work */}
-      <div className={`${EduStyle.Educontainer} pb-20`}>
+      <div className={`${EduStyle.Educontainer} pb-12 md:pb-20`}>
         {/* title */}
-        <div className={EduStyle.title}>
-          <h1>
-            My <span>Work Experience</span>
-          </h1>
-        </div>
+        <ScrollAnimation animation="animate-fade-in-up">
+          <div className={EduStyle.title}>
+            <h1>
+              My <span>Work Experience</span>
+            </h1>
+          </div>
+        </ScrollAnimation>
 
         {/* horizontal scroll container */}
-        <div className="flex px-100 gap-10 overflow-x-auto overflow-y-hidden py-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent *:scrollbar-thumb-rounded-full">
-          {workExpData.map((data, index) => (
-            <div key={`work-exp-${index}`} className="shrink-0">
-              <WorkExpCard data={data} />
-            </div>
-          ))}
-        </div>
+        <ScrollAnimation animation="animate-slide-in-up" delay={200}>
+          <div className="flex px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 gap-6 md:gap-10 overflow-x-auto overflow-y-hidden py-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thumb-rounded-full">
+            {workExpData.map((data, index) => (
+              <div key={`work-exp-${index}`} className="shrink-0">
+                <WorkExpCard data={data} />
+              </div>
+            ))}
+          </div>
+        </ScrollAnimation>
       </div>
 
       {/* my latest project */}
       <div className={ProjectStyle.projectContainer}>
         {/* title */}
-        <div className={ProjectStyle.Projecttitle}>
-          <div className={ProjectStyle.innterTitleContainer}>
-            <h1>My latest <span>Projects</span></h1>
-            <CtaButton title="Projects" onPress={() => navigation('/project')} />
+        <ScrollAnimation animation="animate-fade-in-up">
+          <div className={ProjectStyle.Projecttitle}>
+            <div className={ProjectStyle.innterTitleContainer}>
+              <h1>My latest <span>Projects</span></h1>
+              <CtaButton title="Projects" onPress={() => navigation('/project')} />
+            </div>
           </div>
-        </div>
+        </ScrollAnimation>
 
         {/* data */}
-        <div className={ProjectStyle.cardContainer} >
+        <div className={ProjectStyle.cardContainer}>
           {ProjectData?.map((data, index) => (
-            <div key={`project-${index}`} className={ProjectStyle.card} style={{ marginBottom: "20px" }}>
+            <ScrollAnimation 
+              key={`project-${index}`} 
+              animation="animate-zoom-in" 
+              delay={index * 150}
+              className={ProjectStyle.card} 
+              style={{ marginBottom: "20px" }}
+            >
               <ProjectCard link={data.link} projectDes={data.des} projectTitle={data.title} projectImage={data.image} catagrees={data.catagrees} />
-            </div>
+            </ScrollAnimation>
           ))}
         </div>
       </div>
@@ -265,71 +294,81 @@ const HomePage: React.FC = () => {
       {/* contact */}
       <div className={ContactStyle.container}>
         {/* title */}
-        <div className={ContactStyle.title}>
-          <h1>
-            Start a <span>Conversation</span>
-          </h1>
-        </div>
+        <ScrollAnimation animation="animate-fade-in-down">
+          <div className={ContactStyle.title}>
+            <h1>
+              Start a <span>Conversation</span>
+            </h1>
+          </div>
+        </ScrollAnimation>
 
         {/* content */}
-        <div className={ContactStyle.content}>
-          <div className={ContactStyle.textBlock}>
-            <h1>Let's Build Something Great Together!</h1>
-            <p>
-              Are you looking to build a high-performance mobile app, enhance your
-              small-scale product's UI design, develop a website, or get reliable
-              tech support? I specialize in crafting user-friendly mobile and web
-              applications using React Native, MERN stack, and other cutting-edge
-              technologies. Let's discuss how I can help bring your ideas to life.
-            </p>
-          </div>
-
-          <div className={ContactStyle.linksContainer}>
-            <div className={ContactStyle.iconContainer}>
-              {ContactIcons?.map((data, index) => (
-                <div
-                  className={ContactStyle.icon}
-                  key={`contact-${index}`}
-                  onClick={() => window.open(`${data.link}`)}
-                >
-                  <data.Icon color={"white"} size={30} />
-                </div>
-              ))}
+        <ScrollAnimation animation="animate-fade-in-up" delay={200}>
+          <div className={ContactStyle.content}>
+            <div className={ContactStyle.textBlock}>
+              <h1>Let's Build Something Great Together!</h1>
+              <p>
+                Are you looking to build a high-performance mobile app, enhance your
+                small-scale product's UI design, develop a website, or get reliable
+                tech support? I specialize in crafting user-friendly mobile and web
+                applications using React Native, MERN stack, and other cutting-edge
+                technologies. Let's discuss how I can help bring your ideas to life.
+              </p>
             </div>
 
-            <div className={ContactStyle.socialContainer}>
-              {SocialMedia?.map((data, index) => (
-                <div
-                  className={ContactStyle.icon}
-                  key={`social-${index}`}
-                  onClick={() => window.open(`${data.link}`)}
-                >
-                  <data.Icon color={"white"} size={30} />
-                </div>
-              ))}
+            <div className={ContactStyle.linksContainer}>
+              <div className={ContactStyle.iconContainer}>
+                {ContactIcons?.map((data, index) => (
+                  <div
+                    className={ContactStyle.icon}
+                    key={`contact-${index}`}
+                    onClick={() => window.open(`${data.link}`)}
+                  >
+                    <data.Icon color={"white"} size={30} />
+                  </div>
+                ))}
+              </div>
+
+              <div className={ContactStyle.socialContainer}>
+                {SocialMedia?.map((data, index) => (
+                  <div
+                    className={ContactStyle.icon}
+                    key={`social-${index}`}
+                    onClick={() => window.open(`${data.link}`)}
+                  >
+                    <data.Icon color={"white"} size={30} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollAnimation>
       </div>
 
       {/* blogs */}
       <div className={BlogStyle.container}>
         <div>
           {/* title */}
-          <div className={BlogStyle.title}>
-            <h1>My <br />
-              <span>Blog Post</span>
-            </h1>
+          <ScrollAnimation animation="animate-fade-in-left">
+            <div className={BlogStyle.title}>
+              <h1>My <br />
+                <span>Blog Post</span>
+              </h1>
 
-            <div>
-              <CtaButton title="View My Blogs" onPress={() => navigation('/bloglist')} />
+              <div>
+                <CtaButton title="View My Blogs" onPress={() => navigation('/bloglist')} />
+              </div>
             </div>
-          </div>
+          </ScrollAnimation>
 
           {/* blog posts */}
-          <div className={BlogStyle.BlogCard} >
+          <div className={BlogStyle.BlogCard}>
             {BlogData?.map((data, index) => (
-              <div key={`blog-${index}`}>
+              <ScrollAnimation 
+                key={`blog-${index}`} 
+                animation="animate-fade-in-up" 
+                delay={index * 100}
+              >
                 <HomeBlogCard
                   BlogImage={data.blogImage}
                   BlogTitle={data.blogTitle}
@@ -337,7 +376,7 @@ const HomePage: React.FC = () => {
                   author="DhineshKumar"
                   date={new Date()}
                   onPress={() => window.open(`${data.link}`)} />
-              </div>
+              </ScrollAnimation>
             ))}
           </div>
         </div>
