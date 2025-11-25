@@ -13,6 +13,7 @@ const BlogList = React.lazy(() => import("../pages/BlogPage/BlogList"));
 const Loader = React.lazy(() => import("../components/loader/Loader"));
 const PageNotFound = React.lazy(() => import("../components/404Page/PageNotFound"));
 const AboutPage = React.lazy(() => import("../pages/AboutPage"));
+const SkillsPage = React.lazy(() => import("../pages/SkillsPage"));
 
 // Enhanced Loader with minimum display time
 function EnhancedLoader() {
@@ -38,7 +39,8 @@ function EnhancedLoader() {
 
 const links = [
   { label: "Home", path: "/" },
-  { label: "About", path: "/about" },
+    { label: "About", path: "/about" },
+    { label: "Skills", path: "/skills" },
   { label: "Projects", path: "/project" },
   { label: "Blog List", path: "/bloglist" },
   { label: "Create Blog", path: "/createblog" },
@@ -116,6 +118,7 @@ export function Router() {
           <Route path="/project" element={<Projects />} />
           <Route path="/bloglist" element={<BlogList />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/skills" element={<SkillsPage />} />
           <Route path="/links" element={<LinksPage />} />
           <Route path="*" element={
             <Suspense fallback={<Loader />}>

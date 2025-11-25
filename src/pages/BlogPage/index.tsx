@@ -8,7 +8,7 @@ import { FaFacebook, FaLinkedin, FaWhatsapp, FaArrowLeft } from "react-icons/fa"
 import { IoShareOutline } from "react-icons/io5";
 import { RiTwitterXFill } from "react-icons/ri";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { darcula } from "react-syntax-highlighter/dist/styles";
+import darcula from "react-syntax-highlighter/dist/esm/styles/hljs/darcula";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FiCopy, FiCheck } from "react-icons/fi";
 

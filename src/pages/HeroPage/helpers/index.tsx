@@ -4,11 +4,13 @@ import { FaXTwitter } from "react-icons/fa6";
 import { IoLogoInstagram } from "react-icons/io";
 import { MdAlternateEmail, MdDeveloperMode } from "react-icons/md";
 import { SiMaterialdesignicons, SiWorkplace } from "react-icons/si";
-
+import aboutData from '../../../utils/Data/aboutData.json';
 
 export const skillsCarocils = [
     "ReactNative", "JavaScript", "TypeScript", "Git & Github", "Figma UI/UX Design", "Golang(begginer)", "Android", "Ios App Dev", "ReactJS", "Jest unitTesting", "SEO & Content Writing (Begginer)", "Trainner (Junior)"
 ]
+
+export const about = aboutData.about;
 
 export const ResumeLink = "https://1drv.ms/w/c/6393B3F980D8B1AE/Ea6x2ID5s5MggGP6UAAAAAABuBDRXoY2GZ6XrsTvSEdHnQ?e=vFRsYg"
 export const serviceData = [
@@ -158,3 +160,35 @@ export const BlogData = [
         link: "https://medium.com/@dhidroid/a-comprehensive-guide-to-eslint-from-basics-to-advanced-4defc05800e0"
     }
 ]
+
+export const convertToEmbedUrl = (url: string): string => {
+  // If it's a OneDrive link, convert it to embed format
+  if (url.includes('onedrive.live.com')) {
+    // Replace 'view.aspx' with 'embed.aspx'
+    if (url.includes('view.aspx')) {
+      return url.replace('view.aspx', 'embed.aspx');
+    }
+    // If already has resid and authkey, convert to embed
+    if (url.includes('resid=') || url.includes('authkey=')) {
+      const baseUrl = url.split('?')[0];
+      const params = new URLSearchParams(url.split('?')[1]);
+      return `https://onedrive.live.com/embed?${params.toString()}`;
+    }
+  }
+
+  // For 1drv.ms shortened links - these need to be opened in new window
+  if (url.includes('1drv.ms')) {
+    return url;
+  }
+
+  // If it's a Google Drive link
+  if (url.includes('drive.google.com')) {
+    const fileId = url.match(/[-\w]{25,}/);
+    if (fileId) {
+      return `https://drive.google.com/file/d/${fileId[0]}/preview`;
+    }
+  }
+
+  // For direct PDF links, return as is
+  return url;
+};

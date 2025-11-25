@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Loader from '../../../components/loader/Loader';
+import { Container, UiButton } from '../../../components';
 import style from './index.module.css';
 import { client } from '../../../senity/senity';
 import { Helmet } from 'react-helmet';
@@ -101,7 +102,7 @@ const BlogList = () => {
                 <title>Blog List | DhineshKumar Thirupathi</title>
                 <meta name="description" content="Explore articles on web development, programming, and technology" />
             </Helmet>
-            <div className={style.container}>
+            <Container className="py-12">
                 {/* Header Section */}
                 <div className={style.headerSection}>
                     <div className={style.titleContainer}>
@@ -112,14 +113,14 @@ const BlogList = () => {
                     </div>
 
                     {/* Search Bar */}
-                    <div className={style.searchContainer}>
-                        <FiSearch className={style.searchIcon} />
+                    <div className="relative w-full md:w-96">
+                        <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
                         <input
                             type="text"
                             placeholder="Search blogs by title or author..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className={style.searchInput}
+                            className="w-full pl-10 pr-3 py-2 rounded-md bg-[#141420] border border-[#4A4A63] text-white placeholder:text-muted"
                             data-testid="search-input"
                         />
                     </div>
@@ -130,7 +131,7 @@ const BlogList = () => {
                     {/* Category Filter */}
                     <div className={style.categoryContainer}>
                         <button
-                            className={`${style.categoryButton} ${activeCategory === 'all' ? style.active : ''}`}
+                            className={`px-3 py-1 rounded-full text-sm ${activeCategory === 'all' ? 'bg-primary text-white shadow-sm' : 'bg-[#141420] text-secondary border border-[#4A4A63] hover:bg-[#252538]'}`}
                             onClick={() => handleCategoryChange('all')}
                             data-testid="category-all"
                         >
@@ -140,7 +141,7 @@ const BlogList = () => {
                         {category.map((data) => (
                             <button
                                 key={data._id}
-                                className={`${style.categoryButton} ${activeCategory === data.title ? style.active : ''}`}
+                                className={`px-3 py-1 rounded-full text-sm ${activeCategory === data.title ? 'bg-primary text-white shadow-sm' : 'bg-[#141420] text-secondary border border-[#4A4A63] hover:bg-[#252538]'}`}
                                 onClick={() => handleCategoryChange(data.title)}
                                 data-testid={`category-${data.title}`}
                             >
@@ -199,7 +200,7 @@ const BlogList = () => {
                             ))}
                     </div>
                 </div>
-            </div>
+            </Container>
         </React.Fragment>
     );
 };
