@@ -2,8 +2,12 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import path from 'path'
+import tailwindcss from '@tailwindcss/vite'
 
-// https://vite.dev/config/ 
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
@@ -14,7 +18,7 @@ export default defineConfig({
   css: {
     modules: {
       // Enable CSS modules for files ending with .module.css
-      localsConvention: 'camelCaseOnly', // or 'camelCase', 'dashes', etc.
+      localsConvention: 'camelCaseOnly',
       generateScopedName: '[name]__[local]___[hash:base64:5]'
     }
   },
@@ -25,9 +29,12 @@ export default defineConfig({
     }
   },
   worker: {
-    format: 'es',
+    format: 'es'
   },
   build: {
-    target: 'esnext'
+    target: 'esnext',
+    rollupOptions: {
+      external: ['@xenova/transformers']
+    }
   }
 })

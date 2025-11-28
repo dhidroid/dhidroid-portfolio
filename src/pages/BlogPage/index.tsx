@@ -78,7 +78,7 @@ const BlogDetailsPage = () => {
 
     // Initialize AI Worker
     useEffect(() => {
-        const worker = new Worker(new URL('../../workers/ai-worker.ts', import.meta.url), {
+        const worker = new Worker(new URL('../../workers/ai-worker.js', import.meta.url), {
             type: 'module'
         });
 
