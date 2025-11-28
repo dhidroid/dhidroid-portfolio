@@ -23,5 +23,11 @@ export default defineConfig({
       '@Screens': path.resolve(__dirname, 'src/pages/index.ts'),
       '@Components': path.resolve(__dirname, 'src/components/index.ts')
     }
+  },
+  worker: {
+    format: 'es',
+  },
+  build: {
+    target: 'esnext'
   }
 })

@@ -269,7 +269,6 @@ a:hover {
   background-color: var(--bg-surface);
   color: var(--text-primary);
 }
-
 /* Card Styles */
 .card {
   background-color: var(--bg-card);
@@ -347,8 +346,48 @@ a:hover {
   color: var(--text-primary);
 }
 
+
 /* Focus Visible */
 *:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+/* ========================================
+   Enhanced Blur Effects & Utilities
+   ======================================== */
+
+/* Liquid Glass Blur Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-effect-strong {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced Blur Backgrounds */
+.blur-bg {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.blur-bg-strong {
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.blur-bg-soft {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Utility Classes */
+.transition-all-smooth {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }

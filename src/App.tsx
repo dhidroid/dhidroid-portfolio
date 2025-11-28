@@ -1,14 +1,16 @@
-import React from "react";
 import { Router } from "./router/rootNavigation";
 import { Analytics } from "@vercel/analytics/react"
-import HomeScreen from "./pages/HeroPage/HomeScreen";
+import ChatBot from "./components/ChatBot/ChatBot";
+
+import { AIProvider } from "./context/AIContext";
+
 const App = () => {
   return (
-    <React.Fragment>
+    <AIProvider>
       <Router />
+      <ChatBot />
       <Analytics />
-      {/* <HomeScreen /> */}
-    </React.Fragment>
+    </AIProvider>
   );
 };
 

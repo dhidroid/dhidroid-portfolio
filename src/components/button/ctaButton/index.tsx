@@ -7,6 +7,7 @@ interface CtaButtonProps {
 }
 
 const CtaButton = ({ title, onPress, colour }: CtaButtonProps) => {
+
     const buttonStyles = {
         fontSize: '1rem',
         fontWeight: '500',
@@ -27,7 +28,7 @@ const CtaButton = ({ title, onPress, colour }: CtaButtonProps) => {
     };
 
     const iconContainerStyles = {
-        backgroundColor: "#5315FC",
+        backgroundColor: "var(--primary-color)",
         display: "flex",
         justifyContent: "center" as const,
         alignItems: "center" as const,

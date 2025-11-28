@@ -1,105 +1,147 @@
 .serviceContainer {
-    height: 80vh;
-    background-color: var(--highlight-color);
-    padding: 20px;
-    color: var(--text-white);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+        padding: 80px 20px;
+        background-color: var(--background-color);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Background Glow */
+    .serviceContainer::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(83, 21, 252, 0.15) 0%, transparent 70%);
+        filter: blur(100px);
+        z-index: 0;
+        pointer-events: none;
 }
 
 .serviceinnerContainer {
-    width: 100%;
     max-width: 1200px;
+    margin: 0 auto 60px;
     text-align: center;
-    margin-bottom: 20px;
+    position: relative;
+        z-index: 1;
 }
 
-
-/* Title */
 .serviceinnerContainer h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    text-align: center;
     font-family: var(--secondaryFont);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+        color: var(--text-white);
+        font-weight: 700;
 }
 
 .serviceinnerContainer h1 span {
-    /* color: var(--primary-color); */
+    color: var(--primary-color);
+        position: relative;
+        display: inline-block;
 }
 
-/* Button */
-.serviceinnerContainer a {
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.3s ease-in-out;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    background-color: var(--text-white);
-    color: black;
-    border-radius: 100px;
-    padding: 2px 1px;
-    padding-right: 10px;
-}
-
-.serviceinnerContainer a:hover {
-    color: var(--secondary-color);
-}
-
-/* Service Cards */
-.serviceCardContainer {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 10px;
+.serviceinnerContainer h1 span::after {
+    content: "";
+    position: absolute;
+    bottom: 5px;
+    left: 0;
     width: 100%;
-    max-width: 1200px;
+    height: 8px;
+    background-color: var(--primary-color);
+    opacity: 0.2;
+    transform: skew(-12deg);
+    z-index: -1;
 }
 
+.serviceCardContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
 
-/* Responsive Styles */
-@media (max-width: 1024px) {
-    .serviceContainer {
-        height: auto;
-        padding: 40px 20px;
+/* Card Styling - Glassmorphism */
+.card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 40px 30px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+        align-items: flex-start;
+    gap: 20px;
+    position: relative;
+        overflow: hidden;
     }
+    
+    .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+    width: 100%;
+    height: 100%;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+}
 
-    .serviceCardContainer {
-        justify-content: flex-start;
-    }
+.card:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary-color);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 20px rgba(83, 21, 252, 0.2);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.iconWrapper {
+    width: 60px;
+    height: 60px;
+    background: rgba(83, 21, 252, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 28px;
+    transition: all 0.3s ease;
+}
+
+.card:hover .iconWrapper {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1) rotate(5deg);
+}
+
+.cardTitle {
+    font-family: var(--secondaryFont);
+    font-size: 1.5rem;
+    color: var(--text-white);
+    font-weight: 600;
+}
+.cardDescription {
+    font-family: var(--primaryFont);
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
 }
 
 @media (max-width: 768px) {
-    .serviceinnerContainer {
-        text-align: center;
+    .serviceContainer {
+        padding: 60px 20px;
     }
-
-    .serviceinnerContainer h1 {
-        font-size: 1.8rem;
-    }
-
+    
     .serviceCardContainer {
-        display: flex;
-        flex-direction: column;
-        padding-bottom: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .serviceinnerContainer h1 {
-        font-size: 1.5rem;
-    }
-
-    .serviceCardContainer {
-        gap: 10px;
+        grid-template-columns: 1fr;
     }
 }
