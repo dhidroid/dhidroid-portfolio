@@ -12,7 +12,18 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
+        
+      - name: Debug token
+        env:
+          TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "❌ TOKEN is EMPTY — secret not found"
+            exit 1
+          else
+            echo "✅ TOKEN is loaded (masked)"
+          fi
+          
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
