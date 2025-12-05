@@ -33,4 +33,7 @@ jobs:
           git config --global user.email "dhinesh4668@outlook.com"
           git add public/sitemap.xml
           git commit -m "🤖 Update sitemap [skip ci]" || echo "No changes to commit"
-          git push
+          # Replace remote URL with PAT auth
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
+
+           git push origin HEAD:main
