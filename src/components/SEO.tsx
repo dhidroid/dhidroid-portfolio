@@ -11,7 +11,6 @@ interface SEOProps {
   url?: string;
   structuredData?: any;
 }
-import resolveImageUrl, { resolveRouteImage } from '../utils/meta';
 
 const SEO: React.FC<SEOProps> = ({ title, description, keywords, image, route, url, structuredData }) => {
   const siteTitle = "Dhidroid - Portfolio";
