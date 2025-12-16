@@ -1,5 +1,7 @@
 import React, { Suspense, useState, useEffect } from "react";
 import { Link, Route, Routes } from "react-router";
+import SEO from "../components/SEO";
+import { generateMetaForRoute } from '../utils/seo';
 import { Footer, Header } from "../components";
 import Lottie from "lottie-react";
 import { LoaderAnimation } from "../assets";
@@ -51,6 +53,13 @@ const links = [
 export default function LinksPage() {
   return (
     <div className="p-6 max-w-xl mx-auto">
+      <SEO
+        title={generateMetaForRoute('/links').title}
+        description={generateMetaForRoute('/links').description}
+        route="/links"
+        structuredData={generateMetaForRoute('/links').structuredData}
+        url="/links"
+      />
       <h1 className="text-2xl font-bold mb-4">All Local Links</h1>
       <ul className="space-y-2">
         {links.map((link, index) => (

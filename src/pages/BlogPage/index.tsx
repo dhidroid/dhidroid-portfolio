@@ -226,8 +226,19 @@ const BlogDetailsPage = () => {
         );
     }
 
-    const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
-    const imageUrl = blog.mainImage?.asset?.url || '';
+    const baseUrl = 'https://dhidroid.vercel.app';
+    const pageUrl = typeof window !== 'undefined' ? window.location.href : baseUrl;
+    // Resolve image URL and type, fallback to site logo
+    const { url: imageUrl, type: imageType } = (() => {
+        const img = blog.mainImage?.asset?.url || '/logo.svg';
+        const abs = img.startsWith('http') ? img : `${baseUrl.replace(/\/$/, '')}${img.startsWith('/') ? '' : '/'}${img}`;
+        let t = 'image/jpeg';
+        const ext = (img.split('.').pop() || '').toLowerCase();
+        if (ext === 'svg') t = 'image/svg+xml';
+        else if (ext === 'png') t = 'image/png';
+        else if (ext === 'webp') t = 'image/webp';
+        return { url: abs, type: t };
+    })();
     const description = blog.body?.[0]?.children?.[0]?.text?.slice(0, 160) || 'Read this insightful article by DhineshKumar Thirupathi, a Full Stack Developer specializing in React, React Native, and modern web technologies.';
     const keywords = [
         blog.title,
@@ -281,7 +292,7 @@ const BlogDetailsPage = () => {
                 <meta property="og:description" content={description} />
                 <meta property="og:image" content={imageUrl} />
                 <meta property="og:image:secure_url" content={imageUrl} />
-                <meta property="og:image:type" content="image/jpeg" />
+                <meta property="og:image:type" content={imageType} />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
                 <meta property="og:image:alt" content={blog.title} />

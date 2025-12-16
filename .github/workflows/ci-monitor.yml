@@ -1,0 +1,70 @@
+name: CI Monitor — Create Issues on Failure
+
+on:
+  workflow_run:
+    types: [completed]
+
+permissions:
+  issues: write
+  checks: read
+  contents: read
+
+jobs:
+  detect-and-report:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gather failure context and create/reopen issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const run = context.payload.workflow_run;
+            const repoOwner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const fingerprint = `${run.name}::${run.head_branch}::${run.head_sha}`;
+            const shortSha = run.head_sha ? run.head_sha.substring(0,7) : '';
+            const title = `CI Failure: ${run.name} on ${run.head_branch} (${shortSha})`;
+
+            const body = `**Workflow:** ${run.name}\n**Status:** ${run.conclusion}\n**Branch:** ${run.head_branch}\n**Commit:** ${run.head_sha}\n**Run ID:** ${run.id}\n**URL:** ${run.html_url}\n\nFingerprint: \`${fingerprint}\`\n`;
+
+            // ensure label exists (automation)
+            const requiredLabels = [
+              { name: 'bug', color: 'd73a4a' },
+              { name: 'ci', color: '0e8a16' },
+              { name: 'automation', color: '0366d6' }
+            ];
+
+            for (const label of requiredLabels) {
+              try {
+                await github.rest.issues.getLabel({ owner: repoOwner, repo, name: label.name });
+              } catch (err) {
+                if (err.status === 404) {
+                  await github.rest.issues.createLabel({ owner: repoOwner, repo, name: label.name, color: label.color, description: 'Created by automation' });
+                }
+              }
+            }
+
+            // search for existing issue with fingerprint
+            const q = `repo:${repoOwner}/${repo} "${fingerprint}"`;
+            const search = await github.rest.search.issuesAndPullRequests({ q, per_page: 10 });
+            const existing = (search.data.items || []).find(i => i.title.includes(run.name) || i.body.includes(fingerprint));
+
+            if (existing) {
+              // reopen if closed, then add comment
+              if (existing.state === 'closed') {
+                await github.rest.issues.update({ owner: repoOwner, repo, issue_number: existing.number, state: 'open' });
+              }
+              await github.rest.issues.createComment({ owner: repoOwner, repo, issue_number: existing.number, body: `Reoccurred at ${new Date().toISOString()}\n\n${body}` });
+            } else {
+              // find repo owner login to assign
+              let assignee = undefined;
+              try {
+                const repoRes = await github.rest.repos.get({ owner: repoOwner, repo });
+                assignee = repoRes.data.owner?.login;
+              } catch (err) {
+                // ignore
+              }
+
+              const newIssue = await github.rest.issues.create({ owner: repoOwner, repo, title, body, labels: ['bug','ci','automation'], assignees: assignee ? [assignee] : [] });
+            }

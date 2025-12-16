@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import styles from './styles/AboutPage.module.css';
 import SEO from '../../components/SEO';
+import { generateMetaForRoute } from '../../utils/seo';
 import FlipProfileCard from '../../components/Cards/FipCard/FlipCard';
 import { FiCpu } from 'react-icons/fi';
 import { useAI } from '../../context/AIContext';
@@ -53,9 +54,11 @@ const AboutPage = () => {
     return (
         <React.Fragment>
             <SEO
-                title="About DhineshKumar - Full Stack Developer"
-                description="Learn more about DhineshKumar Thirupathi, a passionate Full Stack Developer specializing in React Native, React, and Node.js."
-                keywords={["About Me", "DhineshKumar", "Developer Bio", "Experience", "Natobotics"]}
+                title={generateMetaForRoute('/about').title}
+                description={generateMetaForRoute('/about').description}
+                keywords={generateMetaForRoute('/about').keywords}
+                route="/about"
+                structuredData={generateMetaForRoute('/about').structuredData}
             />
             <div className={styles.container}>
                 <div className={styles.wrapper}>

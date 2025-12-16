@@ -1,15 +1,19 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { resolveImageUrl, resolveRouteImage } from '../utils/meta';
 
 interface SEOProps {
   title?: string;
   description?: string;
   keywords?: string[];
   image?: string;
+  route?: string;
   url?: string;
+  structuredData?: any;
 }
+import resolveImageUrl, { resolveRouteImage } from '../utils/meta';
 
-const SEO: React.FC<SEOProps> = ({ title, description, keywords, image, url }) => {
+const SEO: React.FC<SEOProps> = ({ title, description, keywords, image, route, url, structuredData }) => {
   const siteTitle = "Dhidroid - Portfolio";
   const defaultDescription = "Dhinesh's Portfolio - Full Stack Developer, AI Enthusiast, and Tech Blogger. Explore my projects, skills, and latest articles.";
   const defaultKeywords = [
@@ -24,13 +28,15 @@ const SEO: React.FC<SEOProps> = ({ title, description, keywords, image, url }) =
     "Web Development",
     "Tech Blog"
   ];
-  const defaultImage = "https://dhidroid.com/og-image.png"; // Placeholder, should be replaced with actual URL
-  const siteUrl = "https://dhidroid.com";
+  const siteUrl = "https://dhidroid.vercel.app"; // canonical site base URL
+  const defaultImagePath = '/logo.svg';
 
   const finalTitle = title ? `${title} | ${siteTitle}` : siteTitle;
   const finalDescription = description || defaultDescription;
   const finalKeywords = keywords ? [...defaultKeywords, ...keywords] : defaultKeywords;
-  const finalImage = image ? (image.startsWith('http') ? image : `${siteUrl}${image}`) : defaultImage;
+  // If a route is provided and no explicit image prop is given, resolve by route mapping
+  const resolved = image && image !== '' ? resolveImageUrl(image, siteUrl, defaultImagePath) : resolveRouteImage(route, siteUrl);
+  const { url: finalImage, type: finalImageType } = resolved;
   const finalUrl = url ? (url.startsWith('http') ? url : `${siteUrl}${url}`) : siteUrl;
 
   return (
@@ -47,6 +53,8 @@ const SEO: React.FC<SEOProps> = ({ title, description, keywords, image, url }) =
       <meta property="og:title" content={finalTitle} />
       <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={finalImage} />
+      <meta property="og:image:type" content={finalImageType} />
+      <meta property="og:image:alt" content={title || siteTitle} />
       
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />
@@ -54,9 +62,14 @@ const SEO: React.FC<SEOProps> = ({ title, description, keywords, image, url }) =
       <meta property="twitter:title" content={finalTitle} />
       <meta property="twitter:description" content={finalDescription} />
       <meta property="twitter:image" content={finalImage} />
+      <meta property="twitter:image:alt" content={title || siteTitle} />
       
       {/* Canonical */}
       <link rel="canonical" href={finalUrl} />
+      {/* JSON-LD structured data (if provided) */}
+      {structuredData && (
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+      )}
     </Helmet>
   );
 };

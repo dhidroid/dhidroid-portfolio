@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "motion/react";
 import styles from "./Skills.module.css";
 import SEO from "../../components/SEO";
+import { generateMetaForRoute } from '../../utils/seo';
 import {
   FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, FaGithub, FaFigma, FaAndroid, FaAppStoreIos, FaDocker, FaAws
 } from "react-icons/fa";
@@ -54,6 +55,8 @@ const SkillsPage = () => {
         title="Skills & Technologies"
         description="Explore the technical arsenal of DhineshKumar Thirupathi. Proficient in React Native, React, Node.js, and more."
         keywords={["Skills", "Tech Stack", "React Native", "React", "Node.js", "TypeScript"]}
+        route="/skills"
+        structuredData={generateMetaForRoute('/skills').structuredData}
       />
 
       <div className={styles.content}>

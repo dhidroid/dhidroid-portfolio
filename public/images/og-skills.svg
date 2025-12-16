@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#071226" />
+  <text x="50%" y="48%" font-family="Inter, Arial, sans-serif" text-anchor="middle" font-size="44" fill="#fff">Skills & Technologies</text>
+  <text x="50%" y="58%" font-family="Inter, Arial, sans-serif" text-anchor="middle" font-size="26" fill="#CDE6FF">React Native • React • Node.js</text>
+</svg>

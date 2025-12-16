@@ -1,0 +1,42 @@
+name: Update README (automated)
+
+on:
+  schedule:
+    - cron: '0 2 * * 0' # weekly
+  workflow_dispatch: {}
+  push:
+    paths:
+      - 'src/utils/Data/**'
+
+permissions:
+  contents: write
+
+jobs:
+  generate-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run README generator
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node ./scripts/generate-readme.js
+
+      - name: Commit and push README
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: update README (automated)"
+          file_pattern: README.md
+          branch: main
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com

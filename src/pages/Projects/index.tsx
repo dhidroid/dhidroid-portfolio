@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { client } from "../../senity/senity";
-import { Helmet } from 'react-helmet';
+import SEO from '../../components/SEO';
 import Loader from "../../components/loader/Loader";
 import { AiOutlineArrowRight } from 'react-icons/ai';
 
@@ -77,9 +77,7 @@ const Projects = () => {
       ].join(", ")
     : "Projects, Portfolio, App Development, React, React Native, Firebase, Web Development, Mobile Apps, Full Stack Development, dhidroid, dhineshkumar thirupathi";
 
-  const ogImage = ProjectData.length > 0 && ProjectData[0]?.image?.asset?.url 
-    ? ProjectData[0].image.asset.url 
-    : `${baseUrl}/default-og-image.jpg`;
+  // OG image is resolved by the `SEO` component using route mapping or page-provided images.
 
   if (loading) {
     return <Loader />;
@@ -87,20 +85,14 @@ const Projects = () => {
 
   return (
     <React.Fragment>
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={metaDescription} />
-        <meta name="keywords" content={dynamicKeywords} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={metaDescription} />
-        <meta property="og:image" content={ogImage} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={metaDescription} />
-        <meta name="twitter:image" content={ogImage} />
-      </Helmet>
+      {/* Use centralized SEO component that resolves the OG image using route mapping */}
+      <SEO
+        title={pageTitle}
+        description={metaDescription}
+        keywords={dynamicKeywords.split(',').map(s => s.trim())}
+        route="/project"
+        url={canonicalUrl}
+      />
 
       <div className="min-h-screen w-full bg-gradient-to-b from-[#050505] via-[#0a0a0f] to-[#050505] pt-32 pb-20 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32">
         {/* Header */}

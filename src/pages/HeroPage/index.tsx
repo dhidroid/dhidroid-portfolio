@@ -14,6 +14,7 @@ import { getCalApi } from "@calcom/embed-react";
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import WorkExpCard from "../../components/Cards/WorkExpComp";
 import { client } from "../../senity/senity";
+import { generateMetaForRoute } from '../../utils/seo';
 import ResumeModal from "./helpers/ResumeModel";
 import FlipProfileCard from "../../components/Cards/FipCard/FlipCard";
 import ProfileGeneratorModal from "../../components/Modals/ProfileGeneratorModal";
@@ -132,12 +133,14 @@ const HomePage: React.FC = () => {
 
   return (
     <React.Fragment>
+      {/* Use generated site meta for home */}
       <SEO
-        title="DhineshKumar Thirupathi - Web & Mobile App Developer"
-        description="Professional React Native and web developer specializing in TypeScript, NodeJS, and MERN Stack. Expert in building high-performance mobile and web applications."
-        keywords={["React Native Developer", "TypeScript Developer", "NodeJS Developer", "Web Developer", "Mobile App Developer", "MERN Stack Developer", "Software Engineer", "DhineshKumar Thirupathi", "Dhidroid", "Frontend Developer", "Full Stack Developer", "Firebase", "GCP", "Azure", "Android", "iOS", "Swift", "Kotlin", "Figma Designer", "UI/UX Designer", "Content Writer", "API Development"]}
-        image="https://dhidroid.vercel.app/og-image.jpg"
-        url="https://dhidroid.vercel.app/"
+        title={generateMetaForRoute('/').title}
+        description={generateMetaForRoute('/').description}
+        keywords={generateMetaForRoute('/').keywords}
+        route='/'
+        url='/'
+        structuredData={generateMetaForRoute('/').structuredData}
       />
 
       {/* Resume Modal */}

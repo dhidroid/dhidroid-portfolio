@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Loader from '../../../components/loader/Loader';
 import { client } from '../../../senity/senity';
-import { Helmet } from 'react-helmet';
+import SEO from '../../../components/SEO';
+import { generateMetaForRoute } from '../../../utils/seo';
 import HomeBlogCard from '../../../components/Cards/HomeBlogCards';
 import { useNavigate } from 'react-router';
 import { FiSearch } from 'react-icons/fi';
@@ -93,12 +94,21 @@ const BlogList = () => {
         return <Loader />;
     }
 
+    const metaTitle = `Blog | DhineshKumar Thirupathi`;
+    const metaDesc = `Explore ${blogData.length} articles on web development, programming, and technology by DhineshKumar.`;
+
     return (
         <React.Fragment>
-            <Helmet>
-                <title>Blog List | DhineshKumar Thirupathi</title>
-                <meta name="description" content="Explore articles on web development, programming, and technology" />
-            </Helmet>
+                {/* Use central SEO generator: prefer the first blog image if available */}
+                <SEO
+                    title={metaTitle}
+                    description={metaDesc}
+                    keywords={["Blog", "Articles", "Dhidroid"]}
+                    image={blogData[0]?.mainImage?.asset?.url}
+                    route="/bloglist"
+                    url="/bloglist"
+                    structuredData={generateMetaForRoute('/bloglist', { title: metaTitle, description: metaDesc }).structuredData}
+                />
 
             <div className="min-h-screen w-full bg-gradient-to-b from-[#050505] via-[#0a0a0f] to-[#050505] pt-32 pb-20 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32">
                 {/* Header Section */}
