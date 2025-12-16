@@ -1,4 +1,4 @@
-name: 🗺️ Daily Sitemap Generator
+name: Daily Sitemap Generator
 
 on:
   schedule:
@@ -8,11 +8,14 @@ on:
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        
+        with:
+          token: ${{ secrets.PERSONAL_TOKEN }}  # Use PAT for checkout
+          fetch-depth: 0
+          
       - name: Debug token
         env:
           TOKEN: ${{ secrets.PERSONAL_TOKEN }}
@@ -28,26 +31,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
+          
       - name: Install dependencies
         run: |
           npm install --force || npm ci
-
+          
       - name: Generate sitemap
         run: node sitemap.js
-
+        
       - name: Commit and push sitemap
         env:
-          TOKEN: ${{ secrets.PERSONAL_TOKEN }}   # FIXED indent
+          TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-
+          git config user.name "dhidroid"
+          git config user.email "dhidroid@users.noreply.github.com"
+          
+          # Check if there are changes
+          if git diff --quiet public/sitemap.xml; then
+            echo "No changes to sitemap"
+            exit 0
+          fi
+          
           git add public/sitemap.xml
-          git commit -m "🤖 Update sitemap [skip ci]" || echo "No changes to commit"
-
-          # Use PAT for authentication
-          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
-
-          # Push to the current branch (auto-detect)
-          git push origin HEAD:${{ github.ref_name }}
+          git commit -m "🤖 Update sitemap [skip ci]"
+          
+          # Push using PAT
+          git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
