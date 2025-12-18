@@ -1,81 +1,81 @@
 import React from 'react';
 import moment from 'moment';
-import { AiOutlineArrowRight } from 'react-icons/ai';
-import { BsStars } from 'react-icons/bs';
-
+import { AiOutlineRight } from 'react-icons/ai';
+import { IoReader } from "react-icons/io5";
+import { getIconForCategory } from '../../../utils/iconMapper';
 
 interface Props {
-    BlogImage: string | any;
-    Category: string;
+    BlogImage?: string | undefined;
+    categories?: string[];
     BlogTitle: string;
-    author: string;
+    excerpt?: string;
+    readingTime?: number;
+    author?: string;
     date: Date | any;
     onPress: () => void;
     onSummarize?: () => void;
 }
 
 const HomeBlogCard: React.FC<Props> = ({
-    BlogImage, BlogTitle, Category, author, date, onPress, onSummarize
+    BlogImage, BlogTitle, categories = [], excerpt, readingTime, author, date, onPress, onSummarize
 }) => {
     return (
-        <div 
+        <article
             onClick={onPress}
-            className="group relative w-[320px] h-[450px] rounded-3xl overflow-hidden cursor-pointer flex-shrink-0 transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(83,21,252,0.3)]"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter') onPress(); }}
+            aria-label={`Read article ${BlogTitle}`}
+            className="group bg-white/3 border border-white/6 rounded-xl p-6 flex flex-col h-full transition-shadow duration-150 hover:shadow-md hover:-translate-y-1 cursor-pointer"
         >
-            {/* Background Image */}
-            <div className="absolute inset-0 w-full h-full">
-                <img
-                    src={BlogImage}
-                    alt={BlogTitle}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+            <header className="mb-4 flex items-center gap-3 flex-wrap">
+                {categories.length ? categories.map((c) => {
+                    const Icon = getIconForCategory(c);
+                    return (
+                        <span key={c} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-[#5315FC]/10 text-[#5315FC] border border-[#5315FC]/20">
+                            <Icon size={12} className="text-[#5315FC]" />
+                            <span className="capitalize">{c}</span>
+                        </span>
+                    );
+                }) : (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#5315FC]/10 text-[#5315FC] border border-[#5315FC]/20">Uncategorized</span>
+                )}
+            </header>
+
+            {BlogImage && (
+                <div className="mb-4 h-40 w-full overflow-hidden rounded-md">
+                    <img src={BlogImage} alt={BlogTitle} className="w-full h-full object-cover" />
+                </div>
+            )}
+
+            <div className="flex-1">
+                <h3 className="text-lg md:text-xl font-semibold text-white leading-snug mb-2 font-secondary">{BlogTitle}</h3>
+                {excerpt && (
+                    <p className="text-gray-300 text-sm mb-4 line-clamp-3">{excerpt}</p>
+                )}
             </div>
 
-            {/* Content */}
-            <div className="absolute inset-0 flex flex-col justify-end p-6 z-10">
-                {/* Category Badge */}
-                <div className="mb-3">
-                    <span className="px-4 py-1.5 rounded-full bg-[#5315FC]/30 backdrop-blur-md text-white text-xs font-medium shadow-lg border border-[#5315FC]/50 capitalize font-secondary">
-                        {Category}
-                    </span>
+            <footer className="mt-4 flex items-center justify-between text-sm text-gray-400">
+                <div>
+                    <span className="block">{author}</span>
+                    <time className="block text-gray-400" dateTime={new Date(date).toISOString()}>{moment(date).format('MMM DD, YYYY')}</time>
                 </div>
+                <div className="flex items-center gap-3">
+                    {onSummarize && (
+                        <button
+                            onClick={(e) => { e.stopPropagation(); onSummarize(); }}
+                            className="p-2 rounded-md bg-white/5 hover:bg-white/6 text-gray-300"
+                            title="Summarize with AI"
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-300"><path d="M12 2 L13.09 8.26 L19.6 8.26 L14.27 11.74 L15.36 18 L12 14.77 L8.64 18 L9.73 11.74 L4.4 8.26 L10.91 8.26 L12 2 Z" fill="currentColor" /></svg>
+                        </button>
+                    )}
 
-                {/* Title */}
-                <h3 className="text-white font-bold text-xl md:text-2xl leading-tight mb-3 font-secondary group-hover:text-[#A99DFF] transition-colors duration-300">
-                    {BlogTitle}
-                </h3>
-
-                {/* Meta Info */}
-                <div className="flex items-center gap-4 mb-4 text-gray-300 text-sm">
-                    <span className="font-primary">{author}</span>
-                    <span className="w-1 h-1 rounded-full bg-gray-400"></span>
-                    <span className="font-primary">{moment(date).format("MMM DD, YYYY")}</span>
+                    <span className="text-gray-400">{readingTime ? `${readingTime} min` : ''}</span>
+                    <IoReader className="text-gray-400 transition-transform duration-150 group-hover:translate-x-1" />
                 </div>
-
-                {/* CTA */}
-                <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2 text-white font-medium text-sm group-hover:text-[#A99DFF] transition-colors duration-300">
-                        <span>Read Article</span>
-                        <AiOutlineArrowRight className="group-hover:translate-x-2 transition-transform duration-300" />
-                    </div>
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onSummarize?.();
-                        }}
-                        className="p-2 rounded-full bg-white/10 hover:bg-[#5315FC] backdrop-blur-md transition-all duration-300 border border-white/20 hover:border-[#5315FC]"
-                        title="Summarize with AI"
-                    >
-                        <BsStars className="text-white" size={16} />
-                    </button>
-                </div>
-            </div>
-
-            {/* Hover Border Glow */}
-            <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-[#5315FC]/50 transition-all duration-500 pointer-events-none" />
-        </div>
+            </footer>
+        </article>
     );
 }
 

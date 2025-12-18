@@ -35,13 +35,47 @@ const HomePage: React.FC = () => {
   const [selectedWorkExp, setSelectedWorkExp] = useState<any>(null);
   const [aiSummary, setAiSummary] = useState<string>("");
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const [blogData, setBlogData] = useState<any[]>([]);
 
+  const fetchBlogData = async (category: string) => {
+    try {
+      let query = `
+              *[_type == "post"${category !== 'all' ? ` && "${category}" in categories[]->title` : ''}] {
+                  title,
+                  slug { current },
+                  mainImage { asset->{_id, url}, alt },
+                  author -> { name, image { asset->{_id, url} } },
+                  categories[] -> { title },
+                  publishedAt,
+                  "excerpt": pt::text(body)[0...300],
+                  "bodyText": pt::text(body)
+              } | order(publishedAt desc)`;
+
+      const fetchData = await client.fetch(query);
+
+      // Enrich posts with computed readingTime and ensure excerpt is present
+      const enriched = fetchData.map((post: any) => {
+        const text = (post.bodyText || post.excerpt || '').trim();
+        const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+        return {
+          ...post,
+          readingTime: Math.max(1, Math.ceil(words / 200)),
+          excerpt: post.excerpt || (text.length ? `${text.slice(0, 300)}${text.length > 300 ? '…' : ''}` : ''),
+        };
+      });
+
+      setBlogData(enriched);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
     (async function () {
       const cal = await getCalApi({ "namespace": "30min" });
       cal("ui", { "cssVarsPerTheme": { "light": { "cal-brand": "#5315FC" }, "dark": { "cal-brand": "#5315FC" } }, "hideEventTypeDetails": false, "layout": "month_view" });
     })();
     fetchWorkExperience();
+    fetchBlogData('all');
   }, [])
 
   // Listen to worker messages for summary updates
@@ -399,7 +433,7 @@ const HomePage: React.FC = () => {
       <div className="relative w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 py-16 md:py-24">
         {/* Title */}
         <div className="relative text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold font-secondary text-white mb-4">
+          <h1 style={{ fontFamily: "'BBH Bartle', sans-serif" }} className="text-4xl md:text-5xl font-bold font-secondary text-white mb-4">
             Start a <span className="text-[#5315FC]">Conversation</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
@@ -493,7 +527,7 @@ const HomePage: React.FC = () => {
           {/* title */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold font-secondary text-white mb-2">
+              <h1 style={{ fontFamily: "'BBH Bartle', sans-serif" }} className="text-4xl md:text-5xl font-bold font-secondary text-white mb-2">
                 My <span className="text-[#5315FC]">Blog Posts</span>
               </h1>
               <p className="text-gray-400 text-lg">Latest thoughts and insights</p>
@@ -504,14 +538,34 @@ const HomePage: React.FC = () => {
           </div>
 
           {/* Horizontal Scroll Blog Posts */}
-          <div className="relative">
-            <div className="flex gap-6 overflow-x-auto px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 pb-8 scrollbar-thin scrollbar-thumb-[#5315FC]/50 scrollbar-track-transparent">
-              {BlogData?.map((data, index) => (
+          <main className="max-w-7xl mx-auto w-screen overflow-y-auto px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 p-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-8">
+              {[...blogData]
+                .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+                .slice(0, 3)
+                .map((data, index) => (
+                  <HomeBlogCard
+                    key={data.slug?.current || index}
+                    BlogImage={data.mainImage?.asset?.url || undefined}
+                    BlogTitle={data.title}
+                    categories={data.categories?.map((c: any) => c.title) || []}
+                    excerpt={data.excerpt}
+                    readingTime={data.readingTime}
+                    author={data.author?.name || 'Anonymous'}
+                    date={new Date(data.publishedAt)}
+                    onPress={() => {
+                      navigation(`/blog/${data.slug.current}`, {
+                        state: { slug: data?.slug?.current }
+                      });
+                    }}
+                  />
+                ))}
+              {/* {BlogData?.map((data, index) => (
                 <HomeBlogCard
                   key={`blog-${index}`}
                   BlogImage={data.blogImage}
                   BlogTitle={data.blogTitle}
-                  Category={data.categoree}
+                  categories={[data.categoree]}
                   author="DhineshKumar"
                   date={new Date()}
                   onPress={() => window.open(`${data.link}`)}
@@ -528,10 +582,10 @@ const HomePage: React.FC = () => {
                       `blog_summary_${index}`
                     );
                   }}
-                />
-              ))}
+                /> 
+              ))} */}
             </div>
-          </div>
+          </main>
         </div>
       </div>
     </React.Fragment >

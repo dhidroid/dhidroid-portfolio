@@ -3,11 +3,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=BBH+Bartle&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+/* Tailwind CSS Imports */
 @import "tailwindcss";
 
 @tailwind utilities;
 
+html, body {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE & Edge (legacy) */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari */
+}
 /* Global CSS Variables for Dark UI Theme */
 :root {
   /* Primary Colors */
@@ -82,7 +93,7 @@
   --radius-full: 9999px;
 
   /* Typography */
-  --primaryFont: "Urbanist", sans-serif;
+  --primaryFont: "Mona Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;;
   --secondaryFont: "Space Grotesk", sans-serif;
   --tertiaryFont: "Poppins", sans-serif;
   --font-family-sans: var(--primaryFont);
