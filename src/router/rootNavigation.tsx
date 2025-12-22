@@ -1,140 +1,70 @@
-import React, { Suspense, useState, useEffect } from "react";
-import { Link, Route, Routes } from "react-router";
-import SEO from "../components/SEO";
-import { generateMetaForRoute } from '../utils/seo';
-import { Footer, Header } from "../components";
-import Lottie from "lottie-react";
-import { LoaderAnimation } from "../assets";
+import React, { Suspense } from "react";
+import { Route, Routes } from "react-router";
+import { Loader2 } from "lucide-react";
+import Header from "../components/header/Header";
+import Footer from "../components/Footer/Footer";
 
-// Lazy load the HomePage component
+// Lazy load Components
 const HomeScreen = React.lazy(() => import("../pages/HeroPage/index"));
 const BlogPage = React.lazy(() => import("../pages/BlogPage/index"));
-const UndertheDev = React.lazy(() => import("../components/404Page/UndertheDev"));
-const Projects = React.lazy(() => import("../pages/Projects"));
 const BlogList = React.lazy(() => import("../pages/BlogPage/BlogList"));
-const Loader = React.lazy(() => import("../components/loader/Loader"));
-const PageNotFound = React.lazy(() => import("../components/404Page/PageNotFound"));
 const AboutPage = React.lazy(() => import("../pages/AboutPage"));
 const SkillsPage = React.lazy(() => import("../pages/SkillsPage"));
+const ServicesPage = React.lazy(() => import("../pages/ServicesPage"));
+const PricingPage = React.lazy(() => import("../pages/PricingPage"));
+const SchedulePage = React.lazy(() => import("../pages/SchedulePage"));
+const Projects = React.lazy(() => import("../pages/Projects"));
+const PageNotFound = React.lazy(() => import("../components/404Page/PageNotFound"));
 
-// Enhanced Loader with minimum display time
-function EnhancedLoader() {
-  const [showLoader, setShowLoader] = useState(true);
-
-  useEffect(() => {
-    // Set minimum loader display time (adjust as needed)
-    const timer = setTimeout(() => {
-      setShowLoader(false);
-    }, 2000); // 2 seconds minimum loading time
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (showLoader) {
-    return <Loader />;
-  }
-
-  return null;
-}
-
-
-
-const links = [
-  { label: "Home", path: "/" },
-    { label: "About", path: "/about" },
-    { label: "Skills", path: "/skills" },
-  { label: "Projects", path: "/project" },
-  { label: "Blog List", path: "/bloglist" },
-  { label: "Create Blog", path: "/createblog" },
-  // You can also predefine slugs for example blogs
-  { label: "Sample Blog Post", path: "/blog/sample-post" },
-];
-
-export default function LinksPage() {
+// Helper for loading state
+function LoadingFallback() {
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <SEO
-        title={generateMetaForRoute('/links').title}
-        description={generateMetaForRoute('/links').description}
-        route="/links"
-        structuredData={generateMetaForRoute('/links').structuredData}
-        url="/links"
-      />
-      <h1 className="text-2xl font-bold mb-4">All Local Links</h1>
-      <ul className="space-y-2">
-        {links.map((link, index) => (
-          <li key={index}>
-            <Link
-              to={link.path}
-              className="text-blue-600 hover:underline"
-            >
-              {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <Loader2 className="w-10 h-10 animate-spin text-primary" />
     </div>
   );
 }
 
-
 function BlogCreate() {
-  const [isRedirecting, setIsRedirecting] = useState<boolean>(true);
-
   React.useEffect(() => {
-    // Add delay before redirect to show loader longer
     const timer = setTimeout(() => {
       window.location.href = "https://dhidroid.sanity.studio/";
-    }, 3000); // 3 seconds delay
-
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <center>
-      <Lottie animationData={LoaderAnimation} loop={true} />
-      <p style={{ marginTop: '20px', color: '#666' }}>
-        Redirecting to blog creation...
-      </p>
-    </center>
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+      <p className="text-gray-500">Redirecting to CMS...</p>
+    </div>
   );
 }
 
 export function Router() {
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
-
-  useEffect(() => {
-    // Global initial loading delay
-    const timer = setTimeout(() => {
-      setIsInitialLoading(false);
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isInitialLoading) {
-    return <Loader />;
-  }
-
   return (
-    <Suspense fallback={<EnhancedLoader />}>
-      <div>
+    <Suspense fallback={<LoadingFallback />}>
+      <div className="flex flex-col min-h-screen">
         <Header />
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
-          <Route path="/blog/:slug" element={<BlogPage />} />
-          <Route path="/createblog" element={<BlogCreate />} />
-          <Route path="/project" element={<Projects />} />
-          <Route path="/bloglist" element={<BlogList />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/skills" element={<SkillsPage />} />
-          <Route path="/links" element={<LinksPage />} />
-          <Route path="*" element={
-            <Suspense fallback={<Loader />}>
-              <UndertheDev />
-            </Suspense>
-          } />
-        </Routes>
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/skills" element={<SkillsPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/project" element={<Projects />} />
+
+            {/* Blog Routes */}
+            <Route path="/bloglist" element={<BlogList />} />
+            <Route path="/blog/:slug" element={<BlogPage />} />
+            <Route path="/createblog" element={<BlogCreate />} />
+
+            {/* 404 / Fallback */}
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </main>
         <Footer />
       </div>
     </Suspense>

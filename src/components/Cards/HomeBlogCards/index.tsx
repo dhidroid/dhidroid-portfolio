@@ -1,82 +1,89 @@
-import React from 'react';
-import moment from 'moment';
-import { AiOutlineRight } from 'react-icons/ai';
-import { IoReader } from "react-icons/io5";
-import { getIconForCategory } from '../../../utils/iconMapper';
+import React from "react";
+import { Badge } from "../../ui/Badge";
+import { ArrowRight, Clock, Calendar } from "lucide-react";
 
-interface Props {
-    BlogImage?: string | undefined;
-    categories?: string[];
+interface HomeBlogCardProps {
+    BlogImage?: string;
     BlogTitle: string;
-    excerpt?: string;
+    categories: string[];
+    excerpt: string;
     readingTime?: number;
-    author?: string;
-    date: Date | any;
+    author: string;
+    date: Date;
     onPress: () => void;
-    onSummarize?: () => void;
 }
 
-const HomeBlogCard: React.FC<Props> = ({
-    BlogImage, BlogTitle, categories = [], excerpt, readingTime, author, date, onPress, onSummarize
+const HomeBlogCard: React.FC<HomeBlogCardProps> = ({
+    BlogImage,
+    BlogTitle,
+    categories,
+    excerpt,
+    readingTime,
+    author,
+    date,
+    onPress,
 }) => {
     return (
-        <article
-            onClick={onPress}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => { if (e.key === 'Enter') onPress(); }}
-            aria-label={`Read article ${BlogTitle}`}
-            className="group bg-white/3 border border-white/6 rounded-xl p-6 flex flex-col h-full transition-shadow duration-150 hover:shadow-md hover:-translate-y-1 cursor-pointer"
-        >
-            <header className="mb-4 flex items-center gap-3 flex-wrap">
-                {categories.length ? categories.map((c) => {
-                    const Icon = getIconForCategory(c);
-                    return (
-                        <span key={c} className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-[#5315FC]/10 text-[#5315FC] border border-[#5315FC]/20">
-                            <Icon size={12} className="text-[#5315FC]" />
-                            <span className="capitalize">{c}</span>
-                        </span>
-                    );
-                }) : (
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#5315FC]/10 text-[#5315FC] border border-[#5315FC]/20">Uncategorized</span>
-                )}
-            </header>
+      <div
+          className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:border-primary/20 transition-all duration-300 cursor-pointer"
+          onClick={onPress}
+      >
+          {/* Image */}
+          <div className="relative aspect-video overflow-hidden bg-gray-100">
+              {BlogImage ? (
+                  <img
+                      src={BlogImage}
+                      alt={BlogTitle}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+              ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      No Image
+                  </div>
+              )}
+              <div className="absolute top-4 left-4 flex gap-2">
+                  {categories.slice(0, 1).map((cat) => (
+                      <Badge key={cat} className="bg-white/90 text-gray-900 backdrop-blur-sm">
+                          {cat}
+                      </Badge>
+                  ))}
+              </div>
+          </div>
 
-            {BlogImage && (
-                <div className="mb-4 h-40 w-full overflow-hidden rounded-md">
-                    <img src={BlogImage} alt={BlogTitle} className="w-full h-full object-cover" />
-                </div>
-            )}
+          {/* Content */}
+          <div className="flex flex-col flex-grow p-6">
+              <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                  <div className="flex items-center gap-1">
+                      <Calendar size={12} />
+                      <span>{new Date(date).toLocaleDateString()}</span>
+                  </div>
+                  {readingTime && (
+                      <div className="flex items-center gap-1">
+                          <Clock size={12} />
+                          <span>{readingTime} min read</span>
+                      </div>
+                  )}
+              </div>
 
-            <div className="flex-1">
-                <h3 className="text-lg md:text-xl font-semibold text-white leading-snug mb-2 font-secondary">{BlogTitle}</h3>
-                {excerpt && (
-                    <p className="text-gray-300 text-sm mb-4 line-clamp-3">{excerpt}</p>
-                )}
-            </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary transition-colors">
+                  {BlogTitle}
+              </h3>
 
-            <footer className="mt-4 flex items-center justify-between text-sm text-gray-400">
-                <div>
-                    <span className="block">{author}</span>
-                    <time className="block text-gray-400" dateTime={new Date(date).toISOString()}>{moment(date).format('MMM DD, YYYY')}</time>
-                </div>
-                <div className="flex items-center gap-3">
-                    {onSummarize && (
-                        <button
-                            onClick={(e) => { e.stopPropagation(); onSummarize(); }}
-                            className="p-2 rounded-md bg-white/5 hover:bg-white/6 text-gray-300"
-                            title="Summarize with AI"
-                        >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-300"><path d="M12 2 L13.09 8.26 L19.6 8.26 L14.27 11.74 L15.36 18 L12 14.77 L8.64 18 L9.73 11.74 L4.4 8.26 L10.91 8.26 L12 2 Z" fill="currentColor" /></svg>
-                        </button>
-                    )}
+              <p className="text-gray-600 text-sm line-clamp-3 mb-6 flex-grow">
+                  {excerpt}
+              </p>
 
-                    <span className="text-gray-400">{readingTime ? `${readingTime} min` : ''}</span>
-                    <IoReader className="text-gray-400 transition-transform duration-150 group-hover:translate-x-1" />
-                </div>
-            </footer>
-        </article>
-    );
-}
+              <div className="flex items-center justify-between mt-auto">
+                  <span className="text-sm font-medium text-gray-900">
+                      {author}
+                  </span>
+                  <div className="text-primary font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Read More <ArrowRight size={16} />
+                  </div>
+              </div>
+          </div>
+      </div>
+  );
+};
 
 export default HomeBlogCard;

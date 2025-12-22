@@ -10,20 +10,21 @@ interface SEOProps {
   route?: string;
   url?: string;
   structuredData?: any;
+  type?: string;
 }
 
-const SEO: React.FC<SEOProps> = ({ title, description, keywords, image, route, url, structuredData }) => {
+const SEO: React.FC<SEOProps> = ({ title, description, keywords, image, route, url, structuredData, type = "website" }) => {
   const siteTitle = "Dhidroid - Portfolio";
   const defaultDescription = "Dhinesh's Portfolio - Full Stack Developer, AI Enthusiast, and Tech Blogger. Explore my projects, skills, and latest articles.";
   const defaultKeywords = [
-    "Dhinesh", 
-    "Dhidroid", 
-    "Portfolio", 
-    "Full Stack Developer", 
-    "AI Engineer", 
-    "React Developer", 
-    "Node.js", 
-    "Sanity.io", 
+    "Dhinesh",
+    "Dhidroid",
+    "Portfolio",
+    "Full Stack Developer",
+    "AI Engineer",
+    "React Developer",
+    "Node.js",
+    "Sanity.io",
     "Web Development",
     "Tech Blog"
   ];
@@ -47,7 +48,7 @@ const SEO: React.FC<SEOProps> = ({ title, description, keywords, image, route, u
       <meta name="robots" content="index, follow" />
       
       {/* Open Graph / Facebook */}
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content={type} />
       <meta property="og:url" content={finalUrl} />
       <meta property="og:title" content={finalTitle} />
       <meta property="og:description" content={finalDescription} />

@@ -1,125 +1,102 @@
 import React from "react";
-import { motion } from "motion/react";
-import styles from "./Skills.module.css";
 import SEO from "../../components/SEO";
 import { generateMetaForRoute } from '../../utils/seo';
-import {
-  FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, FaGithub, FaFigma, FaAndroid, FaAppStoreIos, FaDocker, FaAws
-} from "react-icons/fa";
-import {
-  SiTypescript, SiTailwindcss, SiNextdotjs, SiMongodb, SiPostgresql, SiGraphql, SiFirebase, SiRedux, SiSanity, SiVercel, SiKotlin, SiSwift, SiGo
-} from "react-icons/si";
-import { TbBrandReactNative } from "react-icons/tb";
+import { Container } from "../../components/ui/Container";
+import { Badge } from "../../components/ui/Badge";
+import { Code2, Server, Database, Terminal } from "lucide-react";
 
-const skills = [
-  { name: "React Native", icon: TbBrandReactNative, category: "Mobile" },
-  { name: "React.js", icon: FaReact, category: "Frontend" },
-  { name: "TypeScript", icon: SiTypescript, category: "Languages" },
-  { name: "Node.js", icon: FaNodeJs, category: "Backend" },
-  { name: "Next.js", icon: SiNextdotjs, category: "Frontend" },
-  { name: "JavaScript", icon: FaJs, category: "Languages" },
-  { name: "HTML5", icon: FaHtml5, category: "Frontend" },
-  { name: "CSS3", icon: FaCss3Alt, category: "Frontend" },
-  { name: "Tailwind CSS", icon: SiTailwindcss, category: "Frontend" },
-  { name: "Redux", icon: SiRedux, category: "Frontend" },
-  { name: "MongoDB", icon: SiMongodb, category: "Backend" },
-  { name: "PostgreSQL", icon: SiPostgresql, category: "Backend" },
-  { name: "GraphQL", icon: SiGraphql, category: "Backend" },
-  { name: "Firebase", icon: SiFirebase, category: "Backend" },
-  { name: "Sanity.io", icon: SiSanity, category: "Backend" },
-  { name: "Go", icon: SiGo, category: "Backend" },
-  { name: "Android (Kotlin)", icon: SiKotlin, category: "Mobile" },
-  { name: "iOS (Swift)", icon: SiSwift, category: "Mobile" },
-  { name: "Git", icon: FaGitAlt, category: "Tools" },
-  { name: "GitHub", icon: FaGithub, category: "Tools" },
-  { name: "Figma", icon: FaFigma, category: "Tools" },
-  { name: "Docker", icon: FaDocker, category: "DevOps" },
-  { name: "AWS", icon: FaAws, category: "DevOps" },
-  { name: "Vercel", icon: SiVercel, category: "DevOps" },
+// Mock Data - Replace with Sanity fetch if needed
+const skillCategories = [
+  {
+    title: "Frontend Development",
+    icon: Code2,
+    skills: [
+      { name: "React.js", desc: "Component-based UI library" },
+      { name: "Next.js", desc: "React framework for production" },
+      { name: "TypeScript", desc: "Typed JavaScript" },
+      { name: "Tailwind CSS", desc: "Utility-first CSS framework" },
+    ]
+  },
+  {
+    title: "Backend Development",
+    icon: Server,
+    skills: [
+      { name: "Node.js", desc: "JavaScript runtime" },
+      { name: "Python", desc: "Versatile programming language" },
+      { name: "Go", desc: "Efficient compiled language" },
+      { name: "GraphQL", desc: "Query language for APIs" },
+    ]
+  },
+  {
+    title: "Database & Cloud",
+    icon: Database,
+    skills: [
+      { name: "PostgreSQL", desc: "Relational database" },
+      { name: "MongoDB", desc: "NoSQL database" },
+      { name: "AWS", desc: "Cloud computing services" },
+      { name: "Firebase", desc: "App development platform" },
+    ]
+  },
+  {
+    title: "Mobile & Tools",
+    icon: Terminal,
+    skills: [
+      { name: "React Native", desc: "Cross-platform mobile apps" },
+      { name: "Swift", desc: "iOS development" },
+      { name: "Kotlin", desc: "Android development" },
+      { name: "Docker", desc: "Containerization platform" },
+    ]
+  }
 ];
 
 const SkillsPage = () => {
-  // Group skills by category for better organization, or just show all as a cloud
-  // The user image shows a mix, let's do a categorized view but with the pill style
-
-  const categories = ["All", "Mobile", "Frontend", "Backend", "DevOps", "Tools"];
-  const [activeCategory, setActiveCategory] = React.useState("All");
-
-  const filteredSkills = activeCategory === "All"
-    ? skills
-    : skills.filter(skill => skill.category === activeCategory);
-
   return (
-    <div className={styles.container}>
-      <SEO
-        title="Skills & Technologies"
-        description="Explore the technical arsenal of DhineshKumar Thirupathi. Proficient in React Native, React, Node.js, and more."
-        keywords={["Skills", "Tech Stack", "React Native", "React", "Node.js", "TypeScript"]}
-        route="/skills"
-        structuredData={generateMetaForRoute('/skills').structuredData}
-      />
+      <React.Fragment>
+        <SEO
+          title={generateMetaForRoute('/skills').title}
+          description={generateMetaForRoute('/skills').description}
+          route="/skills"
+        />
 
-      <div className={styles.content}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className={styles.header}
-        >
-          <h1 className={styles.title}>
-            My Technical <span className={styles.highlight}>Arsenal</span>
-          </h1>
-          <p className={styles.subtitle}>
-            A curated list of technologies I use to build scalable, high-performance digital solutions.
-            From pixel-perfect UIs to robust backend systems.
-          </p>
-        </motion.div>
+        <section className="pt-32 pb-24 bg-gray-50 border-b border-gray-200">
+          <Container className="text-center">
+            <Badge className="mb-6">Expertise</Badge>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Tools & <span className="text-primary">Technologies</span>
+            </h1>
+            <p className="max-w-2xl mx-auto text-lg text-gray-500">
+              I use a modern stack to build robust, scalable, and efficient applications.
+            </p>
+          </Container>
+        </section>
 
-        {/* Category Filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className={styles.skillsGrid}
-          style={{ marginBottom: '20px' }}
-        >
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              className={`${styles.skillPill} ${activeCategory === cat ? styles.active : ''}`}
-              onClick={() => setActiveCategory(cat)}
-              style={{ animation: 'none' }} // Disable float for filter buttons
-            >
-              {cat}
-            </button>
-          ))}
-        </motion.div>
+        <section className="py-24 bg-white">
+          <Container>
+            <div className="grid grid-cols-1 gap-16">
+              {skillCategories.map((category) => (
+                <div key={category.title}>
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="p-3 rounded-xl bg-primary/10 text-primary">
+                      <category.icon size={24} />
+                    </div>
+                    <h2 className="text-2xl font-bold">{category.title}</h2>
+                  </div>
 
-        {/* Skills Grid */}
-        <motion.div
-          layout
-          className={styles.skillsGrid}
-        >
-          {filteredSkills.map((skill, index) => (
-            <motion.div
-              layout
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3 }}
-              key={skill.name}
-              className={styles.skillPill}
-            >
-              <span className={styles.iconWrapper}>
-                <skill.icon />
-              </span>
-              {skill.name}
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </div>
-  );
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                              {category.skills.map((skill) => (
+                                <div key={skill.name} className="p-6 rounded-2xl border border-gray-100 bg-white hover:shadow-lg hover:border-primary/20 transition-all duration-300 group">
+                                  <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">{skill.name}</h3>
+                                  <p className="text-sm text-gray-500">{skill.desc}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+            </div>
+          </Container>
+        </section>
+      </React.Fragment>
+    );
 };
 
 export default SkillsPage;

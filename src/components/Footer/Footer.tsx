@@ -1,65 +1,101 @@
-
-import { FaXTwitter } from "react-icons/fa6";
-import styles from "./Footer.module.css";
-import { FaInstagram, FaLinkedin, } from "react-icons/fa";
-import { SiPeerlist } from "react-icons/si";
-import { useEffect } from "react";
-import { getCalApi } from "@calcom/embed-react";
-import { FaSquareGithub } from "react-icons/fa6";
+import React from "react";
+import { Link } from "react-router";
+import { Container } from "../ui/Container";
+import { Twitter, Linkedin, Facebook, Instagram } from "lucide-react";
+import DhiDroidLogo from '../../assets/logo.svg';
 
 const Footer = () => {
-
-  const SocialIcon = [
-    {name: FaSquareGithub, link: "https://github.com/dhidroid"},
-    {name: FaInstagram, link: "https://instagram.com/dhidroid"},
-    {name: FaLinkedin, link: "https://www.linkedin.com/in/dhidroid-rndev"},
-    {name: FaXTwitter, link: "https://x.com/@dhidroid"},
-    {name: SiPeerlist, link: "https://peerlist.io/dhidroid"},
-  ]
-
-  useEffect(() => {
-    (async function () {
-      const cal = await getCalApi({ "namespace": "30min" });
-      cal("ui", { "cssVarsPerTheme": { "light": { "cal-brand": "#5315FC" }, "dark": { "cal-brand": "#5315FC" } }, "hideEventTypeDetails": false, "layout": "month_view" });
-    })();
-  }, [])
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={styles.footer}>
-      <div className={styles.container}>
-        {/* Left Section - Contact Info */}
-        <div className={styles.contactSection}>
-          <p onClick={() => window.open("mailto:dhinesh4668@outlook.com")} style={{cursor: "pointer"}}  className={styles.email}>dhinesh4668@outlook.com</p>
-          <p onClick={() => window.open("tel:+919150507538")} style={{cursor: "pointer"}}  className={styles.phone}>+91 9150507538</p>
-          <p className={styles.copyright}>© Copyright {new Date().getFullYear()}.</p>
-        </div>
+    <footer className="bg-gray-50 pt-20 pb-10 border-t border-gray-100 mt-auto">
+      <Container>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <div className="md:col-span-1">
+            <Link to="/" className="flex items-center gap-2 font-bold text-xl tracking-tight mb-4">
+              <img
+                src={DhiDroidLogo}
+                alt="DhiDroid Logo"
+                className="h-8 w-8 rounded-full"
+              />
+              <span>Dhidroid</span>
+            </Link>
+            <p className="text-gray-500 mb-6">
+              Building premium digital experiences with modern web technologies.
+            </p>
+            <div className="flex gap-4">
+              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
+                <Twitter size={20} />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
+                <Linkedin size={20} />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
+                <Facebook size={20} />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
+                <Instagram size={20} />
+              </a>
+            </div>
+          </div>
 
-        {/* Middle Section - CTA */}
-        <div className={styles.ctaSection}>
-          <h2 className={styles.heading}>Got a project? Want to collaborate?</h2>
-          <button
-          onClick={(e) => {
-            e.preventDefault()
-          }}
-          data-cal-namespace="30min"
-          data-cal-link="dhidroid/30min"
-          data-cal-config='{"layout":"month_view"}'
-          className={styles.ctaButton}>Discuss your project</button>
-        </div>
+          <div>
+            <h4 className="font-bold mb-6">Pages</h4>
+            <ul className="space-y-4">
+              <li>
+                <Link to="/" className="text-gray-500 hover:text-primary transition-colors">Home</Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-gray-500 hover:text-primary transition-colors">About</Link>
+              </li>
+              <li>
+                <Link to="/services" className="text-gray-500 hover:text-primary transition-colors">Services</Link>
+              </li>
+              <li>
+                <Link to="/projects" className="text-gray-500 hover:text-primary transition-colors">Projects</Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Right Section - Locations */}
-        <div className={styles.locationsSection}>
-          <div className={styles.socialIcons}>
-            {SocialIcon.map((data, index) => (
-              <data.name size={30} className={styles.icon} onClick={() => window.open(data.link)} key={index} />
-            ))}
+          <div>
+            <h4 className="font-bold mb-6">Company</h4>
+            <ul className="space-y-4">
+              <li>
+                <Link to="/contact" className="text-gray-500 hover:text-primary transition-colors">Contact</Link>
+              </li>
+              <li>
+                <Link to="/bloglist" className="text-gray-500 hover:text-primary transition-colors">Blog</Link>
+              </li>
+              <li>
+                <Link to="/schedule" className="text-gray-500 hover:text-primary transition-colors">Schedule Demo</Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-bold mb-6">Resources</h4>
+            <ul className="space-y-4">
+              <li>
+                <Link to="/style-guide" className="text-gray-500 hover:text-primary transition-colors">Style Guide</Link>
+              </li>
+              <li>
+                <Link to="/licenses" className="text-gray-500 hover:text-primary transition-colors">Licenses</Link>
+              </li>
+              <li>
+                <Link to="/changelog" className="text-gray-500 hover:text-primary transition-colors">Changelog</Link>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      <div className={styles.bigText}>
-        LET'S WORK TOGETHER
-      </div>
+        <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+          <p>&copy; {currentYear} Dhidroid. All rights reserved.</p>
+          <div className="flex gap-8 mt-4 md:mt-0">
+            <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-primary">Terms of Service</Link>
+          </div>
+        </div>
+      </Container>
     </footer>
   );
 };
