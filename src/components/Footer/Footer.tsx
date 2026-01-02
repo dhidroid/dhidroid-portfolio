@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { Container } from "../ui/Container";
-import { Twitter, Linkedin, Facebook, Instagram } from "lucide-react";
+import { FaGithub, FaLinkedin, FaMedium } from "react-icons/fa";
 import DhiDroidLogo from '../../assets/logo.svg';
 
 const Footer = () => {
@@ -24,17 +24,14 @@ const Footer = () => {
               Building premium digital experiences with modern web technologies.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
-                <Twitter size={20} />
+              <a href="https://github.com/dhidroid" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors">
+                <FaGithub size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
-                <Linkedin size={20} />
+              <a href="https://linkedin.com/in/dhidroid-rndev" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors">
+                <FaLinkedin size={20} />
               </a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors">
-                <Instagram size={20} />
+              <a href="https://medium.com/@dhidroid" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors">
+                <FaMedium size={20} />
               </a>
             </div>
           </div>
@@ -52,7 +49,7 @@ const Footer = () => {
                 <Link to="/services" className="text-gray-500 hover:text-primary transition-colors">Services</Link>
               </li>
               <li>
-                <Link to="/projects" className="text-gray-500 hover:text-primary transition-colors">Projects</Link>
+                <Link to="/project" className="text-gray-500 hover:text-primary transition-colors">Projects</Link>
               </li>
             </ul>
           </div>

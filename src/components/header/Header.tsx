@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 import { Button } from "../ui/Button";
 import { Container } from "../ui/Container";
 import DhiDroidLogo from '../../assets/logo.svg';
@@ -21,10 +22,11 @@ const Header = () => {
   const links = [
     { title: "Home", href: "/" },
     { title: "About", href: "/about" },
+    { title: "Works", href: "/works" },
     { title: "Skills", href: "/skills" },
     { title: "Services", href: "/services" },
-    { title: "Pricing", href: "/pricing" },
-    { title: "Blog", href: "/bloglist" }, // Keeping existing path for now
+    // { title: "Pricing", href: "/pricing" },
+    { title: "Blog", href: "/bloglist" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -60,10 +62,40 @@ const Header = () => {
           </nav>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-4">
-            <Link to="/schedule">
-              <Button size="sm">Get Started</Button>
-            </Link>
+          <div className="hidden md:flex items-center">
+            <div className="flex items-center border border-gray-300 bg-card/80 divide-x divide-gray-300 overflow-hidden">
+
+              {/* LinkedIn Action */}
+              <a
+                href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=dhidroid-rndev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 px-4 py-2 hover:bg-muted/5 transition-colors duration-300"
+              >
+                <div className="w-8 h-8 flex items-center justify-center bg-blue-50 text-[#0A66C2] group-hover:bg-[#0A66C2] group-hover:text-white transition-all duration-300">
+                  <FaLinkedin size={14} />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs font-bold font-display text-foreground leading-none mb-0.5">LinkedIn</span>
+                  <span className="text-[10px] text-muted-foreground font-medium leading-none">Follow Me</span>
+                </div>
+              </a>
+
+              {/* Hire Me Action */}
+              <Link
+                to="/schedule"
+                className="group flex items-center gap-3 px-4 py-2 hover:bg-muted/5 transition-colors duration-300"
+              >
+                <div className="w-8 h-8 flex items-center justify-center bg-muted/20 text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <ArrowRight size={14} className="-rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs font-bold font-display text-foreground leading-none mb-0.5">Hire Me</span>
+                  <span className="text-[10px] text-muted-foreground font-medium leading-none">Book Call</span>
+                </div>
+              </Link>
+
+            </div>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -91,9 +123,22 @@ const Header = () => {
                 {link.title}
               </Link>
             ))}
-            <div className="pt-4 border-t border-gray-100">
+            <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
+              <a
+                href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=dhidroid-rndev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 bg-[#0A66C2] text-white px-4 py-3 rounded-full font-medium shadow-sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <FaLinkedin size={18} />
+                <span>Follow on LinkedIn</span>
+              </a>
               <Link to="/schedule" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button className="w-full">Get Started</Button>
+                <Button className="w-full rounded-full group flex items-center justify-center gap-2">
+                  Get Started
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
               </Link>
             </div>
           </nav>

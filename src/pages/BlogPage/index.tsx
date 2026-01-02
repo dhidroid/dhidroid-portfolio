@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
 import SEO from "../../components/SEO";
 import { Container } from "../../components/ui/Container";
-import { Badge } from "../../components/ui/Badge";
 import { client } from "../../senity/senity";
-import { Calendar, Clock, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import CTA from "../../components/home/CTA";
 import MarkdownRenderer from "../../components/blog/MarkdownRenderer";
 import { PortableText } from '@portabletext/react';
 import imageUrlBuilder from '@sanity/image-url'
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { AISummary } from "../../components/ui/AISummary";
+import { generateMetaForRoute } from "../../utils/seo";
+import BlogHero from "../../components/blog/BlogHero";
+import BlogShare from "../../components/blog/BlogShare";
+import RecommendedBlogs from "../../components/blog/RecommendedBlogs";
 
 const builder = imageUrlBuilder(client);
 
@@ -21,7 +25,7 @@ function urlFor(source: any) {
 // Re-using the same styling logic for Portable Text to match MarkdownRenderer
 const PortableTextRenderer = ({ value }: { value: any }) => {
     return (
-        <div className="prose prose-lg md:prose-xl max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-strong:text-slate-900 prose-code:text-primary prose-code:bg-primary/5 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-xl prose-blockquote:text-gray-800 prose-blockquote:bg-gray-50 prose-blockquote:rounded-r-lg">
+        <div className="prose prose-lg md:prose-xl max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900 prose-code:text-primary prose-code:bg-primary/5 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-xl prose-blockquote:text-gray-800 prose-blockquote:bg-gray-50 prose-blockquote:rounded-r-lg">
             <PortableText
                 value={value}
                 components={{
@@ -35,7 +39,7 @@ const PortableTextRenderer = ({ value }: { value: any }) => {
                                     <img
                                         src={urlFor(value).width(800).fit('max').auto('format').url()}
                                         alt={value.alt || 'Blog Image'}
-                                        className="w-full h-auto rounded-xl shadow-md"
+                                        className="w-full h-auto shadow-md"
                                         loading="lazy"
                                     />
                                     {value.caption && (
@@ -108,12 +112,13 @@ const PortableTextRenderer = ({ value }: { value: any }) => {
 const BlogPage = () => {
     const { slug } = useParams();
     const [post, setPost] = useState<any>(null);
+    const [recommended, setRecommended] = useState<any[]>([]); // State for recommended blogs
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                // Updated query to fetch specific fields needed
+                // Fetch Current Post
                 const query = `
           *[_type == "post" && slug.current == $slug][0] {
             title,
@@ -135,6 +140,33 @@ const BlogPage = () => {
                 }
 
                 setPost(data);
+
+                // Fetch Recommended Blogs (Recent 3, excluding text heavy data)
+                const recommendedQuery = `
+                  *[_type == "post" && slug.current != $slug] | order(publishedAt desc) [0...3] {
+                    _id,
+                    title,
+                    slug,
+                    publishedAt,
+                    mainImage { asset->{_id, url} },
+                    categories[] -> { title },
+                    "bodyText": pt::text(body)
+                  }
+                `;
+                const recData = await client.fetch(recommendedQuery, { slug });
+
+                // Calculate reading time for them
+                const processedRecs = recData.map((p: any) => {
+                    const text = (p.bodyText || '').trim();
+                    const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+                    return {
+                        ...p,
+                        readingTime: Math.max(1, Math.ceil(words / 200))
+                    };
+                });
+
+                setRecommended(processedRecs);
+
             } catch (error) {
                 console.error(error);
             } finally {
@@ -167,92 +199,63 @@ const BlogPage = () => {
     const isMarkdown = typeof post.body === 'string';
     const hasContent = post.body; 
 
+    const bodyTextStr = post && post.bodyText ? post.bodyText : "";
+
+    const meta = post ? generateMetaForRoute(`/blog/${slug}`, {
+        title: post.title,
+        description: bodyTextStr.slice(0, 160),
+        image: post.mainImage ? urlFor(post.mainImage).width(1200).height(630).fit('crop').url() : undefined,
+        keywords: post.categories?.map((c: any) => c.title),
+        type: 'article',
+        publishedAt: post.publishedAt,
+        authorName: post.author?.name
+    }) : null;
+
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
 
     return (
         <React.Fragment>
-            <SEO
-                title={`${post.title} | Blog`}
-                description={post.bodyText?.slice(0, 160) || "Read this article on my portfolio."}
-                route={`/blog/${slug}`}
-                image={post.mainImage?.asset?.url}
-                type="article"
-            />
+            {meta && (
+                <SEO 
+                    title={meta.title}
+                    description={meta.description}
+                    keywords={meta.keywords}
+                    image={meta.image}
+                    url={meta.canonical}
+                    type="article"
+                    structuredData={meta.structuredData}
+                />
+            )}
 
             <article className="bg-white min-h-screen">
-                {/* Navigation / Breadcrumb */}
-                <div className="border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-0 z-30">
-                    <Container className="py-4">
-                        <Link to="/bloglist" className="inline-flex items-center text-sm text-gray-500 hover:text-primary transition-colors font-medium">
-                            <ChevronLeft className="w-4 h-4 mr-1" />
-                            Back to Blog
-                        </Link>
-                    </Container>
+                {/* Navigation / Breadcrumb - Fixed Header Offset */}
+                <div className="pt-24 md:pt-28">
+                    <div className="border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-20 z-30">
+                        <Container className="py-4">
+                            <Link to="/bloglist" className="inline-flex items-center text-sm text-gray-500 hover:text-primary transition-colors font-medium">
+                                <ChevronLeft className="w-4 h-4 mr-1" />
+                                Back to Blog
+                            </Link>
+                        </Container>
+                    </div>
                 </div>
 
                 {/* Hero Header */}
-                <section className="pt-12 pb-12 lg:pt-20 lg:pb-16 bg-white">
-                    <Container className="max-w-[800px] text-center">
-                        {/* Categories */}
-                        <div className="flex flex-wrap justify-center gap-2 mb-8">
-                            {post.categories?.map((cat: any) => (
-                                <Badge key={cat.title} variant="secondary" className="bg-primary/5 text-primary border-primary/10 hover:bg-primary/10 px-4 py-1.5 text-sm">
-                                    {cat.title}
-                                </Badge>
-                            ))}
-                        </div>
-
-                        {/* Title */}
-                        <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold mb-8 leading-[1.15] text-slate-900 tracking-tight">
-                            {post.title}
-                        </h1>
-
-                        {/* Metadata (Author, Date, Time) */}
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-gray-500 text-base border-t border-b border-gray-100 py-6">
-                            <div className="flex items-center gap-3">
-                                {post.author?.image ? (
-                                    <img src={post.author.image.asset.url} alt={post.author.name} className="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-sm" />
-                                ) : (
-                                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                        D
-                                    </div>
-                                )}
-                                <div className="text-left">
-                                    <div className="font-bold text-slate-900 leading-none mb-1">{post.author?.name || 'Dhinesh'}</div>
-                                    <div className="text-xs text-gray-400">Author</div>
-                                </div>
-                            </div>
-
-                            <div className="hidden sm:block w-px h-8 bg-gray-200" />
-
-                            <div className="flex items-center gap-6">
-                                <div className="flex items-center gap-2">
-                                    <Calendar className="w-4 h-4 text-primary" />
-                                    <span>{new Date(post.publishedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Clock className="w-4 h-4 text-primary" />
-                                    <span>{post.readingTime} min read</span>
-                                </div>
-                            </div>
-                        </div>
-                    </Container>
-                </section>
-
-                {/* Feature Image */}
-                {post.mainImage && (
-                    <Container className="max-w-5xl mb-16 px-4 sm:px-6">
-                        <div className="rounded-2xl overflow-hidden shadow-2xl shadow-gray-200/50 aspect-[21/9] relative">
-                            <img 
-                                src={post.mainImage.asset.url}
-                                alt={post.mainImage.alt || post.title}
-                                className="absolute inset-0 w-full h-full object-cover"
-                            />
-                        </div>
-                    </Container>
-                )}
+                <BlogHero
+                    title={post.title}
+                    date={post.publishedAt}
+                    readingTime={post.readingTime}
+                    author={post.author?.name}
+                    category={post.categories?.[0]?.title}
+                    image={post.mainImage?.asset?.url}
+                />
 
                 {/* Main Content */}
-                <section className="pb-24">
+                <section className="pb-12">
+                    <Container className="max-w-[720px] px-6 mb-12">
+                        <AISummary summary={post.bodyText?.slice(0, 300) + (post.bodyText?.length > 300 ? "..." : "")} type="blog" />
+                    </Container>
+
                     <Container className="max-w-[720px] px-6">
                         {hasContent ? (
                             isMarkdown ? (
@@ -267,10 +270,15 @@ const BlogPage = () => {
                                 </p>
                             </div>
                         )}
+
+                        {/* Share Component */}
+                        <BlogShare title={post.title} url={currentUrl} />
+
                     </Container>
                 </section>
 
-                {/* Divider / Share / Tags could go here */}
+                {/* Recommended Blogs */}
+                <RecommendedBlogs currentSlug={slug || ''} posts={recommended} />
 
             </article>
 

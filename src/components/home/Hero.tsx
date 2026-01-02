@@ -1,175 +1,238 @@
 import React from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, ZoomIn, ZoomOut, Download } from "lucide-react";
 import { Link } from "react-router";
-import { ArrowRight, CheckCircle, Users, Globe, Shield } from "lucide-react";
-import { Button } from "../ui/Button";
-import { Container } from "../ui/Container";
-import { PortfolioContent } from "../../utils/Data/portfolioContent";
-import { HeroBackgroundSVG } from "../Backgrounds/HeroBackgroundSVG";
+import HeroTerminal from "./HeroTerminal";
+import { SectionWrapper } from "../layout/SectionWrapper";
+import { fadeInUp, staggerContainer, textReveal } from "../../utils/motion";
+
+import { Modal } from "../ui/Modal";
+
+
+import { Document, Page, pdfjs } from 'react-pdf';
+import ResumePDF from "../../assets/Dhineshkumar_thirupathi.pdf";
+
+// Styles for react-pdf
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
+// Configure worker
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const Hero = () => {
-  const { hero } = PortfolioContent;
+  const [isResumeOpen, setIsResumeOpen] = React.useState(false);
+  const [pageNumber] = React.useState<number>(1);
+  const [scale, setScale] = React.useState<number>(1.0);
+  const [containerWidth, setContainerWidth] = React.useState<number>(0);
+  const modalBodyRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (isResumeOpen && modalBodyRef.current) {
+      setContainerWidth(modalBodyRef.current.clientWidth);
+    }
+  }, [isResumeOpen]);
+
+  const handleHireMe = () => {
+    // Simple obfuscation to prevent basic scrapers
+    const user = "dhinesh4668";
+    const domain = "outlook.com";
+    const email = `${user}@${domain}`;
+    const subject = encodeURIComponent("Project Inquiry: Hiring Request");
+    const body = encodeURIComponent("Hi Dhinesh,\n\nI'm interested in hiring you for a project.\n\n[Please describe your project here]\n\nBest regards,");
+
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  };
 
   return (
-    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white">
-      {/* Background SVG */}
-      <div className="absolute inset-0 z-0">
-          <HeroBackgroundSVG />
-      </div>
+    <SectionWrapper className="min-h-screen flex items-center pt-32 pb-12 lg:pt-48 relative">
 
-      <Container className="relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Left Column: Content */}
-          <div className="max-w-2xl text-center lg:text-left mx-auto lg:mx-0">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 bg-white/50 backdrop-blur-sm shadow-sm mb-8 animate-fade-in-up hover:border-primary/30 transition-colors cursor-default">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
-              </span>
-              <span className="text-sm font-semibold text-gray-700 tracking-wide">
-                {hero.badge}
-              </span>
+      <motion.div
+        variants={staggerContainer}
+        initial="initial"
+        animate="animate"
+        className="w-full grid lg:grid-cols-12 gap-8 items-center relative z-20"
+      >
+        {/* Left Content: The "Hook" - Spans 8 cols */}
+        <div className="lg:col-span-8 flex flex-col justify-center">
+          {/* Badge / Pill */}
+          <motion.div variants={fadeInUp} className="mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-white/50 backdrop-blur-sm text-sm font-medium text-gray-600">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              Available for new projects
+            </span>
+          </motion.div>
+
+          {/* Massive Typography */}
+          <div className="relative z-10 font-display uppercase leading-[0.85] tracking-tighter">
+            <div className="overflow-hidden">
+              <motion.h1
+                variants={textReveal}
+                className="text-[14vw] lg:text-[10rem] font-bold text-foreground block"
+              >
+                CREATIVE
+              </motion.h1>
             </div>
-
-            {/* Heading */}
-            <h1 className="text-5xl md:text-6xl lg:text-[5.5rem] font-bold tracking-tight leading-[1.1] mb-6 animate-fade-in-up animation-delay-100 text-slate-900">
-              {hero.title.line1} <br />
-              <span className="text-primary relative inline-block">
-                {hero.title.highlight}
-              </span>
-            </h1>
-
-            {/* Subtext */}
-            <p className="text-lg md:text-xl text-gray-500 mb-10 leading-relaxed max-w-lg mx-auto lg:mx-0 animate-fade-in-up animation-delay-200">
-              {hero.subheadline}
-            </p>
-
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-12 animate-fade-in-up animation-delay-300">
-              <Link to="/project">
-                <Button size="lg" className="h-14 px-8 rounded-full text-base font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300">
-                  {hero.cta.primary}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/bloglist">
-                <Button variant="outline" size="lg" className="h-14 px-8 rounded-full text-base font-semibold border-gray-200 hover:bg-gray-50 hover:text-primary transition-colors">
-                  {hero.cta.secondary}
-                </Button>
-              </Link>
-            </div>
-
-            {/* Social Proof */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 animate-fade-in-up animation-delay-400">
-             <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center overflow-hidden">
-                    <img src={`https://i.pravatar.cc/100?img=${10 + i}`} alt="User" className="w-full h-full object-cover" />
-                  </div>
-                ))}
-                <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-50 flex items-center justify-center text-xs font-bold text-gray-600">
-                  4k+
-                </div>
-             </div>
-             <div className="text-sm font-medium text-gray-600">
-               {hero.socialProof}
-             </div>
+            <div className="overflow-hidden">
+              <motion.h1
+                variants={textReveal}
+                className="text-[14vw] lg:text-[10rem] font-light italic text-foreground block ml-[5vw] lg:ml-24"
+              >
+                DEVELOPER
+              </motion.h1>
             </div>
           </div>
 
-          {/* Right Column: Visual Composition */}
-          <div className="relative animate-fade-in-up animation-delay-500 hidden lg:block perspective-1000">
-            {/* Background Blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/5 rounded-full blur-3xl -z-10" />
+          <motion.p
+            variants={fadeInUp}
+            className="mt-8 text-lg md:text-xl text-gray-500 max-w-xl font-body leading-relaxed ml-2"
+          >
+            Crafting digital experiences that blend high-end aesthetics with robust engineering.
+            Based in India, working globally.
+          </motion.p>
 
-            {/* Main Dashboard Card */}
-            <div className="relative bg-white rounded-2xl shadow-2xl border border-gray-200/60 overflow-hidden transform rotate-y-6 rotate-x-2 transition-transform duration-500 hover:rotate-0">
-               {/* Window Header */}
-               <div className="h-10 bg-gray-50 border-b border-gray-100 flex items-center px-4 gap-2">
-                 <div className="w-3 h-3 rounded-full bg-red-400" />
-                 <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                 <div className="w-3 h-3 rounded-full bg-green-400" />
-               </div>
-               
-               {/* Dashboard Content */}
-               <div className="p-6">
-                 {/* Top Row: Stats */}
-                 <div className="flex justify-between items-center mb-8">
-                   <div>
-                     <div className="text-sm text-gray-400 font-medium mb-1">Total Revenue</div>
-                     <div className="text-3xl font-bold text-slate-900">$48,290.00</div>
-                   </div>
-                   <div className="p-2 bg-green-50 text-green-600 rounded-lg text-sm font-bold">
-                     +18.2%
-                   </div>
-                 </div>
+          <motion.div variants={fadeInUp} className="mt-12 w-full max-w-4xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 border border-border/60 divide-y md:divide-y-0 md:divide-x divide-border/60 bg-card shadow-lg">
 
-                 {/* Chart Placeholder (CSS Bars) */}
-                 <div className="flex items-end justify-between h-32 gap-3 mb-8">
-                    {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
-                      <div key={i} className="w-full bg-primary/10 rounded-t-sm relative group">
-                        <div 
-                          className="absolute bottom-0 left-0 w-full bg-primary rounded-t-sm transition-all duration-700 ease-out group-hover:bg-primary/80"
-                          style={{ height: `${h}%` }}
-                        />
-                      </div>
-                    ))}
-                 </div>
-                 
-                 {/* Bottom Row: List */}
-                 <div className="space-y-3">
-                   {[1, 2].map((i) => (
-                     <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                       <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-primary">
-                         <Globe className="w-5 h-5" />
-                       </div>
-                       <div className="flex-1">
-                         <div className="text-sm font-bold text-slate-900">Global Reach</div>
-                         <div className="text-xs text-gray-500">Expanded to 5 new regions</div>
-                       </div>
-                       <div className="text-xs font-medium text-gray-400">Just now</div>
-                     </div>
-                   ))}
-                 </div>
-               </div>
-            </div>
-
-            {/* Floating Element 1: Active Users */}
-            <div className="absolute -left-12 top-20 bg-white p-4 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-100 animate-float-slow">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
-                  <Users className="w-5 h-5" />
+              {/* 1. My Works */}
+              <Link
+                to="/works"
+                className="group relative p-8 flex flex-row items-center gap-4 hover:bg-muted/5 transition-colors duration-500 text-left"
+              >
+                <div className="w-10 h-10 flex items-center justify-center bg-muted/10 text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                 </div>
                 <div>
-                  <div className="text-xs text-gray-500 font-medium">Active Users</div>
-                  <div className="text-lg font-bold text-slate-900">12,504</div>
+                  <h3 className="text-xl font-bold font-display text-foreground group-hover:text-primary transition-colors mb-1">
+                    My Works
+                  </h3>
+                  <p className="text-sm text-muted-foreground font-sans">
+                    Explore my portfolio
+                  </p>
                 </div>
-              </div>
-              <div className="flex -space-x-2 pl-1">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="w-6 h-6 rounded-full bg-gray-200 border border-white" />
-                ))}
-              </div>
-            </div>
+              </Link>
 
-            {/* Floating Element 2: Security */}
-            <div className="absolute -right-8 bottom-32 bg-white p-4 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-100 animate-float-medium">
-               <div className="flex items-center gap-3">
-                 <div className="p-2 bg-green-100 rounded-lg text-green-600">
-                    <Shield className="w-5 h-5" />
-                 </div>
-                 <div>
-                   <div className="text-sm font-bold text-slate-900">100% Secure</div>
-                   <div className="text-xs text-gray-500">Audited & Verified</div>
-                 </div>
-                 <CheckCircle className="w-4 h-4 text-green-500 ml-2" />
-               </div>
-            </div>
+              {/* 2. Hire Me */}
+              <button
+                onClick={handleHireMe}
+                className="group relative p-8 flex flex-row items-center gap-4 hover:bg-muted/5 transition-colors duration-500 text-left"
+              >
+                <div className="w-10 h-10 flex items-center justify-center bg-muted/10 text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-display text-foreground group-hover:text-primary transition-colors mb-1">
+                    Hire Me
+                  </h3>
+                  <p className="text-sm text-muted-foreground font-sans">
+                    Start a project together
+                  </p>
+                </div>
+              </button>
 
-          </div>
+              {/* 3. View Resume */}
+              <button
+                onClick={() => setIsResumeOpen(true)}
+                className="group relative p-8 flex flex-row items-center gap-4 hover:bg-muted/5 transition-colors duration-500 text-left"
+              >
+                <div className="w-10 h-10 flex items-center justify-center bg-muted/10 text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-display text-foreground group-hover:text-primary transition-colors mb-1">
+                    View Resume
+                  </h3>
+                  <p className="text-sm text-muted-foreground font-sans">
+                    See my qualifications
+                  </p>
+                </div>
+              </button>
+
+            </div>
+          </motion.div>
         </div>
-      </Container>
-    </section>
+
+        {/* Right Content: Visual / Asymmetry - Spans 4 cols */}
+        <div className="lg:col-span-4 relative h-full min-h-[400px] lg:min-h-[600px] hidden lg:block">
+          <motion.div
+            variants={fadeInUp}
+            className="absolute top-1/2 -translate-y-1/2 right-0 w-full"
+          >
+            {/* Realtime AI Flow Terminal */}
+            <div className="transform rotate-2 hover:rotate-0 transition-all duration-700 hover:scale-105">
+              <HeroTerminal />
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Resume Modal */}
+      <Modal
+        isOpen={isResumeOpen}
+        onClose={() => setIsResumeOpen(false)}
+        title="My Resume"
+        className="max-w-5xl h-[90vh]"
+        actions={
+          <div className="flex items-center gap-2 mr-2">
+            <button
+              onClick={() => setScale(s => Math.max(0.5, s - 0.1))}
+              className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground hover:text-foreground"
+              title="Zoom Out"
+            >
+              <ZoomOut size={18} />
+            </button>
+            <span className="text-sm font-mono text-muted-foreground min-w-[3rem] text-center">
+              {Math.round(scale * 100)}%
+            </span>
+            <button
+              onClick={() => setScale(s => Math.min(2.0, s + 0.1))}
+              className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground hover:text-foreground"
+              title="Zoom In"
+            >
+              <ZoomIn size={18} />
+            </button>
+            <div className="w-px h-4 bg-border/60 mx-1" />
+            <a
+              href={ResumePDF}
+              download
+              className="flex items-center gap-2 px-4 py-1.5 bg-primary text-white text-sm rounded-full font-medium hover:bg-primary/90 transition-colors shadow-sm"
+            >
+              <Download size={14} />
+              <span>Download</span>
+            </a>
+          </div>
+        }
+      >
+        <div ref={modalBodyRef} className="w-full h-full bg-gray-50 flex flex-col items-center overflow-auto p-4 md:p-8">
+          <Document
+            file={ResumePDF}
+            className="shadow-2xl"
+            loading={
+              <div className="flex items-center justify-center p-12">
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              </div>
+                }
+            error={
+              <div className="text-center p-8">
+                <p className="text-red-500 mb-4">Error loading PDF.</p>
+                <a href={ResumePDF} download className="text-primary hover:underline font-bold">
+                  Download Instead
+                </a>
+              </div>
+                }
+          >
+            {/* Render the first page, scalable */}
+            <Page
+              pageNumber={pageNumber}
+              width={containerWidth > 0 ? (Math.min(containerWidth - 64, 800) * scale) : 600}
+              className="mb-4"
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+            />
+          </Document>
+        </div>
+      </Modal>
+
+    </SectionWrapper>
   );
 };
 

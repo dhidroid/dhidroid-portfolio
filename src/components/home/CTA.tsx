@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { ArrowRight, Mail } from "lucide-react";
-import { Button } from "../ui/Button";
+
 import { Container } from "../ui/Container";
 import { PortfolioContent } from "../../utils/Data/portfolioContent";
 import { CTABackgroundSVG } from "../Backgrounds/CTABackgroundSVG";
@@ -21,19 +21,44 @@ const CTA = () => {
                     <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
                         {contact.subtext}
                     </p>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Link to="/schedule">
-                            <Button size="lg" className="h-14 px-8 rounded-full text-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">
-                                {contact.cta}
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 border border-white/10 divide-y md:divide-y-0 md:divide-x divide-white/10 bg-white/5 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden text-left max-w-2xl mx-auto">
+
+                        {/* 1. Schedule */}
+                        <Link
+                            to="/schedule"
+                            className="group relative p-8 flex flex-row items-center gap-6 hover:bg-white/5 transition-colors duration-500"
+                        >
+                            <div className="w-12 h-12 flex items-center justify-center bg-white/10 text-white rounded-lg group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                                <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold font-display text-white group-hover:text-primary transition-colors mb-1">
+                                    Schedule a Call
+                                </h3>
+                                <p className="text-sm text-gray-400 font-sans">
+                                    Book a 30-minute consultation
+                                </p>
+                            </div>
                         </Link>
-                         <Link to="/contact">
-                            <Button variant="outline" size="lg" className="h-14 px-8 rounded-full text-lg bg-transparent text-white border-white/20 hover:bg-white/10 hover:text-white backdrop-blur-sm">
-                                <Mail className="mr-2 h-5 w-5" />
-                                Contact Me
-                            </Button>
+
+                        {/* 2. Contact */}
+                        <Link
+                            to="/contact"
+                            className="group relative p-8 flex flex-row items-center gap-6 hover:bg-white/5 transition-colors duration-500"
+                        >
+                            <div className="w-12 h-12 flex items-center justify-center bg-white/10 text-white rounded-lg group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                                <Mail className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold font-display text-white group-hover:text-primary transition-colors mb-1">
+                                    Send a Message
+                                </h3>
+                                <p className="text-sm text-gray-400 font-sans">
+                                    Get in touch directly
+                                </p>
+                            </div>
                         </Link>
+
                     </div>
                 </div>
             </Container>

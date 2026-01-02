@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router";
 import SEO from "../../components/SEO";
-import { Link, useNavigate } from "react-router";
 import { client } from "../../senity/senity";
 import { generateMetaForRoute } from '../../utils/seo';
 import Hero from "../../components/home/Hero";
-import Clients from "../../components/home/Clients";
-import Features from "../../components/home/Features";
-import Skills from "../../components/home/Skills";
-import WorkExperience from "../../components/home/WorkExperience";
+import Capabilities from "../../components/home/Capabilities";
+import SelectedWork from "../../components/home/SelectedWork";
+import ExperienceStats from "../../components/about/ExperienceStats";
+import Testimonials from "../../components/home/Testimonials";
 import CTA from "../../components/home/CTA";
 import HomeBlogCard from "../../components/Cards/HomeBlogCards";
 import { Container } from "../../components/ui/Container";
+import WorkExperience from "../../components/home/WorkExperience";
+import ServiceList from "../../components/services/ServiceList";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [blogData, setBlogData] = useState<any[]>([]);
-  const [workExpData, setWorkExpData] = useState<any[]>([]);
+  const [workExpData, setWorkExpData] = React.useState<any[]>([]);
 
   // Fetch Blog Data
   const fetchBlogData = async () => {
@@ -50,46 +52,109 @@ const HomePage: React.FC = () => {
     }
   };
 
-  // Fetch Work Experience
   const fetchWorkExperience = async () => {
     try {
       const query = `
-        *[_type == "workExperience"]{
-            company,
-            title,
-            location,
-            tags,
-            duration[]{ from, toDate }
-        }`;
-
+            *[_type == "workExperience"]{
+                company,
+                title,
+                location,
+                tags,
+                description,
+                duration[]{ from, toDate }
+            }`;
       const result = await client.fetch(query);
 
-      const sortedData = result.sort((a: any, b: any) => {
-        const dateA = new Date(a.duration?.[0]?.from || 0).getTime();
-        const dateB = new Date(b.duration?.[0]?.from || 0).getTime();
-        return dateB - dateA;
-      });
+      let mappedData: any[] = [];
 
-      // Map to ExperienceItem interface
-      const mappedData = sortedData.map((item: any) => {
-        const startYear = item.duration?.[0]?.from ? new Date(item.duration[0].from).getFullYear() : '';
-        const endYear = item.duration?.[0]?.toDate ? new Date(item.duration[0].toDate).getFullYear() : 'Present';
-        const period = startYear ? `${startYear} - ${endYear}` : '';
+      if (result && result.length > 0) {
+        const sortedData = result.sort((a: any, b: any) => {
+          const dateA = new Date(a.duration?.[0]?.from || 0).getTime();
+          const dateB = new Date(b.duration?.[0]?.from || 0).getTime();
+          return dateB - dateA;
+        });
 
-        return {
-          id: item._id || item.company,
-          company: item.company,
-          role: item.title,
-          period: period,
-          location: item.location,
-          tags: item.tags,
-          achievements: [] // Sanity query doesn't (yet) return description/achievements here
-        };
-      });
+        mappedData = sortedData.map((item: any) => {
+          const startYear = item.duration?.[0]?.from ? new Date(item.duration[0].from).getFullYear() : '';
+          const endYear = item.duration?.[0]?.toDate ? new Date(item.duration[0].toDate).getFullYear() : 'Present';
+          const period = startYear ? `${startYear} - ${endYear}` : '';
+
+          return {
+            id: item._id || item.company,
+            company: item.company,
+            role: item.title,
+            period: period,
+            location: item.location,
+            tags: item.tags,
+            achievements: item.description ? [item.description] : []
+          };
+        });
+      } else {
+        // Fallback Data from User Request if CMS is empty
+        mappedData = [
+          {
+            id: "natobotics",
+            company: "Natobotics Technology Pvt. Ltd.",
+            role: "React Native Developer",
+            period: "2024 - Present",
+            location: "Chennai, India",
+            tags: ["React Native", "Android", "iOS", "Typescript", "App Development", "Full Stack"],
+            achievements: ["Building scalable digital products.", "Cross-platform mobile application development."]
+          },
+          {
+            id: "freelance",
+            company: "Fiverr & Upwork",
+            role: "Full Stack Development",
+            period: "2024",
+            location: "Remote",
+            tags: ["Full Stack", "Mobile App Development", "Web Development", "UI/UX"],
+            achievements: ["Delivering high-quality web and mobile solutions for global clients."]
+          },
+          {
+            id: "algojaxon",
+            company: "Algojaxon Global Soft",
+            role: "Full Stack & Mobile App Dev",
+            period: "2023",
+            location: "Salem, TamilNadu",
+            tags: ["MERN Stack", "React Native", "Android", "iOS"],
+            achievements: ["Developed full stack web and mobile applications."]
+          }
+        ];
+      }
 
       setWorkExpData(mappedData);
     } catch (error) {
-      console.error("Error fetching work experience:", error);
+      console.error(error);
+      // On Error, also use fallback to ensure UI shows
+      setWorkExpData([
+        {
+          id: "natobotics",
+          company: "Natobotics Technology Pvt. Ltd.",
+          role: "React Native Developer",
+          period: "2024 - Present",
+          location: "Chennai, India",
+          tags: ["React Native", "Android", "iOS", "Typescript"],
+          achievements: []
+        },
+        {
+          id: "freelance",
+          company: "Fiverr & Upwork",
+          role: "Full Stack Development",
+          period: "2024",
+          location: "Remote",
+          tags: ["Full Stack", "React", "Node"],
+          achievements: []
+        },
+        {
+          id: "algojaxon",
+          company: "Algojaxon Global Soft",
+          role: "Full Stack & Mobile App Dev",
+          period: "2023",
+          location: "Salem, TamilNadu",
+          tags: ["MERN", "Mobile"],
+          achievements: []
+        }
+      ]);
     }
   };
 
@@ -98,34 +163,44 @@ const HomePage: React.FC = () => {
     fetchWorkExperience();
   }, []);
 
+
   return (
     <React.Fragment>
       <SEO
         title={generateMetaForRoute('/').title}
         description={generateMetaForRoute('/').description}
         keywords={generateMetaForRoute('/').keywords}
-        route='/'
         url='/'
         structuredData={generateMetaForRoute('/').structuredData}
       />
 
       <Hero />
-      <Clients />
-      <Features />
-      <Skills />
 
-      {/* Work Experience / Stats / Testimonials Area */}
-      {workExpData.length > 0 && <WorkExperience experiences={workExpData} />}
+      {/* Stuxen V2 Flow: Stats immediately after Hero (or mixed) */}
+      <div className="mb-24">
+        <ExperienceStats />
+      </div>
+
+      {/* <Capabilities /> */}
+      <ServiceList />
+      <SelectedWork />
+
+      {/* <Testimonials /> */}
+      {workExpData.length > 0 && (
+        <div className="pt-24 bg-gray-50 border-t border-gray-100">
+          <WorkExperience experiences={workExpData} />
+        </div>
+      )}
 
       {/* Blog Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-white border-t border-gray-100">
         <Container>
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Latest <span className="text-primary">Insights</span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 font-display">
+                Latest <span className="text-primary italic font-serif font-normal">Insights</span>
               </h2>
-              <p className="text-lg text-gray-500">
+              <p className="text-lg text-gray-500 font-body">
                 Thoughts on development, design, and technology.
               </p>
             </div>

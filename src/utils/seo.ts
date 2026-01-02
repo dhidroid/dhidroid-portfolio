@@ -1,87 +1,185 @@
-import { resolveRouteImage, OG_MAP, resolveImageUrl } from './meta';
-import aboutData from './Data/aboutData.json';
+import { PERSONAL_INFO } from '../config/personal';
 
-const SITE_BASE = (import.meta.env?.VITE_SITE_URL as string) || 'https://dhidroid.vercel.app';
-const SITE_NAME = 'Dhidroid';
+const SITE_BASE = PERSONAL_INFO.siteUrl;
+const SITE_NAME = "Dhidroid";
 
 export type MetaResult = {
   title: string;
   description: string;
   keywords?: string[];
-  image: { url: string; type: string };
+  image: string;
   canonical: string;
+  type: string;
   structuredData?: any;
 };
 
 /**
- * Generate meta for generic routes or items. Prefers item image; otherwise uses route mapping.
+ * Generate meta for generic routes or items.
  */
-export function generateMetaForRoute(route: string, opts?: { title?: string; description?: string; keywords?: string[]; image?: string | null; itemUrl?: string }): MetaResult {
+export function generateMetaForRoute(route: string, opts?: {
+  title?: string;
+  description?: string;
+  keywords?: string[];
+  image?: string | null;
+  itemUrl?: string;
+  type?: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  authorName?: string;
+}): MetaResult {
   const path = route || '/';
-  const title = opts?.title || defaultTitleForRoute(path);
+
+  // 1. Resolve basic meta
+  const title = opts?.title
+    ? `${opts.title} | ${SITE_NAME}`
+    : defaultTitleForRoute(path);
+
   const description = opts?.description || defaultDescriptionForRoute(path);
-  const keywords = opts?.keywords || defaultKeywordsForRoute(path);
 
-  const image = resolveRouteImage(path, SITE_BASE, opts?.image);
-  const canonical = opts?.itemUrl ? (opts.itemUrl.startsWith('http') ? opts.itemUrl : `${SITE_BASE.replace(/\/$/, '')}${opts.itemUrl.startsWith('/') ? '' : '/'}${opts.itemUrl}`) : `${SITE_BASE.replace(/\/$/, '')}${path.startsWith('/') ? path : '/' + path}`;
+  const keywords = [
+    ...(opts?.keywords || []),
+    ...defaultKeywordsForRoute(path)
+  ];
 
-  const structuredData = generateStructuredData(path, { title, description, canonical, image: image.url });
+  // 2. Resolve Image
+  // If opts.image is provided and absolute, use it. If relative, prepend site base.
+  // Fallback to default personal image.
+  let image = PERSONAL_INFO.seo.defaultImage;
+  if (opts?.image) {
+    if (opts.image.startsWith('http')) {
+      image = opts.image;
+    } else {
+      image = `${SITE_BASE}${opts.image.startsWith('/') ? '' : '/'}${opts.image}`;
+    }
+  } else {
+    // If no image provided, use default but ensure it's absolute
+    image = `${SITE_BASE}${PERSONAL_INFO.seo.defaultImage}`;
+  }
 
-  return { title, description, keywords, image, canonical, structuredData };
+  // 3. Resolve Canonical
+  const canonical = opts?.itemUrl
+    ? (opts.itemUrl.startsWith('http') ? opts.itemUrl : `${SITE_BASE}${opts.itemUrl.startsWith('/') ? '' : '/'}${opts.itemUrl}`)
+    : `${SITE_BASE}${path.startsWith('/') ? path : '/' + path}`;
+
+  const type = opts?.type || 'website';
+
+  // 4. Generate Structured Data
+  const structuredData = generateStructuredData({
+    title,
+    description,
+    canonical,
+    image,
+    type,
+    publishedAt: opts?.publishedAt,
+    updatedAt: opts?.updatedAt,
+    authorName: opts?.authorName
+  });
+
+  return { title, description, keywords, image, canonical, type, structuredData };
 }
 
 function defaultTitleForRoute(route: string) {
   switch (route) {
-    case '/': return `${SITE_NAME} - DhineshKumar Thirupathi | Web & Mobile Developer`;
-    case '/projects': return `Projects | ${SITE_NAME}`;
-    case '/bloglist': return `Blog | ${SITE_NAME}`;
-    case '/skills': return `Skills | ${SITE_NAME}`;
-    case '/about': return `About | ${SITE_NAME}`;
-    case '/links': return `Links | ${SITE_NAME}`;
-    default: return `${SITE_NAME}`;
+    case '/': return PERSONAL_INFO.seo.defaultTitle;
+    case '/works': return `Projects | ${PERSONAL_INFO.name}`;
+    case '/bloglist': return `Blog | ${PERSONAL_INFO.name}`;
+    case '/skills': return `Skills & Stack | ${PERSONAL_INFO.name}`;
+    case '/about': return `About | ${PERSONAL_INFO.name}`;
+    case '/services': return `Services | ${PERSONAL_INFO.name}`;
+    default: return PERSONAL_INFO.seo.defaultTitle;
   }
 }
 
 function defaultDescriptionForRoute(route: string) {
   switch (route) {
-    case '/': return "DhineshKumar Thirupathi - Full Stack Developer specializing in React, React Native, Node.js and Cloud services.";
-    case '/projects': return "Explore selected projects in web and mobile development by DhineshKumar (Dhidroid).";
-    case '/bloglist': return "Latest articles and tutorials on web development, React Native, and engineering best practices.";
-    case '/skills': return "Skills & Technologies: React Native, React, Node.js, TypeScript, Firebase, and more.";
-    case '/about': return aboutData.about.slice(0, 160);
-    case '/links': return "Collection of external links and profiles for DhineshKumar (Dhidroid).";
-    default: return "Explore Dhidroid - Web & Mobile developer portfolio, blog and projects.";
+    case '/': return PERSONAL_INFO.seo.defaultDescription;
+    case '/works': return "Explore selected projects and case studies in web and mobile development.";
+    case '/bloglist': return "Technical articles, tutorials, and insights on Full Stack Development.";
+    case '/skills': return "My technical toolkit: React, Node.js, Cloud Architecture, and Design Systems.";
+    case '/about': return `Learn more about ${PERSONAL_INFO.name}, a ${PERSONAL_INFO.role} passionate about building scalable digital products.`;
+    default: return PERSONAL_INFO.seo.defaultDescription;
   }
 }
 
 function defaultKeywordsForRoute(route: string) {
-  const base = ['Dhidroid', 'DhineshKumar Thirupathi', 'Web Developer', 'Mobile Developer'];
+  const base = PERSONAL_INFO.seo.defaultKeywords;
   switch (route) {
-    case '/projects': return [...base, 'Projects', 'Portfolio'];
-    case '/bloglist': return [...base, 'Blog', 'Articles', 'Tutorials'];
-    case '/skills': return [...base, 'Skills', 'Tech Stack'];
+    case '/works': return [...base, 'Projects', 'Case Studies', 'Portfolio Works'];
+    case '/bloglist': return [...base, 'Blog', 'Tech Tutorials', 'Engineering'];
+    case '/skills': return [...base, 'Skills', 'Tech Stack', 'React', 'Node.js'];
     default: return base;
   }
 }
 
-function generateStructuredData(route: string, opts: { title: string; description: string; canonical: string; image: string }) {
-  // Basic WebPage schema; for lists or home page
-  return {
+function generateStructuredData(opts: {
+  title: string;
+  description: string;
+  canonical: string;
+  image: string;
+  type: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  authorName?: string;
+}) {
+  const baseSchema = {
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
+    '@type': opts.type === 'article' ? 'BlogPosting' : 'WebPage',
     'name': opts.title,
     'description': opts.description,
     'url': opts.canonical,
+    'image': opts.image,
     'publisher': {
       '@type': 'Organization',
-      'name': SITE_NAME,
+      'name': PERSONAL_INFO.name,
       'logo': {
         '@type': 'ImageObject',
-        'url': `${SITE_BASE.replace(/\/$/, '')}/logo.svg`
+        'url': `${SITE_BASE}/logo.svg`
       }
-    },
-    'image': opts.image
+    }
   };
+
+  if (opts.type === 'article') {
+    return {
+      ...baseSchema,
+      'headline': opts.title,
+      'datePublished': opts.publishedAt,
+      'dateModified': opts.updatedAt || opts.publishedAt,
+      'author': {
+        '@type': 'Person',
+        'name': opts.authorName || PERSONAL_INFO.name,
+        'url': PERSONAL_INFO.siteUrl
+        },
+      'mainEntityOfPage': {
+        '@type': 'WebPage',
+        '@id': opts.canonical
+      }
+    };
+  }
+
+  // Person Schema for Home/About
+  if (opts.canonical === SITE_BASE || opts.canonical === `${SITE_BASE}/about`) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      'name': PERSONAL_INFO.name,
+      'url': PERSONAL_INFO.siteUrl,
+      'image': `${SITE_BASE}/profile.jpg`, // Assuming profile image exists or logo
+      'sameAs': [
+        PERSONAL_INFO.social.linkedin,
+        PERSONAL_INFO.social.github,
+        PERSONAL_INFO.social.twitter,
+        PERSONAL_INFO.social.instagram,
+        PERSONAL_INFO.social.peerlist
+      ],
+      'jobTitle': PERSONAL_INFO.role,
+      'worksFor': {
+        '@type': 'Organization',
+        'name': 'Freelance / Self-Employed'
+      }
+    };
+  }
+
+  return baseSchema;
 }
 
 export default { generateMetaForRoute };

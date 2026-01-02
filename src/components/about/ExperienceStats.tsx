@@ -1,0 +1,75 @@
+import React, { useEffect, useState } from "react";
+import { Container } from "../ui/Container";
+import StatsCard from "./StatsCard";
+import { client } from "../../senity/senity";
+
+const ExperienceStats = () => {
+    const [stats, setStats] = useState({
+        experience: "1 +",
+        projects: "24+",
+        awards: "08"
+    });
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const query = `
+                {
+                    "projects": count(*[_type == "project"]),
+                    "experience": count(*[_type == "workExperience"]), 
+                    "awards": count(*[_type == "award"])
+                }`;
+                
+                const data = await client.fetch(query);
+                
+                setStats({
+                    experience: "1 +", 
+                    projects: data.projects > 10 ? `${data.projects}+` : "10 +",
+                    awards: data.awards > 0 ? `${data.awards.toString().padStart(2, '0')}` : "05" 
+                });
+
+            } catch (error) {
+                console.error("Error fetching stats:", error);
+            }
+        };
+
+        fetchStats();
+    }, []);
+
+    return (
+        <section className="py-24 bg-white">
+            <Container className="px-6">
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <StatsCard 
+                        title="EXPERIENCE"
+                        value={stats.experience}
+                        subtitle="Years of building scalable digital products."
+                        variant="lines"
+                        index={0}
+                    />
+
+                    <StatsCard 
+                        title="PROJECTS"
+                        value={stats.projects}
+                        subtitle="Successfully delivered mobile and web apps."
+                        variant="grid"
+                        index={1}
+                        className="bg-[#0f0f0f]" 
+                    />
+
+                    <StatsCard 
+                        title="AWARDS"
+                        value={stats.awards}
+                        subtitle="Recognition for design and engineering excellence."
+                        variant="radar"
+                        index={2}
+                    />
+
+                 </div>
+            </Container>
+        </section>
+    );
+};
+
+export default ExperienceStats;

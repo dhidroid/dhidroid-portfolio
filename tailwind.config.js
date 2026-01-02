@@ -16,8 +16,10 @@ export default {
     },
     extend: {
       colors: {
+        background: '#F5F5F5',
+        foreground: '#111111',
         primary: {
-          DEFAULT: '#3f0bd9',
+          DEFAULT: '#5235F6', // Stuxen Purple
           foreground: '#ffffff',
           50: '#f0ecff',
           100: '#e0d6ff',
@@ -25,7 +27,7 @@ export default {
           300: '#a385ff',
           400: '#855cff',
           500: '#6633ff',
-          600: '#3f0bd9', // The exact primary color from design
+          600: '#5235F6',
           700: '#3206ad',
           800: '#23037a',
           900: '#14014d',
@@ -34,24 +36,27 @@ export default {
           DEFAULT: '#0f172a',
           foreground: '#ffffff',
         },
-        background: '#ffffff',
-        foreground: '#0f172a',
         muted: {
-          DEFAULT: '#f1f5f9',
+          DEFAULT: '#e2e8f0',
           foreground: '#64748b',
         },
         card: {
           DEFAULT: '#ffffff',
-          foreground: '#0f172a',
+          foreground: '#111111',
         },
       },
       fontFamily: {
-        sans: ['Urbanist', 'sans-serif'],
+        sans: ['"Instrument Sans"', '"Poppins"', 'sans-serif'],
+        display: ['"Instrument Sans"', '"Poppins"', 'sans-serif'],
+        body: ['"Inter"', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      transitionTimingFunction: {
+        'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in-out',
@@ -77,36 +82,6 @@ export default {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-20px)' },
         },
-        shimmer: {
-          from: { backgroundPosition: "0 0" },
-          to: { backgroundPosition: "-200% 0" },
-        },
-        meteor: {
-          "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
-          "70%": { opacity: "1" },
-          "100%": {
-            transform: "rotate(215deg) translateX(-500px)",
-            opacity: "0",
-          },
-        },
-        spotlight: {
-          "0%": { opacity: "0", transform: "translate(-72%, -62%) scale(0.5)" },
-          "100%": { opacity: "1", transform: "translate(-50%,-40%) scale(1)" },
-        },
-        scroll: {
-          to: { transform: "translate(calc(-50% - 0.5rem))" },
-        },
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.6s ease-in-out',
-        'fade-in-up': 'fadeInUp 0.8s ease-out',
-        'slide-in-up': 'slideInUp 0.6s ease-out',
-        'float-slow': 'float 6s ease-in-out infinite',
-        'float-medium': 'float 5s ease-in-out infinite',
-        shimmer: "shimmer 2s linear infinite",
-        meteor: "meteor 5s linear infinite",
-        spotlight: "spotlight 2s ease .75s 1 forwards",
-        scroll: "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
       },
     },
   },
