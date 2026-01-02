@@ -1,5 +1,11 @@
 {
   "name": "dhidroid",
+  "description": "Personal portfolio website showcasing projects, blog, and services",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dhidroid/dhidroid-portfolio.git"
+  },
   "private": true,
   "version": "0.0.0",
   "type": "module",
