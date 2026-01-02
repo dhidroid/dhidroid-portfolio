@@ -13,8 +13,13 @@ const SkillsPage = React.lazy(() => import("../pages/SkillsPage"));
 const ServicesPage = React.lazy(() => import("../pages/ServicesPage"));
 const PricingPage = React.lazy(() => import("../pages/PricingPage"));
 const SchedulePage = React.lazy(() => import("../pages/SchedulePage"));
-const Projects = React.lazy(() => import("../pages/Projects"));
+// const Projects = React.lazy(() => import("../pages/Projects"));
+const WorksPage = React.lazy(() => import("../pages/WorksPage"));
+const ProjectDetailPage = React.lazy(() => import("../pages/ProjectDetailPage"));
 const PageNotFound = React.lazy(() => import("../components/404Page/PageNotFound"));
+const StyleGuide = React.lazy(() => import("../pages/StyleGuide"));
+const Licenses = React.lazy(() => import("../pages/Licenses"));
+const Changelog = React.lazy(() => import("../pages/Changelog"));
 
 // Helper for loading state
 function LoadingFallback() {
@@ -53,13 +58,21 @@ export function Router() {
             <Route path="/skills" element={<SkillsPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
-            <Route path="/project" element={<Projects />} />
+            <Route path="/project" element={<WorksPage />} />
+            <Route path="/works" element={<WorksPage />} />
+            <Route path="/works/:slug" element={<ProjectDetailPage />} />
 
             {/* Blog Routes */}
             <Route path="/bloglist" element={<BlogList />} />
             <Route path="/blog/:slug" element={<BlogPage />} />
             <Route path="/createblog" element={<BlogCreate />} />
+
+            {/* Utility Pages */}
+            <Route path="/style-guide" element={<StyleGuide />} />
+            <Route path="/licenses" element={<Licenses />} />
+            <Route path="/changelog" element={<Changelog />} />
 
             {/* 404 / Fallback */}
             <Route path="*" element={<PageNotFound />} />

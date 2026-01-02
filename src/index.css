@@ -1,10 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
 /* Tailwind v4 theme tokens */
 @theme {
-  --font-sans: "Urbanist", sans-serif;
+  --font-sans: "Instrument Sans", sans-serif;
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -42,10 +41,54 @@
   body {
     @apply bg-background text-foreground antialiased font-sans;
   }
+/* Hide default cursor on desktop to allow custom cursor */
+/* Hide default cursor on desktop to allow custom cursor */
+@media (min-width: 768px) {
+
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  [role="button"] {
+    cursor: none !important;
+  }
+
+  /* Restore native cursor for Header and Footer */
+  header,
+  footer,
+  header *,
+  footer * {
+    cursor: auto !important;
+  }
+}
 }
 
 @layer utilities {
   .glass {
     @apply bg-white/10 backdrop-blur-lg border border-white/20;
   }
+.bg-dot-pattern {
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bg-dot-pattern-dark {
+  background-image: radial-gradient(#000 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-800 rounded-full hover:bg-gray-400 dark:hover:bg-gray-700 transition-colors;
+}
 }

@@ -5,6 +5,7 @@ import { Badge } from "../../components/ui/Badge";
 import { Button } from "../../components/ui/Button";
 import { Check } from "lucide-react";
 import { Link } from "react-router";
+import { cn } from "../../utils/cn";
 
 const plans = [
     {
@@ -37,51 +38,60 @@ const PricingPage = () => {
                 route="/pricing"
             />
             
-             <section className="pt-32 pb-24 bg-gray-50 border-b border-gray-200">
+            <section className="pt-32 pb-24 bg-background border-b border-border/40">
                 <Container className="text-center">
-                    <Badge className="mb-6">Pricing</Badge>
-                    <h1 className="text-4xl md:text-5xl font-bold mb-6">
+                    <Badge className="mb-6 rounded-none">Pricing</Badge>
+                    <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 tracking-tight">
                         Simple, transparent <span className="text-primary">pricing</span>
                     </h1>
-                     <p className="max-w-2xl mx-auto text-lg text-gray-500">
+                    <p className="max-w-2xl mx-auto text-lg text-muted-foreground font-sans">
                         Choose the plan that fits your project needs. No hidden fees.
                     </p>
                 </Container>
             </section>
 
-            <section className="py-24 bg-white">
+            <section className="py-24 bg-background">
                 <Container>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                        {plans.map((plan) => (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-0 max-w-6xl mx-auto border border-border/60 divide-y md:divide-y-0 md:divide-x divide-border/60 bg-card">
+                        {plans.map((plan, idx) => (
                              <div 
                                 key={plan.name} 
-                                className={`relative p-8 rounded-3xl border ${plan.popular ? 'border-primary shadow-2xl scale-105 z-10' : 'border-gray-100 bg-gray-50/50'} transition-all duration-300`}
+                                className={cn(
+                                    "relative p-10 flex flex-col hover:bg-muted/5 transition-colors duration-300",
+                                    plan.popular && "bg-muted/5"
+                                )}
                             >
                                 {plan.popular && (
-                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1 rounded-full bg-primary text-white text-sm font-bold">
+                                    <div className="absolute top-0 left-0 w-full bg-primary/10 border-b border-primary/20 text-primary text-xs font-bold font-mono py-1.5 text-center uppercase tracking-widest">
                                         Most Popular
                                     </div>
                                 )}
-                                <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                                <p className="text-gray-500 text-sm mb-6">{plan.description}</p>
-                                <div className="mb-8">
-                                    <span className="text-4xl font-bold text-gray-900">${plan.price}</span>
-                                    {plan.price !== "Custom" && <span className="text-gray-500">/project</span>}
+
+                                <div className={cn("mb-8", plan.popular && "mt-6")}>
+                                    <h3 className="text-xl font-display font-semibold mb-2">{plan.name}</h3>
+                                    <p className="text-muted-foreground text-sm leading-relaxed">{plan.description}</p>
                                 </div>
-                                <ul className="space-y-4 mb-8">
+
+                                <div className="mb-8 font-display">
+                                    <span className="text-4xl md:text-5xl font-bold text-foreground tracking-tighter">${plan.price}</span>
+                                    {plan.price !== "Custom" && <span className="text-muted-foreground text-sm ml-1 font-sans">/project</span>}
+                                </div>
+
+                                <ul className="space-y-4 mb-10 flex-grow">
                                     {plan.features.map(feature => (
-                                        <li key={feature} className="flex items-center gap-3">
-                                            <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
-                                                <Check size={12} strokeWidth={3} />
+                                        <li key={feature} className="flex items-start gap-3">
+                                            <div className="flex-shrink-0 w-5 h-5 rounded-none text-primary flex items-center justify-center mt-0.5">
+                                                <Check size={16} strokeWidth={2} />
                                             </div>
-                                            <span className="text-sm font-medium text-gray-700">{feature}</span>
+                                            <span className="text-sm text-foreground/80 font-sans">{feature}</span>
                                         </li>
                                     ))}
                                 </ul>
-                                <Link to="/schedule">
+
+                                <Link to="/schedule" className="mt-auto">
                                     <Button 
                                         variant={plan.popular ? "primary" : "outline"} 
-                                        className="w-full"
+                                        className="w-full rounded-none h-12 text-sm font-medium tracking-wide"
                                     >
                                         Get Started
                                     </Button>

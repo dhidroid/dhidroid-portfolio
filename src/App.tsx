@@ -3,13 +3,17 @@ import { Analytics } from "@vercel/analytics/react"
 import ChatBot from "./components/ChatBot/ChatBot";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AIProvider } from "./context/AIContext";
+import ScrollToTop from "./components/ui/ScrollToTop";
+import GlobalCursor from "./components/ui/GlobalCursor";
 
 const App = () => {
   return (
     <AIProvider>
+      <ScrollToTop />
+      <GlobalCursor />
       <SpeedInsights />
       <Router />
-      <ChatBot />
+      {/* <ChatBot /> */}
       <Analytics />
     </AIProvider>
   );

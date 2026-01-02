@@ -1,50 +1,50 @@
 import React from "react";
+import { motion } from "framer-motion";
 import SEO from "../../components/SEO";
-import { generateMetaForRoute } from '../../utils/seo';
-import { Container } from "../../components/ui/Container";
-import { Badge } from "../../components/ui/Badge";
-import { Code2, Server, Database, Terminal } from "lucide-react";
 
-// Mock Data - Replace with Sanity fetch if needed
+import { Container } from "../../components/ui/Container";
+import { DynamicIcon } from "../../components/ui/DynamicIcon";
+import { PERSONAL_INFO } from "../../config/personal";
+import { fadeInUp, staggerContainer } from "../../utils/motion";
+
+// Enhanced Data for Dynamic Icons
 const skillCategories = [
   {
-    title: "Frontend Development",
-    icon: Code2,
+    title: "Frontend",
     skills: [
-      { name: "React.js", desc: "Component-based UI library" },
-      { name: "Next.js", desc: "React framework for production" },
-      { name: "TypeScript", desc: "Typed JavaScript" },
-      { name: "Tailwind CSS", desc: "Utility-first CSS framework" },
+      { name: "React", desc: "UI Library", url: "https://react.dev" },
+      { name: "Next.js", desc: "Framework", url: "https://nextjs.org" },
+      { name: "TypeScript", desc: "Type Safety", url: "https://www.typescriptlang.org" },
+      { name: "Tailwind CSS", desc: "Styling", url: "https://tailwindcss.com" },
+      { name: "Framer Motion", desc: "Animation", url: "https://www.framer.com/motion" },
+      { name: "Vite", desc: "Build Tool", url: "https://vitejs.dev" },
+      { name: "Redux", desc: "State Management", url: "https://redux.js.org" },
+      { name: "HTML5", desc: "Markup", url: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
     ]
   },
   {
-    title: "Backend Development",
-    icon: Server,
+    title: "Backend",
     skills: [
-      { name: "Node.js", desc: "JavaScript runtime" },
-      { name: "Python", desc: "Versatile programming language" },
-      { name: "Go", desc: "Efficient compiled language" },
-      { name: "GraphQL", desc: "Query language for APIs" },
-    ]
-  },
-  {
-    title: "Database & Cloud",
-    icon: Database,
-    skills: [
-      { name: "PostgreSQL", desc: "Relational database" },
-      { name: "MongoDB", desc: "NoSQL database" },
-      { name: "AWS", desc: "Cloud computing services" },
-      { name: "Firebase", desc: "App development platform" },
+      { name: "Node.js", desc: "Runtime", url: "https://nodejs.org" },
+      { name: "Go", desc: "Performance", url: "https://go.dev" },
+      { name: "Python", desc: "Scripting/AI", url: "https://www.python.org" },
+      { name: "PostgreSQL", desc: "Relational DB", url: "https://www.postgresql.org" },
+      { name: "MongoDB", desc: "NoSQL DB", url: "https://www.mongodb.com" },
+      { name: "GraphQL", desc: "API Query", url: "https://graphql.org" },
+      { name: "Firebase", desc: "BaaS", url: "https://firebase.google.com" },
+      { name: "Supabase", desc: "Open Source BaaS", url: "https://supabase.com" },
     ]
   },
   {
     title: "Mobile & Tools",
-    icon: Terminal,
     skills: [
-      { name: "React Native", desc: "Cross-platform mobile apps" },
-      { name: "Swift", desc: "iOS development" },
-      { name: "Kotlin", desc: "Android development" },
-      { name: "Docker", desc: "Containerization platform" },
+      { name: "React Native", desc: "Cross Platform", url: "https://reactnative.dev" },
+      { name: "Flutter", desc: "Hybrid Apps", url: "https://flutter.dev" },
+      { name: "Docker", desc: "Containerization", url: "https://www.docker.com" },
+      { name: "Git", desc: "Version Control", url: "https://git-scm.com" },
+      { name: "Figma", desc: "UI Design", url: "https://www.figma.com" },
+      { name: "AWS", desc: "Cloud Services", url: "https://aws.amazon.com" },
+      { name: "Vercel", desc: "Deployment", url: "https://vercel.com" },
     ]
   }
 ];
@@ -53,48 +53,113 @@ const SkillsPage = () => {
   return (
       <React.Fragment>
         <SEO
-          title={generateMetaForRoute('/skills').title}
-          description={generateMetaForRoute('/skills').description}
-          route="/skills"
+        title={`Skills & Stack | ${PERSONAL_INFO.name}`}
+        description="My technical toolkit: React, Node.js, Cloud Architecture, and Design Systems."
+        keywords={["Skills", "Tech Stack", "React", "Node.js"]}
+        url="/skills"
         />
 
-        <section className="pt-32 pb-24 bg-gray-50 border-b border-gray-200">
-          <Container className="text-center">
-            <Badge className="mb-6">Expertise</Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Tools & <span className="text-primary">Technologies</span>
-            </h1>
-            <p className="max-w-2xl mx-auto text-lg text-gray-500">
-              I use a modern stack to build robust, scalable, and efficient applications.
-            </p>
-          </Container>
-        </section>
+      <main className="bg-white min-h-screen pt-32 md:pt-48 pb-24">
+        <Container className="max-w-[1800px] px-6">
 
-        <section className="py-24 bg-white">
-          <Container>
-            <div className="grid grid-cols-1 gap-16">
-              {skillCategories.map((category) => (
-                <div key={category.title}>
-                  <div className="flex items-center gap-3 mb-8">
-                    <div className="p-3 rounded-xl bg-primary/10 text-primary">
-                      <category.icon size={24} />
-                    </div>
-                    <h2 className="text-2xl font-bold">{category.title}</h2>
-                  </div>
+          {/* Header Section - Massive Typography */}
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            animate="animate"
+            className="mb-24 md:mb-40"
+          >
+            <motion.h1
+              variants={fadeInUp}
+              className="text-[12vw] md:text-[8rem] font-bold font-display uppercase leading-[0.85] tracking-tighter text-foreground mb-12"
+            >
+              Skills &<br />
+              <span className="text-gray-300">Expertise</span>
+            </motion.h1>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                              {category.skills.map((skill) => (
-                                <div key={skill.name} className="p-6 rounded-2xl border border-gray-100 bg-white hover:shadow-lg hover:border-primary/20 transition-all duration-300 group">
-                                  <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">{skill.name}</h3>
-                                  <p className="text-sm text-gray-500">{skill.desc}</p>
-                                </div>
-                              ))}
-                            </div>
+            <motion.div variants={fadeInUp} className="flex flex-col md:flex-row gap-8 md:items-start border-t border-gray-200 pt-8">
+              <span className="font-mono text-sm uppercase tracking-widest text-gray-500 md:w-48">The Toolkit</span>
+              <p className="max-w-xl text-xl md:text-2xl text-gray-800 leading-relaxed font-light">
+                I leverage a modern, performance-driven stack to build digital products that scale. My expertise spans the entire development lifecycle, from pixel-perfect frontend interfaces to robust backend architectures.
+              </p>
+            </motion.div>
+          </motion.div>
+
+          {/* Skills Grid */}
+          <div className="flex flex-col gap-24 md:gap-40">
+            {skillCategories.map((category) => (
+              <motion.div
+                key={category.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                viewport={{ once: true, margin: "-10%" }}
+                className="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-black/10 pt-12"
+              >
+                {/* Category Title */}
+                <div className="md:col-span-3">
+                  <h2 className="text-4xl md:text-5xl font-bold font-display uppercase tracking-tight text-gray-900 sticky top-32">
+                    {category.title}
+                  </h2>
+                </div>
+
+                {/* Skills List */}
+                <div className="md:col-span-9 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+                  {category.skills.map((skill) => (
+                    <div key={skill.name} className="group relative flex flex-col items-start gap-4">
+
+                      {/* Icon Container */}
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-primary group-hover:bg-primary/5 group-hover:border-primary/20 transition-all duration-500 relative z-10 cursor-pointer">
+                        <DynamicIcon name={skill.name} className="w-8 h-8 md:w-10 md:h-10 transition-transform duration-500 group-hover:scale-110" />
+                      </div>
+
+                      <div className="relative z-10">
+                        <h3 className="text-lg font-bold uppercase tracking-wide text-gray-900 group-hover:text-primary transition-colors">
+                          {skill.name}
+                        </h3>
+                        <p className="text-xs font-mono uppercase tracking-wider text-gray-400 mt-1">
+                          {skill.desc}
+                        </p>
+                      </div>
+
+                      {/* Hover "Pricing Style" Card */}
+                      <div className="absolute left-0 bottom-full mb-4 w-[280px] p-0 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-50 pointer-events-none group-hover:pointer-events-auto">
+                        <div className="bg-white border border-gray-200 shadow-2xl overflow-hidden rounded-none">
+                          {/* Header like Pricing Popular tag if needed, or just clean header */}
+                          <div className="bg-gray-50 border-b border-gray-100 p-4 flex items-center justify-between">
+                            <span className="font-bold font-display text-lg">{skill.name}</span>
+                            <DynamicIcon name={skill.name} className="w-5 h-5 text-gray-400" />
                           </div>
-                        ))}
+
+                          <div className="p-5">
+                            <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+                              Official documentation and resources for {skill.name}.
+                            </p>
+
+                            <a
+                              href={skill.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block w-full py-3 px-4 bg-white border border-gray-900 text-gray-900 font-bold text-center text-sm hover:bg-gray-900 hover:text-white transition-colors duration-300 uppercase tracking-widest"
+                            >
+                              View Docs
+                            </a>
+                          </div>
+                        </div>
+
+                        {/* Arrow */}
+                        <div className="absolute left-8 -bottom-2 w-4 h-4 bg-white border-b border-r border-gray-200 rotate-45"></div>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
             </div>
+
           </Container>
-        </section>
+      </main>
       </React.Fragment>
     );
 };

@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^5.0.2",
+    "@types/lodash": "^4.17.21",
     "@types/react": "^18.0.25",
     "eslint": "^9.9.0",
     "prettier": "^3.0.2",
