@@ -79,24 +79,29 @@ export function generateMetaForRoute(route: string, opts?: {
 }
 
 function defaultTitleForRoute(route: string) {
+  const base = "Dhidroid";
   switch (route) {
-    case '/': return PERSONAL_INFO.seo.defaultTitle;
-    case '/works': return `Projects | ${PERSONAL_INFO.name}`;
-    case '/bloglist': return `Blog | ${PERSONAL_INFO.name}`;
-    case '/skills': return `Skills & Stack | ${PERSONAL_INFO.name}`;
-    case '/about': return `About | ${PERSONAL_INFO.name}`;
-    case '/services': return `Services | ${PERSONAL_INFO.name}`;
-    default: return PERSONAL_INFO.seo.defaultTitle;
+    case '/': return `${PERSONAL_INFO.seo.defaultTitle}`;
+    case '/works':
+    case '/project': return `Portfolio & Case Studies | ${base} - Senior Full Stack Developer`;
+    case '/bloglist': return `Tech Blog & Insights | ${base} - Full Stack Development & AI`;
+    case '/skills': return `Expertise & Tech Stack | ${base} - Expertise in React, Node, React Native`;
+    case '/about': return `About Dhidroid | Dhineshkumar Thirupathi - 100+ Years Exp Dev Journey`; // User specifically asked for "100+ year exp dev" vibe
+    case '/services': return `Freelance Development Services | ${base} - Web, Mobile & AI Solutions`;
+    case '/schedule': return `Book a Call | ${base} - Hire a Senior Developer for Your Project`;
+    default: return `${PERSONAL_INFO.seo.defaultTitle}`;
   }
 }
 
 function defaultDescriptionForRoute(route: string) {
   switch (route) {
     case '/': return PERSONAL_INFO.seo.defaultDescription;
-    case '/works': return "Explore selected projects and case studies in web and mobile development.";
-    case '/bloglist': return "Technical articles, tutorials, and insights on Full Stack Development.";
-    case '/skills': return "My technical toolkit: React, Node.js, Cloud Architecture, and Design Systems.";
-    case '/about': return `Learn more about ${PERSONAL_INFO.name}, a ${PERSONAL_INFO.role} passionate about building scalable digital products.`;
+    case '/works':
+    case '/project': return "Explore a curated gallery of high-performance digital products, mobile apps, and full-stack web solutions. From concept to deployment, witness technical excellence.";
+    case '/bloglist': return "Deep dives into modern engineering: React patterns, React Native performance, AI integration, and full-stack architecture tutorials.";
+    case '/skills': return "A comprehensive overview of my technical arsenal: React Native for cross-platform apps, MERN stack for scalable web, and AI/ML for next-gen features.";
+    case '/about': return `Discover the engineering philosophy of Dhineshkumar Thirupathi. Building digital ecosystems with senior-level precision, scalability, and user-centric design.`;
+    case '/services': return "Elevate your business with bespoke development: High-concurrency web apps, premium mobile experiences, and AI-driven automation services.";
     default: return PERSONAL_INFO.seo.defaultDescription;
   }
 }
@@ -104,9 +109,11 @@ function defaultDescriptionForRoute(route: string) {
 function defaultKeywordsForRoute(route: string) {
   const base = PERSONAL_INFO.seo.defaultKeywords;
   switch (route) {
-    case '/works': return [...base, 'Projects', 'Case Studies', 'Portfolio Works'];
-    case '/bloglist': return [...base, 'Blog', 'Tech Tutorials', 'Engineering'];
-    case '/skills': return [...base, 'Skills', 'Tech Stack', 'React', 'Node.js'];
+    case '/works':
+    case '/project': return [...base, 'Portfolio', 'Case Studies', 'Software Engineering Projects', 'Mobile App Development Portfolio', 'Web Development Showcase'];
+    case '/bloglist': return [...base, 'Technical Writing', 'Coding Tutorials', 'Development Insights', 'AI/ML Engineering', 'Software Architecture Blog'];
+    case '/skills': return [...base, 'Expert Developer', 'Technical Leader', 'Cloud Computing', 'System Design', 'Performance Optimization'];
+    case '/about': return [...base, 'Senior Developer Profile', 'Engineering Leadership', 'Hire Expert Developer', 'Tamil Nadu Developer'];
     default: return base;
   }
 }

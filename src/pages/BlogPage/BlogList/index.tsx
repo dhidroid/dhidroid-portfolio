@@ -71,9 +71,7 @@ const BlogList = () => {
     return (
         <React.Fragment>
             <SEO
-                title={generateMetaForRoute('/bloglist').title}
-                description={generateMetaForRoute('/bloglist').description}
-                url={generateMetaForRoute('/bloglist').canonical}
+                {...generateMetaForRoute('/bloglist')}
             />
 
             <main className="bg-white min-h-screen">

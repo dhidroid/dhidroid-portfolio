@@ -40,28 +40,24 @@
 
   body {
     @apply bg-background text-foreground antialiased font-sans;
-  }
-/* Hide default cursor on desktop to allow custom cursor */
-/* Hide default cursor on desktop to allow custom cursor */
-@media (min-width: 768px) {
-
-  body,
-  a,
-  button,
-  input,
-  textarea,
-  [role="button"] {
-    cursor: none !important;
-  }
-
-  /* Restore native cursor for Header and Footer */
-  header,
-  footer,
-  header *,
-  footer * {
     cursor: auto !important;
+  
+
+    a,
+    button,
+    [role="button"],
+    input,
+    textarea,
+    select {
+      cursor: auto;
   }
-}
+  
+    a:hover,
+    button:hover,
+    [role="button"]:hover {
+      cursor: pointer !important;
+  }
+
 }
 
 @layer utilities {

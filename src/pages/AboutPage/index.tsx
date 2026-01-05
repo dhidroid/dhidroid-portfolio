@@ -125,9 +125,7 @@ const AboutPage = () => {
     return (
         <React.Fragment>
             <SEO
-                title={`About | Dhidroid - Digital Partner`}
-                description="Learn more about my background, experience, and the philosophy behind my work."
-                url={generateMetaForRoute('/about').canonical}
+                {...generateMetaForRoute('/about')}
             />
 
             <main className="bg-white min-h-screen">

@@ -94,12 +94,7 @@ const ProjectDetailPage = () => {
   return (
     <React.Fragment>
       <SEO
-        title={meta.title}
-        description={meta.description}
-        keywords={meta.keywords}
-        image={meta.image}
-        url={meta.canonical}
-        structuredData={meta.structuredData}
+        {...meta}
       />
       <main className="bg-white min-h-screen">
          <ProjectHero 

@@ -3,36 +3,51 @@ import { Link } from "react-router";
 import { Container } from "../ui/Container";
 import { FaGithub, FaLinkedin, FaMedium } from "react-icons/fa";
 import DhiDroidLogo from '../../assets/logo.svg';
+import { IconContainer } from "../ui/IconContainer";
+import { Newsletter } from "../ui/Newsletter";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const socialLinks = [
+    { icon: FaGithub, href: "https://github.com/dhidroid", label: "GitHub" },
+    { icon: FaLinkedin, href: "https://linkedin.com/in/dhidroid-rndev", label: "LinkedIn" },
+    { icon: FaMedium, href: "https://medium.com/@dhidroid", label: "Medium" },
+  ];
+
   return (
-    <footer className="bg-gray-50 pt-20 pb-10 border-t border-gray-100 mt-auto">
-      <Container>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+    <footer className="bg-white border-t border-gray-100 mt-auto font-sans">
+      <Newsletter />
+      <div className="pt-24 pb-12">
+        <Container>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
           <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 font-bold text-xl tracking-tight mb-4">
+              <Link to="/" className="flex items-center gap-3 font-bold text-xl tracking-tighter mb-6 uppercase">
               <img
                 src={DhiDroidLogo}
                 alt="DhiDroid Logo"
-                className="h-8 w-8 rounded-full"
+                  className="h-8 w-8"
               />
               <span>Dhidroid</span>
             </Link>
-            <p className="text-gray-500 mb-6">
-              Building premium digital experiences with modern web technologies.
+              <p className="text-gray-400 text-sm leading-relaxed mb-10 max-w-[240px]">
+                Senior software engineer specializing in high-fidelity digital experiences and modern web architecture.
             </p>
-            <div className="flex gap-4">
-              <a href="https://github.com/dhidroid" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors">
-                <FaGithub size={20} />
-              </a>
-              <a href="https://linkedin.com/in/dhidroid-rndev" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors">
-                <FaLinkedin size={20} />
-              </a>
-              <a href="https://medium.com/@dhidroid" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors">
-                <FaMedium size={20} />
-              </a>
+              <div className="flex gap-3">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group"
+                    title={social.label}
+                  >
+                    <IconContainer size="sm" variant="outline">
+                      <social.icon />
+                    </IconContainer>
+                  </a>
+              ))}
             </div>
           </div>
 
@@ -92,7 +107,8 @@ const Footer = () => {
             <Link to="/terms" className="hover:text-primary">Terms of Service</Link>
           </div>
         </div>
-      </Container>
+        </Container>
+      </div>
     </footer>
   );
 };

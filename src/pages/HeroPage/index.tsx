@@ -4,10 +4,8 @@ import SEO from "../../components/SEO";
 import { client } from "../../senity/senity";
 import { generateMetaForRoute } from '../../utils/seo';
 import Hero from "../../components/home/Hero";
-import Capabilities from "../../components/home/Capabilities";
 import SelectedWork from "../../components/home/SelectedWork";
 import ExperienceStats from "../../components/about/ExperienceStats";
-import Testimonials from "../../components/home/Testimonials";
 import CTA from "../../components/home/CTA";
 import HomeBlogCard from "../../components/Cards/HomeBlogCards";
 import { Container } from "../../components/ui/Container";
@@ -167,11 +165,7 @@ const HomePage: React.FC = () => {
   return (
     <React.Fragment>
       <SEO
-        title={generateMetaForRoute('/').title}
-        description={generateMetaForRoute('/').description}
-        keywords={generateMetaForRoute('/').keywords}
-        url='/'
-        structuredData={generateMetaForRoute('/').structuredData}
+        {...generateMetaForRoute('/')}
       />
 
       <Hero />

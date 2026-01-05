@@ -8,6 +8,7 @@ interface SEOProps {
   keywords?: string[];
   image?: string;
   url?: string;
+  canonical?: string;
   type?: string;
   structuredData?: any;
 }
@@ -18,20 +19,20 @@ const SEO: React.FC<SEOProps> = ({
   keywords,
   image,
   url,
+  canonical,
   structuredData,
   type = "website"
 }) => {
   const siteTitle = PERSONAL_INFO.seo.defaultTitle;
   const siteUrl = PERSONAL_INFO.siteUrl;
 
-  const finalTitle = title ? `${title} | Dhidroid` : siteTitle;
+  const finalTitle = title ? title : siteTitle;
   const finalDescription = description || PERSONAL_INFO.seo.defaultDescription;
 
   // Merge default keywords with page-specific ones
-  const finalKeywords = [
-    ...PERSONAL_INFO.seo.defaultKeywords,
-    ...(keywords || [])
-  ].join(", ");
+  const finalKeywords = keywords && keywords.length > 0
+    ? [...new Set([...PERSONAL_INFO.seo.defaultKeywords, ...keywords])].join(", ")
+    : PERSONAL_INFO.seo.defaultKeywords.join(", ");
 
   // Resolve Image (ensure absolute URL)
   let finalImage = image || PERSONAL_INFO.seo.defaultImage;
@@ -40,13 +41,16 @@ const SEO: React.FC<SEOProps> = ({
   }
 
   // Resolve URL
-  const finalUrl = url
-    ? (url.startsWith('http') ? url : `${siteUrl}${url}`)
+  const effectiveUrl = url || canonical;
+  const finalUrl = effectiveUrl
+    ? (effectiveUrl.startsWith('http') ? effectiveUrl : `${siteUrl}${effectiveUrl.startsWith('/') ? '' : '/'}${effectiveUrl}`)
     : siteUrl;
 
   return (
     <Helmet>
+      {/* Primary Meta Tags */}
       <title>{finalTitle}</title>
+      <meta name="title" content={finalTitle} />
       <meta name="description" content={finalDescription} />
       <meta name="keywords" content={finalKeywords} />
       <meta name="author" content={PERSONAL_INFO.name} />
@@ -74,7 +78,9 @@ const SEO: React.FC<SEOProps> = ({
 
       {/* JSON-LD structured data (if provided) */}
       {structuredData && (
-        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
       )}
     </Helmet>
   );

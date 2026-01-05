@@ -4,6 +4,7 @@ import { Container } from "../../components/ui/Container";
 import Cal, { getCalApi } from "@calcom/embed-react";
 import { Badge } from "../../components/ui/Badge";
 import { DynamicIcon } from "../../components/ui/DynamicIcon";
+import { generateMetaForRoute } from "../../utils/seo";
 
 const SchedulePage = () => {
     useEffect(() => {
@@ -24,9 +25,7 @@ const SchedulePage = () => {
     return (
         <React.Fragment>
              <SEO
-                title="Schedule a Meeting | Dhidroid"
-                description="Book a consultation call."
-                url="/schedule"
+                {...generateMetaForRoute('/schedule')}
             />
 
             <section className="pt-32 pb-24 bg-background border-b border-border/40">

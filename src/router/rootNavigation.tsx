@@ -12,6 +12,7 @@ const AboutPage = React.lazy(() => import("../pages/AboutPage"));
 const SkillsPage = React.lazy(() => import("../pages/SkillsPage"));
 const ServicesPage = React.lazy(() => import("../pages/ServicesPage"));
 const PricingPage = React.lazy(() => import("../pages/PricingPage"));
+const ContactPage = React.lazy(() => import("../pages/ContactPage"));
 const SchedulePage = React.lazy(() => import("../pages/SchedulePage"));
 // const Projects = React.lazy(() => import("../pages/Projects"));
 const WorksPage = React.lazy(() => import("../pages/WorksPage"));
@@ -58,7 +59,7 @@ export function Router() {
             <Route path="/skills" element={<SkillsPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/project" element={<WorksPage />} />
             <Route path="/works" element={<WorksPage />} />

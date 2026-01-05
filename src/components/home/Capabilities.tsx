@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Code2, Palette, Zap } from "lucide-react";
 import { SectionWrapper } from "../layout/SectionWrapper";
 import { fadeInUp, staggerContainer } from "../../utils/motion";
+import { IconContainer } from "../ui/IconContainer";
 
 const capabilities = [
   {
@@ -46,13 +47,13 @@ const Capabilities = () => {
           <motion.div
             key={index}
             variants={fadeInUp}
-            className="group p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:border-primary/20 hover:bg-white hover:shadow-xl hover:shadow-primary/5 transition-all duration-300"
+            className="group p-8 rounded-none bg-gray-50 border border-gray-100 hover:border-black/10 hover:bg-white hover:shadow-2xl hover:shadow-black/5 transition-all duration-500"
           >
-            <div className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-primary/20 transition-transform duration-300">
-              <item.icon className="w-6 h-6 text-gray-700 group-hover:text-primary transition-colors" />
-            </div>
-            <h3 className="text-xl font-bold mb-3 font-display">{item.title}</h3>
-            <p className="text-gray-500 leading-relaxed font-body">
+            <IconContainer size="md" className="mb-8">
+              <item.icon strokeWidth={1.5} />
+            </IconContainer>
+            <h3 className="text-xl font-bold mb-3 font-display uppercase tracking-tight">{item.title}</h3>
+            <p className="text-gray-500 leading-relaxed font-sans text-sm">
               {item.description}
             </p>
           </motion.div>

@@ -15,6 +15,7 @@ import { generateMetaForRoute } from "../../utils/seo";
 import BlogHero from "../../components/blog/BlogHero";
 import BlogShare from "../../components/blog/BlogShare";
 import RecommendedBlogs from "../../components/blog/RecommendedBlogs";
+import PodcastPlayer from "../../components/blog/PodcastPlayer";
 
 const builder = imageUrlBuilder(client);
 
@@ -203,9 +204,9 @@ const BlogPage = () => {
 
     const meta = post ? generateMetaForRoute(`/blog/${slug}`, {
         title: post.title,
-        description: bodyTextStr.slice(0, 160),
+        description: post.excerpt || bodyTextStr.slice(0, 160),
         image: post.mainImage ? urlFor(post.mainImage).width(1200).height(630).fit('crop').url() : undefined,
-        keywords: post.categories?.map((c: any) => c.title),
+        keywords: post.categories?.map((c: any) => c.title) || [],
         type: 'article',
         publishedAt: post.publishedAt,
         authorName: post.author?.name
@@ -252,6 +253,15 @@ const BlogPage = () => {
 
                 {/* Main Content */}
                 <section className="pb-12">
+                    <Container className="max-w-[1000px] px-6 mb-16">
+                        <PodcastPlayer
+                            title={post.title}
+                            seriesTitle={post.categories?.[0]?.title}
+                            coverImage={post.mainImage?.asset?.url}
+                            content={bodyTextStr}
+                        />
+                    </Container>
+
                     <Container className="max-w-[720px] px-6 mb-12">
                         <AISummary summary={post.bodyText?.slice(0, 300) + (post.bodyText?.length > 300 ? "..." : "")} type="blog" />
                     </Container>
