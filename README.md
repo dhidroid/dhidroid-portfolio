@@ -1,4 +1,4 @@
-# dhidroid 
+# dhidroid Portfolio
 
 Personal portfolio website showcasing projects, blog, and services
 
