@@ -34,8 +34,10 @@ async function generateSitemap() {
             { url: '/about', changefreq: 'monthly', priority: 1.0 },
             { url: '/services', changefreq: 'monthly', priority: 1.0 },
             { url: '/bloglist', changefreq: 'monthly', priority: 1.0 },
-            { url: "/project", changefreq: "monthly", priority: 1.0 },
+            { url: "/works", changefreq: "monthly", priority: 1.0 },
+            { url: "/contact", changefreq: "monthly", priority: 1.0 },
             { url: "blog/:slug", changefreq: "daily", priority: 1.0 },
+            { url: "/skills", changefreq: "monthly", priority: 1.0 },
             ...posts.map(p => ({
                 url: `/blog/${p.slug}`,
                 changefreq: 'daily',
