@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.2",
+    "@emailjs/browser": "^4.4.1",
     "@fontsource/instrument-sans": "^5.2.8",
     "@huggingface/inference": "^4.13.4",
     "@mlc-ai/web-llm": "^0.2.80",

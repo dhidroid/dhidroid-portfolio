@@ -1,270 +1,295 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Waves } from 'lucide-react';
+import { Play, Pause, Volume2, FastForward, RotateCcw, Loader2 } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import { useAI } from '../../context/AIContext';
 
 interface PodcastPlayerProps {
     title: string;
     seriesTitle?: string;
     description?: string;
     content?: string;
-    audioUrl?: string; // Keep for fallback or music
-    coverImage?: string;
     spotifyUrl?: string;
 }
 
 const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
     title,
-    seriesTitle = "Development Journey",
+    seriesTitle = "Audio Article",
     content,
-    audioUrl = "https://cdn.pixabay.com/audio/2022/03/10/audio_c8c8a7345a.mp3", // Short synth intro
-    coverImage,
     spotifyUrl
 }) => {
+    const { generateSpeech, worker, isTTSReady } = useAI();
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [currentTime, setCurrentTime] = useState("00:00:00");
-    const [phase, setPhase] = useState<'idle' | 'music' | 'intro' | 'content'>('idle');
-    const audioRef = useRef<HTMLAudioElement>(null);
-    const synthRef = useRef<SpeechSynthesis | null>(window.speechSynthesis);
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-    const totalCharsRef = useRef<number>(0);
+    const [currentTime, setCurrentTime] = useState("00:00");
+    // const [duration, setDuration] = useState("00:00"); // Duration is hard to know with streaming
+    const [isWaitingForData, setIsWaitingForData] = useState(false);
+    const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'es' | 'fr'>('en');
+
+    const languageModels = {
+        'en': { model: 'Xenova/speecht5_tts', embeddings: 'https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/speaker_embeddings.bin' },
+        'es': { model: 'Xenova/mms-tts-spa' },
+        'fr': { model: 'Xenova/mms-tts-fra' }
+    };
+
+    const speechAudioRef = useRef<HTMLAudioElement>(new Audio());
+    const audioQueue = useRef<string[]>([]);
+    const isPlayingChunk = useRef(false);
+    const hasStartedGeneration = useRef(false);
 
     const stopAll = () => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
-        }
-        if (synthRef.current) {
-            synthRef.current.cancel();
-        }
+        speechAudioRef.current.pause();
+        speechAudioRef.current.currentTime = 0;
         setIsPlaying(false);
-        setPhase('idle');
         setProgress(0);
-        setCurrentTime("00:00:00");
+        setCurrentTime("00:00");
+        
+        // Clear queue
+        audioQueue.current = [];
+        isPlayingChunk.current = false;
+        hasStartedGeneration.current = false;
     };
 
-    const playContent = (text: string) => {
-        if (!synthRef.current) return;
+    const processContent = async () => {
+        if (!worker || !content) return;
+        setIsWaitingForData(true);
+        hasStartedGeneration.current = true;
         
-        synthRef.current.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        totalCharsRef.current = text.length;
-        
-        // Settings for a "Podcast Style" voice
-        utterance.rate = 0.95; 
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
-        
-        const voices = synthRef.current.getVoices();
-        const preferredVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Premium')) || voices[0];
-        if (preferredVoice) utterance.voice = preferredVoice;
-
-        utterance.onstart = () => {
-            setPhase('content');
-            setIsPlaying(true);
-        };
-
-        utterance.onboundary = (event) => {
-            if (event.name === 'word') {
-                const charIndex = event.charIndex;
-                const newProgress = (charIndex / totalCharsRef.current) * 100;
-                setProgress(newProgress);
-                
-                // Estimate time: Avg speaking rate is ~150 words per minute.
-                // Text length / 5 (avg chars per word) / 150 * 60 = total seconds.
-                const estimatedTotalSeconds = (totalCharsRef.current / 5) / 150 * 60;
-                const currentSeconds = (charIndex / totalCharsRef.current) * estimatedTotalSeconds;
-                setCurrentTime(formatTime(currentSeconds));
-            }
-        };
-
-        utterance.onend = () => {
-            setProgress(100);
-            setTimeout(stopAll, 1000);
-        };
-
-        utterance.onerror = () => stopAll();
-
-        utteranceRef.current = utterance;
-        synthRef.current.speak(utterance);
+        const config = languageModels[selectedLanguage] as { model: string; embeddings?: string };
+        generateSpeech(content, {
+            model: config.model,
+            speaker_embeddings: config.embeddings
+        });
     };
 
-    const playIntro = () => {
-        setPhase('intro');
-        const intro = new SpeechSynthesisUtterance("Dhidroid");
-        intro.rate = 0.8; 
-        intro.pitch = 0.9;
-        
-        intro.onend = () => {
-            if (content) {
-                playContent(content);
-            } else {
-                stopAll();
+    const playNextChunk = () => {
+        if (audioQueue.current.length > 0) {
+            const nextUrl = audioQueue.current.shift();
+            if (nextUrl) {
+                isPlayingChunk.current = true;
+                speechAudioRef.current.src = nextUrl;
+                speechAudioRef.current.play()
+                    .then(() => {
+                        setIsPlaying(true);
+                        setIsWaitingForData(false);
+                    })
+                    .catch(e => console.error("Playback error", e));
             }
-        };
-        
-        synthRef.current?.speak(intro);
+        } else {
+            isPlayingChunk.current = false;
+            // If we are waiting for more generation, keep playing state true? 
+            // Ideally we'd know if generation is DONE. For now, if queue empty and stopped, we pause.
+            // But if generation is still happening, we might just be buffering.
+            // Simplified: if queue empty, just stop for now, user can click play again if more comes.
+            // Or better: show buffering if we expect more? 
+            // For this iteration, let's auto-pause if empty.
+            // setIsPlaying(false); // Only pause if we really think we are done.
+        }
     };
 
     const togglePlay = () => {
         if (isPlaying) {
-            if (phase === 'music') {
-                audioRef.current?.pause();
-            } else if (phase === 'content' || phase === 'intro') {
-                synthRef.current?.pause();
-            }
+            speechAudioRef.current.pause();
             setIsPlaying(false);
         } else {
-            if (phase === 'idle') {
-                setPhase('music');
-                if (audioRef.current) {
-                    audioRef.current.currentTime = 0;
-                    audioRef.current.play();
-                } else {
-                    playIntro();
-                }
-            } else if (phase === 'music') {
-                audioRef.current?.play();
+            if (isPlayingChunk.current) {
+                speechAudioRef.current.play();
+                setIsPlaying(true);
+            } else if (hasStartedGeneration.current && audioQueue.current.length > 0) {
+                 playNextChunk();
             } else {
-                synthRef.current?.resume();
+                processContent();
             }
-            setIsPlaying(true);
         }
     };
 
     const formatTime = (time: number) => {
-        const h = Math.floor(time / 3600);
-        const m = Math.floor((time % 3600) / 60);
+        const m = Math.floor((time / 60));
         const s = Math.floor(time % 60);
-        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        return `${ m.toString().padStart(2, '0') }:${ s.toString().padStart(2, '0') }`;
     };
 
     useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        const onMusicEnd = () => {
-            playIntro();
+        const audio = speechAudioRef.current;
+        
+        const updateProgress = () => {
+            const current = audio.currentTime;
+            // const total = audio.duration; 
+            // Progress is tricky with chunks. We might just show visualizer active.
+            setCurrentTime(formatTime(current));
         };
 
-        const updateProgress = () => {
-            if (phase === 'music') {
-                const current = audio.currentTime;
-                const total = audio.duration;
-                if (!isNaN(total) && total > 0) {
-                    setProgress((current / total) * 100);
-                    setCurrentTime(formatTime(current));
+        const onEnded = () => {
+            // Chunk ended, play next
+            playNextChunk();
+        };
+
+        audio.addEventListener('timeupdate', updateProgress);
+        audio.addEventListener('ended', onEnded);
+
+        return () => {
+            audio.removeEventListener('timeupdate', updateProgress);
+            audio.removeEventListener('ended', onEnded);
+        };
+    }, []);
+
+    // Listen for worker messages for audio data
+    useEffect(() => {
+        if (!worker) return;
+        const handleMessage = (e: MessageEvent) => {
+            const { type, status, output, isChunk } = e.data;
+            if (type === 'tts' && status === 'complete') {
+                setIsWaitingForData(false);
+                
+                const blob = new Blob([encodeWAV(output.audio, output.sampling_rate)], { type: 'audio/wav' });
+                const url = URL.createObjectURL(blob);
+                
+                audioQueue.current.push(url);
+
+                if (!isPlayingChunk.current && isPlaying) {
+                   // If we were waiting for data (buffering) and playing was active, resume
+                   playNextChunk();
+                } else if (!isPlayingChunk.current && !hasStartedGeneration.current) {
+                    // First chunk after manual start? logic handles this in togglePlay mostly
+                } else if (!isPlayingChunk.current && audioQueue.current.length === 1 && hasStartedGeneration.current) {
+                    // Auto-start first chunk
+                    playNextChunk();
                 }
             }
         };
+        worker.addEventListener('message', handleMessage);
+        return () => worker.removeEventListener('message', handleMessage);
+    }, [worker, isPlaying]); // Depend on isPlaying to resume if buffering
 
-        audio.addEventListener('ended', onMusicEnd);
-        audio.addEventListener('timeupdate', updateProgress);
-
-        return () => {
-            audio.removeEventListener('ended', onMusicEnd);
-            audio.removeEventListener('timeupdate', updateProgress);
-            synthRef.current?.cancel();
+    // WAV Encoder helper
+    const encodeWAV = (samples: Float32Array, sampleRate: number) => {
+        const buffer = new ArrayBuffer(44 + samples.length * 2);
+        const view = new DataView(buffer);
+        const writeString = (offset: number, string: string) => {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
         };
-    }, [phase, content]);
+
+        writeString(0, 'RIFF');
+        view.setUint32(4, 36 + samples.length * 2, true);
+        writeString(8, 'WAVE');
+        writeString(12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, 1, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * 2, true);
+        view.setUint16(32, 2, true);
+        view.setUint16(34, 16, true);
+        writeString(36, 'data');
+        view.setUint32(40, samples.length * 2, true);
+
+        const floatTo16BitPCM = (output: DataView, offset: number, input: Float32Array) => {
+            for (let i = 0; i < input.length; i++, offset += 2) {
+                const s = Math.max(-1, Math.min(1, input[i]));
+                output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+            }
+        };
+
+        floatTo16BitPCM(view, 44, samples);
+        return buffer;
+    };
 
 
     return (
-        <div className="w-full bg-[#121212] text-white overflow-hidden shadow-2xl border border-white/5 font-sans">
-            <audio ref={audioRef} src={audioUrl} />
-            
-            <div className="flex flex-col md:flex-row">
-                {/* Left Side: Cover Art */}
-                <div className="w-full md:w-64 h-64 md:h-auto bg-[#1a1b26] relative flex-shrink-0">
-                    {coverImage ? (
-                        <img src={coverImage} alt={title} className="w-full h-full object-cover opacity-80" />
-                    ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-primary/20 to-transparent">
-                            <div className="w-16 h-16 bg-primary/20 flex items-center justify-center mb-6">
-                                <Waves className="w-8 h-8 text-primary" />
-                            </div>
-                            <span className="text-xl font-display font-bold text-center tracking-tight leading-tight uppercase">{seriesTitle}</span>
-                            <div className="mt-8 text-[10px] font-mono uppercase tracking-widest text-primary/60">Presented by Dhidroid</div>
-                        </div>
-                    )}
-                </div>
-
-                {/* Right Side: Controls */}
-                <div className="flex-grow flex flex-col p-8 md:p-10">
-                    <div className="flex items-start justify-between mb-8">
-                        <div className="flex items-center gap-6">
-                            <button 
-                                onClick={togglePlay}
-                                className="w-14 h-14 rounded-full bg-primary text-black flex items-center justify-center hover:scale-105 transition-transform"
-                            >
-                                {isPlaying ? <Pause className="fill-current" size={24} /> : <Play className="fill-current ml-1" size={24} />}
-                            </button>
-                            <div>
-                                <p className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-1.5">
-                                    {phase === 'music' ? 'Intro Music' : phase === 'intro' ? 'Dhidroid Intro' : phase === 'content' ? 'Reading Content' : seriesTitle}
-                                </p>
-                                <h4 className="text-xl md:text-2xl font-display font-bold leading-tight">{title}</h4>
-                            </div>
-                        </div>
-                        <div className="text-sm font-mono text-gray-400 mt-2">{currentTime}</div>
-                    </div>
-
-                    {/* Waveform Visualization (Mockup) */}
-                    <div className="relative h-20 mb-8 flex items-center justify-center opacity-40">
-                        <div className="flex items-end gap-[3px] w-full h-full pb-2">
-                            {Array.from({ length: 60 }).map((_, i) => {
-                                const height = Math.random() * 80 + 20;
-                                return (
-                                    <div 
-                                        key={i} 
-                                        className={cn(
-                                            "flex-grow bg-white rounded-full transition-all duration-300",
-                                            i < (progress / 100) * 60 ? "bg-primary" : "bg-white/30"
-                                        )} 
-                                        style={{ height: `${height}%` }}
-                                    />
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Footer Controls */}
-                    <div className="flex flex-wrap items-center justify-between gap-6 border-t border-white/10 pt-6 mt-auto">
-                        <div className="flex items-center gap-4 text-[10px] font-mono font-bold uppercase tracking-widest text-gray-400">
-                            {spotifyUrl && (
-                                <a href={spotifyUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
-                                    <div className="w-4 h-4 rounded-full bg-[#1DB954] flex items-center justify-center p-0.5">
-                                        <Play fill="black" size={8} />
-                                    </div>
-                                    SAVE TO SPOTIFY
-                                </a>
-                            )}
-                            <button className="hover:text-white transition-colors">SHARE</button>
-                            <button className="hover:text-white transition-colors text-primary">SUBSCRIBE</button>
-                            <button className="hover:text-white transition-colors">DESCRIPTION</button>
-                        </div>
-                        <div className="flex items-center gap-2">
-                             <div className="flex gap-0.5 h-3 items-end">
-                                <div className="w-1 h-3 bg-primary animate-pulse" style={{ animationDelay: '0ms' }} />
-                                <div className="w-1 h-2 bg-primary animate-pulse" style={{ animationDelay: '200ms' }} />
-                                <div className="w-1 h-3 bg-primary animate-pulse" style={{ animationDelay: '400ms' }} />
+        <div className="w-full bg-white border border-gray-200 p-8 md:p-10 font-sans shadow-sm">
+            <div className="flex flex-col gap-8">
+                
+                {/* Header & Meta - Pricing Style */}
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+                    <div>
+                        <div className="flex items-center gap-3 mb-4">
+                             <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest">
+                                {seriesTitle}
+                             </span>
+                             <div className="flex items-center gap-2 text-[10px] font-mono font-medium text-gray-500 uppercase tracking-wider">
+                                <Volume2 size={12} className={isTTSReady ? "text-green-600" : "text-gray-400"} />
+                                <span>{isTTSReady ? "AI Module Active" : "Initializing..."}</span>
                              </div>
                         </div>
+                        <h3 className="text-3xl md:text-4xl font-display font-bold text-slate-900 leading-tight">
+                            {title}
+                        </h3>
+                    </div>
+
+                    {/* Minimal Language Selector */}
+                    <div className="flex items-center border border-gray-200 h-10 px-2 bg-gray-50/50">
+                        <select 
+                            value={selectedLanguage}
+                            onChange={(e) => setSelectedLanguage(e.target.value as any)}
+                            className="bg-transparent text-sm font-medium text-gray-600 focus:outline-none cursor-pointer tracking-wide"
+                        >
+                            <option value="en">English US</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                        </select>
                     </div>
                 </div>
-            </div>
 
-            {/* In this Playlist Section */}
-            <div className="bg-[#1a1c22] px-10 py-5 border-t border-white/5">
-                <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-widest text-gray-500">
-                    <span>IN THIS PLAYLIST</span>
-                    <span>10 OF 753 EPISODES</span>
+                {/* Progress / Status */}
+                <div className="space-y-3">
+                     <div className="h-1 w-full bg-gray-100 overflow-hidden">
+                        {isWaitingForData && (
+                            <div className="h-full bg-primary/20 w-full animate-pulse" />
+                        )}
+                     </div>
                 </div>
-                <div className="mt-4 flex items-center gap-4 py-2">
-                    <button className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center">
-                        <Play size={14} fill="currentColor" className="ml-0.5" />
-                    </button>
-                    <span className="text-sm font-medium text-white/80 line-clamp-1">{title} ...30 min</span>
+
+                {/* Pricing Style Controls */}
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-6">
+                        <button 
+                            onClick={togglePlay}
+                            disabled={isWaitingForData && !isPlaying}
+                            className={cn(
+                                "w-16 h-16 bg-slate-900 text-white flex items-center justify-center hover:bg-slate-800 transition-all duration-200 shadow-xl",
+                                (isWaitingForData && !isPlaying) && "opacity-90 cursor-wait"
+                            )}
+                        >
+                            {isWaitingForData ? (
+                                <Loader2 className="w-6 h-6 animate-spin text-white/50" />
+                            ) : isPlaying ? (
+                                <Pause size={24} fill="currentColor" />
+                            ) : (
+                                <Play size={24} fill="currentColor" className="ml-1" />
+                            )}
+                        </button>
+                        
+                        <div className="flex flex-col">
+                            <span className="text-xs font-bold uppercase tracking-widest text-slate-900">
+                                {isPlaying ? "Now Playing" : "Listen Audio"}
+                            </span>
+                            <span className="text-[10px] uppercase tracking-wider text-gray-400 font-mono mt-1">
+                                {isWaitingForData ? "Buffering..." : "AI Generated"}
+                            </span>
+                        </div>
+
+                        <div className="hidden md:flex items-center gap-2 ml-4">
+                             <button onClick={() => stopAll()} className="p-3 text-gray-400 hover:text-red-500 transition-colors" title="Stop & Reset">
+                                <RotateCcw size={18} />
+                             </button>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                         {spotifyUrl && (
+                            <a 
+                                href={spotifyUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-[#1DB954] transition-colors"
+                            >
+                                <span className="w-1.5 h-1.5 rounded-full bg-current group-hover:animate-pulse" />
+                                Spotify
+                            </a>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

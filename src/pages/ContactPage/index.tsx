@@ -14,6 +14,7 @@ import { getCalApi } from "@calcom/embed-react";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "../../utils/motion";
 import { Newsletter } from "../../components/ui/Newsletter";
+import emailjs from "@emailjs/browser";
 
 
 (async function () {
@@ -109,11 +110,38 @@ const ContactForm = () => {
         e.preventDefault();
         setStatus("loading");
         try {
+            // 1. Save to Sanity
             await client.create({
                 _type: "message",
                 ...formData,
                 createdAt: new Date().toISOString()
             });
+
+            // 2. Send Email via EmailJS
+            // Replace these with your actual Service ID, Template ID, and Public Key
+            // You can find these in your EmailJS dashboard: https://dashboard.emailjs.com/
+            const SERVICE_ID = "YOUR_SERVICE_ID";
+            const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+            const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+
+            // Only send if keys are configured (to avoid errors in dev if not set)
+            if (SERVICE_ID !== "YOUR_SERVICE_ID") {
+                await emailjs.send(
+                    SERVICE_ID,
+                    TEMPLATE_ID,
+                    {
+                        from_name: formData.name,
+                        from_email: formData.email,
+                        subject: formData.subject,
+                        message: formData.message,
+                        to_name: "Dhidroid", // Or your name
+                    },
+                    PUBLIC_KEY
+                );
+            } else {
+                console.warn("EmailJS keys not configured. Skipping email send.");
+            }
+
             setStatus("success");
             setFormData({ name: "", email: "", subject: "", message: "" });
         } catch (error) {
@@ -353,8 +381,6 @@ const ContactPage = () => {
             </section>
 
             <ContactForm />
-
-            <Newsletter className="bg-white" />
         </React.Fragment>
     );
 };

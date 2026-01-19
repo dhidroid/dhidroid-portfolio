@@ -4,6 +4,7 @@ import { Button } from "./Button";
 import { Send } from "lucide-react";
 import { client } from "../../senity/senity";
 import { motion, AnimatePresence } from "framer-motion";
+import emailjs from "@emailjs/browser";
 
 interface NewsletterProps {
   className?: string;
@@ -18,11 +19,29 @@ export const Newsletter: React.FC<NewsletterProps> = ({ className }) => {
     setStatus("loading");
     
     try {
+      // 1. Save to Sanity
       await client.create({
         _type: "subscriber",
         email: email,
         subscribedAt: new Date().toISOString(),
       });
+
+      // 2. Send Confirmation Email via EmailJS (Optional: "Welcome to the newsletter")
+      const SERVICE_ID = "YOUR_SERVICE_ID";
+      const TEMPLATE_ID_NEWSLETTER = "YOUR_NEWSLETTER_TEMPLATE_ID"; // Specialized template
+      const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+
+      if (SERVICE_ID !== "YOUR_SERVICE_ID") {
+        await emailjs.send(
+          SERVICE_ID,
+          TEMPLATE_ID_NEWSLETTER,
+          {
+            to_email: email, // Assuming template uses 'to_email'
+            message: "Welcome to the Dhidroid Newsletter!",
+          },
+          PUBLIC_KEY
+        );
+      }
       
       setStatus("success");
       setEmail("");
