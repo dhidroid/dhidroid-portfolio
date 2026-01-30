@@ -7,7 +7,7 @@ interface Project {
   _id: string;
   title: string;
   slug: { current: string };
-  mainImage: { asset: { url: string } };
+  image?: { asset: { url: string } };
   year?: string;
   categories?: { title: string }[];
 }
@@ -22,7 +22,7 @@ const ProjectGrid = () => {
     const fetchProjects = async () => {
       try {
         const query = `
-          *[_type == "project"] | order(year desc) {
+          *[_type == "project"] | order(_createdAt desc) {
             _id,
             title,
             slug,

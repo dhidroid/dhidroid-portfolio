@@ -10,16 +10,11 @@ import { Badge } from "../ui/Badge";
 interface Project {
   _id: string;
   title: string;
+  slug: { current: string };
   projectDescription: string;
-  mainImage: {
-    asset: {
-      url: string;
-    };
-  };
-  link: string;
-  technologies: {
-    title: string;
-  }[];
+  image?: { asset: { url: string } };
+  link?: string;
+  technologies?: { title: string }[];
 }
 
 const SelectedWork = () => {
@@ -29,9 +24,10 @@ const SelectedWork = () => {
     const fetchProjects = async () => {
       try {
         const query = `
-          *[_type == "project"] | order(year desc)[0...3] {
+          *[_type == "project"] | order(_createdAt desc)[0...3] {
             _id,
             title,
+            slug,
             "projectDescription": description,
             image {
               asset->{
@@ -64,23 +60,23 @@ const SelectedWork = () => {
         className="w-full"
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 px-4 md:px-0">
-           <div className="max-w-xl">
-             <Badge className="mb-6 rounded-none">Portfolio</Badge>
-             <motion.h2 
-               variants={fadeInUp} 
-               className="text-4xl md:text-5xl font-bold font-display tracking-tight mb-4 text-foreground"
-             >
-               Selected Work
-             </motion.h2>
-             <motion.p variants={fadeInUp} className="text-muted-foreground text-lg leading-relaxed font-sans">
-               A curated selection of projects demonstrating design engineering and performance.
-             </motion.p>
-           </div>
-           <motion.div variants={fadeInUp}>
-             <Link to="/project" className="inline-flex items-center gap-2 font-medium text-primary hover:gap-3 transition-all">
-               View All Projects <ArrowRight className="w-5 h-5" />
-             </Link>
-           </motion.div>
+             <div className="max-w-xl">
+               <Badge className="mb-6 rounded-none">Portfolio</Badge>
+               <motion.h2 
+                 variants={fadeInUp} 
+                 className="text-4xl md:text-5xl font-bold font-display tracking-tight mb-4 text-foreground"
+               >
+                 Selected Work
+               </motion.h2>
+               <motion.p variants={fadeInUp} className="text-muted-foreground text-lg leading-relaxed font-sans">
+                 A curated selection of projects demonstrating design engineering and performance.
+               </motion.p>
+             </div>
+             <motion.div variants={fadeInUp}>
+               <Link to="/works" className="inline-flex items-center gap-2 font-medium text-primary hover:gap-3 transition-all">
+                 View All Projects <ArrowRight className="w-5 h-5" />
+               </Link>
+             </motion.div>
         </div>
 
         {/* Connected Grid */}
@@ -130,11 +126,11 @@ const SelectedWork = () => {
                  </div>
 
                  {/* Full Card Link Overlay */}
-                 <Link 
-                    to={`/works/${project._id}`} // Assuming ID is slug for now, or fetch slug
+                  <Link 
+                    to={`/works/${(project as any).slug?.current}`}
                     className="absolute inset-0 z-20"
                     aria-label={`View ${project.title}`}
-                 />
+                  />
                </div>
              </motion.div>
           ))}
