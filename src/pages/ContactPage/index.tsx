@@ -63,7 +63,7 @@ const contactMethods = [
         icon: Instagram,
         action: {
             label: "Connect on Instagram",
-            href: "https://instgram.com/@dhidroid"
+            href: "https://instagram.com/dhidroid"
         }
     },
     {
@@ -89,10 +89,10 @@ const contactMethods = [
 ];
 
 const socialLinks = [
-    { icon: FaGithub, href: "https://github.com/dhinesh-v", label: "GitHub" },
+    { icon: FaGithub, href: "https://github.com/dhinesh", label: "GitHub" },
     { icon: FaLinkedin, href: "https://linkedin.com/in/dhidroid-rndev", label: "LinkedIn" },
     { icon: FaTwitter, href: "https://x.com/@dhidroid", label: "Twitter" },
-    { icon: FaInstagram, href: "https://instgram.com/@dhidroid", label: "Instagram" }
+    { icon: FaInstagram, href: "https://instagram.com/dhidroid", label: "Instagram" }
 ];
 
 import { client } from "../../senity/senity";
