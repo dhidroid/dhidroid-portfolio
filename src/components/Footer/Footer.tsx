@@ -70,7 +70,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6">Company</h4>
+            <h4 className="font-bold mb-6">My Studio</h4>
             <ul className="space-y-4">
               <li>
                 <Link to="/contact" className="text-gray-500 hover:text-primary transition-colors">Contact</Link>

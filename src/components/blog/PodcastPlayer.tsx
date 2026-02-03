@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, FastForward, RotateCcw, Loader2 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useAI } from '../../context/AIContext';
+import { KokoroTTS } from "kokoro-js";
 
 interface PodcastPlayerProps {
     title: string;
@@ -32,6 +33,18 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
         'fr': { model: 'Xenova/mms-tts-fra' }
     };
 
+
+    // new tts playback refs
+    const ismodeliD: string = 'onnx-community/Kokoro-82M-ONNX'
+    const tts = KokoroTTS.from_pretrained(ismodeliD, {
+        dtype: "q8", // Options: "fp32", "fp16", "q8", "q4", "q4f16"
+    });
+    const newModel = {
+        model: ismodeliD,
+        embeddings: 'https://huggingface.co/datasets/onnx-community/Kokoro-82M-ONNX/resolve/main/speaker_embeddings.bin'
+
+    }
+
     const speechAudioRef = useRef<HTMLAudioElement>(new Audio());
     const audioQueue = useRef<string[]>([]);
     const isPlayingChunk = useRef(false);
@@ -43,7 +56,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
         setIsPlaying(false);
         setProgress(0);
         setCurrentTime("00:00");
-        
+
         // Clear queue
         audioQueue.current = [];
         isPlayingChunk.current = false;
@@ -54,7 +67,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
         if (!worker || !content) return;
         setIsWaitingForData(true);
         hasStartedGeneration.current = true;
-        
+
         const config = languageModels[selectedLanguage] as { model: string; embeddings?: string };
         generateSpeech(content, {
             model: config.model,
@@ -96,7 +109,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                 speechAudioRef.current.play();
                 setIsPlaying(true);
             } else if (hasStartedGeneration.current && audioQueue.current.length > 0) {
-                 playNextChunk();
+                playNextChunk();
             } else {
                 processContent();
             }
@@ -106,12 +119,12 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
     const formatTime = (time: number) => {
         const m = Math.floor((time / 60));
         const s = Math.floor(time % 60);
-        return `${ m.toString().padStart(2, '0') }:${ s.toString().padStart(2, '0') }`;
+        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     };
 
     useEffect(() => {
         const audio = speechAudioRef.current;
-        
+
         const updateProgress = () => {
             const current = audio.currentTime;
             // const total = audio.duration; 
@@ -140,15 +153,15 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
             const { type, status, output, isChunk } = e.data;
             if (type === 'tts' && status === 'complete') {
                 setIsWaitingForData(false);
-                
+
                 const blob = new Blob([encodeWAV(output.audio, output.sampling_rate)], { type: 'audio/wav' });
                 const url = URL.createObjectURL(blob);
-                
+
                 audioQueue.current.push(url);
 
                 if (!isPlayingChunk.current && isPlaying) {
-                   // If we were waiting for data (buffering) and playing was active, resume
-                   playNextChunk();
+                    // If we were waiting for data (buffering) and playing was active, resume
+                    playNextChunk();
                 } else if (!isPlayingChunk.current && !hasStartedGeneration.current) {
                     // First chunk after manual start? logic handles this in togglePlay mostly
                 } else if (!isPlayingChunk.current && audioQueue.current.length === 1 && hasStartedGeneration.current) {
@@ -200,18 +213,18 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
     return (
         <div className="w-full bg-white border border-gray-200 p-8 md:p-10 font-sans shadow-sm">
             <div className="flex flex-col gap-8">
-                
+
                 {/* Header & Meta - Pricing Style */}
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                     <div>
                         <div className="flex items-center gap-3 mb-4">
-                             <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest">
+                            <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest">
                                 {seriesTitle}
-                             </span>
-                             <div className="flex items-center gap-2 text-[10px] font-mono font-medium text-gray-500 uppercase tracking-wider">
+                            </span>
+                            <div className="flex items-center gap-2 text-[10px] font-mono font-medium text-gray-500 uppercase tracking-wider">
                                 <Volume2 size={12} className={isTTSReady ? "text-green-600" : "text-gray-400"} />
                                 <span>{isTTSReady ? "AI Module Active" : "Initializing..."}</span>
-                             </div>
+                            </div>
                         </div>
                         <h3 className="text-3xl md:text-4xl font-display font-bold text-slate-900 leading-tight">
                             {title}
@@ -220,7 +233,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
 
                     {/* Minimal Language Selector */}
                     <div className="flex items-center border border-gray-200 h-10 px-2 bg-gray-50/50">
-                        <select 
+                        <select
                             value={selectedLanguage}
                             onChange={(e) => setSelectedLanguage(e.target.value as any)}
                             className="bg-transparent text-sm font-medium text-gray-600 focus:outline-none cursor-pointer tracking-wide"
@@ -234,17 +247,17 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
 
                 {/* Progress / Status */}
                 <div className="space-y-3">
-                     <div className="h-1 w-full bg-gray-100 overflow-hidden">
+                    <div className="h-1 w-full bg-gray-100 overflow-hidden">
                         {isWaitingForData && (
                             <div className="h-full bg-primary/20 w-full animate-pulse" />
                         )}
-                     </div>
+                    </div>
                 </div>
 
                 {/* Pricing Style Controls */}
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                     <div className="flex items-center gap-6">
-                        <button 
+                        <button
                             onClick={togglePlay}
                             disabled={isWaitingForData && !isPlaying}
                             className={cn(
@@ -260,7 +273,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                                 <Play size={24} fill="currentColor" className="ml-1" />
                             )}
                         </button>
-                        
+
                         <div className="flex flex-col">
                             <span className="text-xs font-bold uppercase tracking-widest text-slate-900">
                                 {isPlaying ? "Now Playing" : "Listen Audio"}
@@ -271,18 +284,18 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                         </div>
 
                         <div className="hidden md:flex items-center gap-2 ml-4">
-                             <button onClick={() => stopAll()} className="p-3 text-gray-400 hover:text-red-500 transition-colors" title="Stop & Reset">
+                            <button onClick={() => stopAll()} className="p-3 text-gray-400 hover:text-red-500 transition-colors" title="Stop & Reset">
                                 <RotateCcw size={18} />
-                             </button>
+                            </button>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-4">
-                         {spotifyUrl && (
-                            <a 
-                                href={spotifyUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
+                        {spotifyUrl && (
+                            <a
+                                href={spotifyUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-[#1DB954] transition-colors"
                             >
                                 <span className="w-1.5 h-1.5 rounded-full bg-current group-hover:animate-pulse" />
