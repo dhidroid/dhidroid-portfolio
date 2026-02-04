@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Welcome to the Newsletter</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:#f4f6f8; margin:0; padding:32px }
+      .wrap { max-width:720px; margin:0 auto; background:#fff; padding:32px; border-radius:8px; box-shadow:0 10px 30px rgba(2,6,23,0.06) }
+      h1 { margin:0 0 8px; font-size:32px; font-weight:800; letter-spacing:-0.02em }
+      p { margin:8px 0; color:#334155 }
+      .cta { display:inline-block; margin-top:16px; padding:12px 20px; background:#0f172a; color:#fff; text-decoration:none; border-radius:6px }
+      .muted { color:#64748b; font-size:13px }
+      .primary { color:#0ea5a0 }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Welcome <span class="primary">👋</span></h1>
+      <p style="font-size:15px;">Thanks for joining the Dhidroid newsletter. You're now subscribed with <strong>{{to_email}}</strong>.</p>
+
+      <p style="margin-top:12px">{{message}}</p>
+
+      <a class="cta" href="https://dhidroid.dev">Visit my site</a>
+
+      <hr style="margin:20px 0;border:none;border-top:1px solid #eef2ff" />
+      <p class="muted">If you didn't sign up for this newsletter you can safely ignore this email.</p>
+    </div>
+  </body>
+</html>
