@@ -26,6 +26,7 @@ import emailjs from "@emailjs/browser";
 
 const contactMethods = [
     {
+        id: "general-inquiries",
         name: "General Inquiries",
         value: "dhinesh4668@outlook.com",
         description: "For new projects, collaborations, or just to say hello.",
@@ -36,6 +37,7 @@ const contactMethods = [
         }
     },
     {
+        id: "book-call",
         name: "Book my call",
         value: "30-min Consultation",
         popular: true,
@@ -47,6 +49,7 @@ const contactMethods = [
         }
     },
     {
+        id: "quick-chat-linkedin",
         name: "Quick Chat",
         value: "Social Channels",
         description: "Connect with me on social media for quick questions or updates.",
@@ -57,6 +60,7 @@ const contactMethods = [
         }
     },
     {
+        id: "social-instagram",
         name: "Social",
         value: "Social Channels",
         description: "Connect with me on social media for quick questions or updates.",
@@ -67,6 +71,7 @@ const contactMethods = [
         }
     },
     {
+        id: "quick-chat-whatsapp",
         name: "Quick Chat",
         value: "Social Channels",
         description: "Connect with me on whatsapp for quick questions or updates.",
@@ -77,6 +82,7 @@ const contactMethods = [
         }
     },
     {
+        id: "blog",
         name: "Blog",
         value: "Blog",
         description: "Read about my projects and experiences.",
@@ -111,11 +117,11 @@ const ContactForm = () => {
         setStatus("loading");
         try {
             // 1. Save to Sanity
-            await client.create({
-                _type: "message",
-                ...formData,
-                createdAt: new Date().toISOString()
-            });
+            // await client.create({
+            //     _type: "message",
+            //     ...formData,
+            //     createdAt: new Date().toISOString()
+            // });
 
             // 2. Send Email via EmailJS
             // Replace these with your actual Service ID, Template ID, and Public Key
@@ -125,19 +131,29 @@ const ContactForm = () => {
             const PUBLIC_KEY = "BbS4r6xVZEXKBKUPr";
 
             // Only send if keys are configured (to avoid errors in dev if not set)
-
-            await emailjs.send(
-                'service_4t5cmkp',
-                'template_89p59n8',
-                {
-                    title: formData.subject,
-                    name: formData.name,
-                    email: formData.email,
-                    subject: formData.subject,
-                    message: formData.message,
-                    time: new Date().toLocaleString()
+            if (SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY) {
+                // initialize EmailJS with the public key (safe to call multiple times)
+                try {
+                    emailjs.init(PUBLIC_KEY);
+                } catch (err) {
+                    // init can throw in some environments; continue to attempt send below
+                    console.warn('EmailJS init warning:', err);
                 }
-            );
+
+                await emailjs.send(
+                    SERVICE_ID,
+                    TEMPLATE_ID,
+                    {
+                        title: formData.subject,
+                        name: formData.name,
+                        email: formData.email,
+                        subject: formData.subject,
+                        message: formData.message,
+                        time: new Date().toLocaleString()
+                    },
+                    PUBLIC_KEY
+                );
+            }
 
             setStatus("success");
             setFormData({ name: "", email: "", subject: "", message: "" });
@@ -326,7 +342,7 @@ const ContactPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-0 max-w-6xl mx-auto border border-border/60 divide-y md:divide-y-0 md:divide-x divide-border/60 bg-card">
                         {contactMethods.map((method) => (
                             <div
-                                key={method.name}
+                                key={method.id}
                                 className={cn(
                                     "relative p-12 flex flex-col hover:bg-muted/5 transition-all duration-500 group",
                                     method.popular && "bg-muted/5"

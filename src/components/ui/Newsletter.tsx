@@ -17,32 +17,33 @@ export const Newsletter: React.FC<NewsletterProps> = ({ className }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-    
+
     try {
       // 1. Save to Sanity
-      await client.create({
-        _type: "subscriber",
-        email: email,
-        subscribedAt: new Date().toISOString(),
-      });
+      // await client.create({
+      //   _type: "subscriber",
+      //   email: email,
+      //   subscribedAt: new Date().toISOString(),
+      // });
 
       // 2. Send Confirmation Email via EmailJS (Optional: "Welcome to the newsletter")
-      const SERVICE_ID = "YOUR_SERVICE_ID";
-      const TEMPLATE_ID_NEWSLETTER = "YOUR_NEWSLETTER_TEMPLATE_ID"; // Specialized template
-      const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+      const SERVICE_ID = "service_4t5cmkp";
+      const TEMPLATE_ID = "template_89p59n8";
+      const PUBLIC_KEY = "BbS4r6xVZEXKBKUPr";
 
-      if (SERVICE_ID !== "YOUR_SERVICE_ID") {
+
+      if (SERVICE_ID !== "service_4t5cmkp") {
         await emailjs.send(
           SERVICE_ID,
-          TEMPLATE_ID_NEWSLETTER,
+          TEMPLATE_ID,
           {
-            to_email: email, // Assuming template uses 'to_email'
+            email: email, 
             message: "Welcome to the Dhidroid Newsletter!",
           },
           PUBLIC_KEY
         );
       }
-      
+
       setStatus("success");
       setEmail("");
     } catch (error) {
@@ -58,7 +59,7 @@ export const Newsletter: React.FC<NewsletterProps> = ({ className }) => {
         <div className={`border-t border-b border-gray-200 py-16 min-h-[300px] flex items-center justify-center`}>
           <AnimatePresence mode="wait">
             {status === "success" ? (
-              <motion.div 
+              <motion.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -71,7 +72,7 @@ export const Newsletter: React.FC<NewsletterProps> = ({ className }) => {
                 <p className="font-mono text-sm uppercase tracking-[0.4em] text-gray-500">Welcome to the inner circle.</p>
               </motion.div>
             ) : (
-              <motion.div 
+              <motion.div
                 key="form"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -84,7 +85,7 @@ export const Newsletter: React.FC<NewsletterProps> = ({ className }) => {
                     Join the <span className="text-primary italic">Newsletter</span>
                   </h3>
                 </div>
-                
+
                 <form onSubmit={handleSubmit} className="w-full max-w-xl group">
                   <div className="relative flex flex-col sm:flex-row gap-4">
                     <input
@@ -96,9 +97,9 @@ export const Newsletter: React.FC<NewsletterProps> = ({ className }) => {
                       disabled={status === "loading"}
                       className="flex-grow bg-gray-50 border border-gray-200 px-8 py-4 text-sm font-mono uppercase tracking-widest focus:outline-none focus:border-primary transition-colors rounded-none placeholder:text-gray-300 disabled:opacity-50"
                     />
-                    <Button 
-                      type="submit" 
-                      variant="primary" 
+                    <Button
+                      type="submit"
+                      variant="primary"
                       isLoading={status === "loading"}
                       className="rounded-none h-14 px-10 text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 group-hover:translate-x-1 transition-transform"
                     >
