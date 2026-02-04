@@ -27,17 +27,23 @@ export const Newsletter: React.FC<NewsletterProps> = ({ className }) => {
       // });
 
       // 2. Send Confirmation Email via EmailJS (Optional: "Welcome to the newsletter")
-      const SERVICE_ID = "service_4t5cmkp";
-      const TEMPLATE_ID = "template_89p59n8";
-      const PUBLIC_KEY = "BbS4r6xVZEXKBKUPr";
+      const SERVICE_ID = import.meta.env.VITE_SERVICE_ID;
+      const TEMPLATE_ID = import.meta.env.VITE_TEMPLATE_ID;
+      const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY;
 
+      // Only attempt to send if all EmailJS keys are configured
+      if (SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY) {
+        try {
+          emailjs.init(PUBLIC_KEY);
+        } catch (err) {
+          console.warn('EmailJS init warning:', err);
+        }
 
-      if (SERVICE_ID !== "service_4t5cmkp") {
         await emailjs.send(
           SERVICE_ID,
           TEMPLATE_ID,
           {
-            email: email, 
+            email: email,
             message: "Welcome to the Dhidroid Newsletter!",
           },
           PUBLIC_KEY

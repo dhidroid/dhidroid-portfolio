@@ -126,17 +126,15 @@ const ContactForm = () => {
             // 2. Send Email via EmailJS
             // Replace these with your actual Service ID, Template ID, and Public Key
             // You can find these in your EmailJS dashboard: https://dashboard.emailjs.com/
-            const SERVICE_ID = "service_4t5cmkp";
-            const TEMPLATE_ID = "template_89p59n8";
-            const PUBLIC_KEY = "BbS4r6xVZEXKBKUPr";
+            const SERVICE_ID = import.meta.env.VITE_SERVICE_ID;
+            const TEMPLATE_ID = import.meta.env.VITE_TEMPLATE_ID;
+            const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY;
 
             // Only send if keys are configured (to avoid errors in dev if not set)
             if (SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY) {
-                // initialize EmailJS with the public key (safe to call multiple times)
                 try {
                     emailjs.init(PUBLIC_KEY);
                 } catch (err) {
-                    // init can throw in some environments; continue to attempt send below
                     console.warn('EmailJS init warning:', err);
                 }
 
