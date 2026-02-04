@@ -120,27 +120,24 @@ const ContactForm = () => {
             // 2. Send Email via EmailJS
             // Replace these with your actual Service ID, Template ID, and Public Key
             // You can find these in your EmailJS dashboard: https://dashboard.emailjs.com/
-            const SERVICE_ID = "YOUR_SERVICE_ID";
-            const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-            const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+            const SERVICE_ID = "service_4t5cmkp";
+            const TEMPLATE_ID = "template_89p59n8";
+            const PUBLIC_KEY = "BbS4r6xVZEXKBKUPr";
 
             // Only send if keys are configured (to avoid errors in dev if not set)
-            if (SERVICE_ID !== "YOUR_SERVICE_ID") {
-                await emailjs.send(
-                    SERVICE_ID,
-                    TEMPLATE_ID,
-                    {
-                        from_name: formData.name,
-                        from_email: formData.email,
-                        subject: formData.subject,
-                        message: formData.message,
-                        to_name: "Dhidroid", // Or your name
-                    },
-                    PUBLIC_KEY
-                );
-            } else {
-                console.warn("EmailJS keys not configured. Skipping email send.");
-            }
+
+            await emailjs.send(
+                'service_4t5cmkp',
+                'template_89p59n8',
+                {
+                    title: formData.subject,
+                    name: formData.name,
+                    email: formData.email,
+                    subject: formData.subject,
+                    message: formData.message,
+                    time: new Date().toLocaleString()
+                }
+            );
 
             setStatus("success");
             setFormData({ name: "", email: "", subject: "", message: "" });
@@ -153,7 +150,7 @@ const ContactForm = () => {
 
     if (status === "success") {
         return (
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="py-24 text-center border-t border-gray-100"
@@ -183,53 +180,53 @@ const ContactForm = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
                             <div className="flex flex-col gap-4 group">
                                 <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-focus-within:text-primary transition-colors">Your Name</label>
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     required
                                     placeholder="JOHN DOE"
                                     value={formData.name}
-                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     className="bg-transparent border-b border-gray-200 py-4 text-2xl font-display font-bold uppercase placeholder:text-gray-100 focus:outline-none focus:border-primary transition-all rounded-none"
                                 />
                             </div>
                             <div className="flex flex-col gap-4 group">
                                 <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-focus-within:text-primary transition-colors">Email Address</label>
-                                <input 
-                                    type="email" 
+                                <input
+                                    type="email"
                                     required
                                     placeholder="HELLO@EXAMPLE.COM"
                                     value={formData.email}
-                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     className="bg-transparent border-b border-gray-200 py-4 text-2xl font-display font-bold uppercase placeholder:text-gray-100 focus:outline-none focus:border-primary transition-all rounded-none"
                                 />
                             </div>
                         </div>
                         <div className="flex flex-col gap-4 group">
                             <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-focus-within:text-primary transition-colors">Subject</label>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 required
                                 placeholder="PROJECT INQUIRY"
                                 value={formData.subject}
-                                onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                                 className="bg-transparent border-b border-gray-200 py-4 text-2xl font-display font-bold uppercase placeholder:text-gray-100 focus:outline-none focus:border-primary transition-all rounded-none"
                             />
                         </div>
                         <div className="flex flex-col gap-4 group">
                             <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-focus-within:text-primary transition-colors">Message</label>
-                            <textarea 
+                            <textarea
                                 required
                                 rows={4}
                                 placeholder="TELL ME ABOUT YOUR PROJECT..."
                                 value={formData.message}
-                                onChange={(e) => setFormData({...formData, message: e.target.value})}
+                                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                 className="bg-transparent border-b border-gray-200 py-4 text-2xl font-display font-bold uppercase placeholder:text-gray-100 focus:outline-none focus:border-primary transition-all rounded-none resize-none"
                             />
                         </div>
                         <div className="flex justify-end">
-                            <Button 
-                                type="submit" 
-                                variant="primary" 
+                            <Button
+                                type="submit"
+                                variant="primary"
                                 isLoading={status === "loading"}
                                 className="rounded-none h-20 px-16 text-sm font-bold uppercase tracking-[0.3em] group relative overflow-hidden"
                             >
@@ -263,14 +260,14 @@ const ContactPage = () => {
                         <motion.div variants={fadeInUp}>
                             <Badge className="mb-8 rounded-none px-4 py-1">Connect</Badge>
                         </motion.div>
-                        <motion.h1 
+                        <motion.h1
                             variants={fadeInUp}
                             className="text-[12vw] md:text-[8rem] leading-[0.85] font-bold font-display tracking-tighter text-foreground uppercase mb-12"
                         >
                             Get in<br />
                             <span className="text-gray-300 italic">Touch.</span>
                         </motion.h1>
-                        
+
                         <motion.div variants={fadeInUp} className="flex flex-col md:flex-row gap-8 md:items-start border-t border-gray-100 pt-12 mt-12">
                             <span className="font-mono text-sm uppercase tracking-widest text-gray-400 md:w-64">General inquiries</span>
                             <div className="max-w-2xl">
