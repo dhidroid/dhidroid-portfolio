@@ -45,6 +45,9 @@ const skillCategories = [
       { name: "Figma", desc: "UI Design", url: "https://www.figma.com" },
       { name: "AWS", desc: "Cloud Services", url: "https://aws.amazon.com" },
       { name: "Vercel", desc: "Deployment", url: "https://vercel.com" },
+      { name: "Netlify", desc: "Hosting", url: "https://www.netlify.com" },
+      {name: "Jest", desc: "Testing", url: "https://jestjs.io" },
+      {name: "CodeRabbits", desc: "CI/CD", url: "https://coderabbits.com" },
     ]
   }
 ];
