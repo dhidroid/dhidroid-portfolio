@@ -83,7 +83,7 @@ const contactMethods = [
         icon: FaMediumM,
         action: {
             label: "Read Blog",
-            href: "medium.com/dhidroid"
+            href: "https://medium.com/@dhidroid"
         }
     }
 ];
