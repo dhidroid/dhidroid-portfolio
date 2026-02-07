@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ZoomIn, ZoomOut, Download } from "lucide-react";
 import { Link } from "react-router";
 import HeroTerminal from "./HeroTerminal";
+import CredlyBadge from "../ui/CredlyBadge";
 import { SectionWrapper } from "../layout/SectionWrapper";
 import { fadeInUp, staggerContainer, textReveal } from "../../utils/motion";
 
@@ -18,6 +19,11 @@ import 'react-pdf/dist/Page/TextLayer.css';
 
 // Configure worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
+const BADGE_DATA = [
+  { id: "75ea1e14-e67a-4c03-b1c0-6c75e67c3f14", title: "Badge 1", url: "https://www.credly.com/badges/75ea1e14-e67a-4c03-b1c0-6c75e67c3f14/public_url" },
+  { id: "1a762b61-e521-4e8f-8668-9554a3f51996", title: "Badge 2", url: "https://www.credly.com/badges/1a762b61-e521-4e8f-8668-9554a3f51996/public_url" }
+];
 
 const Hero = () => {
   const [isResumeOpen, setIsResumeOpen] = React.useState(false);
@@ -149,6 +155,13 @@ const Hero = () => {
 
             </div>
           </motion.div>
+
+          {/* Mobile Credly Badge */}
+          <motion.div variants={fadeInUp} className="mt-8 lg:hidden flex justify-start gap-4 flex-wrap">
+            {BADGE_DATA.map((badge) => (
+              <CredlyBadge key={badge.id} badgeId={badge.id} />
+            ))}
+          </motion.div>
         </div>
 
         {/* Right Content: Visual / Asymmetry - Spans 4 cols */}
@@ -157,8 +170,15 @@ const Hero = () => {
             variants={fadeInUp}
             className="absolute top-1/2 -translate-y-1/2 right-0 w-full"
           >
+            {/* Credly Badge */}
+            <div className="absolute -left-12 transform -rotate-6 hover:rotate-0 transition-transform duration-500 z-10 pointer-events-auto flex gap-4">
+              {BADGE_DATA.map((badge) => (
+                <CredlyBadge key={badge.id} badgeId={badge.id} />
+              ))}
+            </div>
+
             {/* Realtime AI Flow Terminal */}
-            <div className="transform rotate-2 hover:rotate-0 transition-all duration-700 hover:scale-105">
+            <div className="transform rotate-2 transition-all duration-700">
               <HeroTerminal />
             </div>
           </motion.div>

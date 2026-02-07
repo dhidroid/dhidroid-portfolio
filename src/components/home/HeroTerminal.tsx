@@ -15,11 +15,11 @@ const HeroTerminal = () => {
           {/* Window Header */}
           <div className="h-12 bg-white/50 border-b border-white/20 flex items-center px-6 gap-20">
               {/* Traffic Lights */}
-              <div className="flex gap-2">
+              {/* <div className="flex gap-2">
                  <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/50" />
                  <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/50" />
                  <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]/50" />
-              </div>
+              </div> */}
               
               {/* Title */}
               <div className="flex-1 text-center text-xs font-medium text-slate-500/70 -ml-12 font-mono tracking-wide">
