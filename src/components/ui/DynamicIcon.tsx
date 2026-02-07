@@ -15,7 +15,10 @@ export const DynamicIcon: React.FC<DynamicIconProps> = ({ name, className }) => 
   // 1. Manual Mapping for common cases (improves accuracy)
   const iconMap: Record<string, React.ElementType> = {
     'react': SiIcons.SiReact,
+    'reactnative': SiIcons.SiReact,
     'reactjs': SiIcons.SiReact,
+    'html5': SiIcons.SiHtml5,
+    'css3': SiIcons.SiCss3,
     'nextjs': SiIcons.SiNextdotjs,
     'next': SiIcons.SiNextdotjs,
     'node': SiIcons.SiNodedotjs,
@@ -74,6 +77,9 @@ export const DynamicIcon: React.FC<DynamicIconProps> = ({ name, className }) => 
     'design': FaIcons.FaPaintBrush,
     'development': FaIcons.FaCode,
     'web': FaIcons.FaGlobe,
+    'netlify': SiIcons.SiNetlify,
+    'jest': SiIcons.SiJest,
+    'coderabbits': SiIcons.SiRabbitmq,
   };
 
   // 2. Direct Lookup
