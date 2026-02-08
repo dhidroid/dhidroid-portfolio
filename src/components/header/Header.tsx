@@ -31,6 +31,13 @@ const Header = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+  const isHome = location.pathname === '/';
+  const isDarkHeader = isHome && !isScrolled;
+
+  const textColor = isDarkHeader ? "text-white" : "text-gray-600";
+  const activeColor = isDarkHeader ? "text-primary/90" : "text-primary";
+  const foregroundColor = isDarkHeader ? "text-white" : "text-foreground";
+  const mutedColor = isDarkHeader ? "text-gray-300" : "text-muted-foreground";
 
   return (
     <header
@@ -39,7 +46,7 @@ const Header = () => {
     >
       <Container>
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 font-bold text-xl tracking-tight">
+          <Link to="/" className={`flex items-center gap-2 font-bold text-xl tracking-tight ${foregroundColor}`}>
             <img
               src={DhiDroidLogo}
               alt="DhiDroid Logo"
@@ -54,7 +61,7 @@ const Header = () => {
               <Link
                 key={link.title}
                 to={link.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${isActive(link.href) ? "text-primary" : "text-gray-600"
+                className={`text-sm font-medium transition-colors hover:text-primary ${isActive(link.href) ? activeColor : textColor
                   }`}
               >
                 {link.title}
@@ -64,35 +71,35 @@ const Header = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center">
-            <div className="flex items-center border border-gray-300 bg-card/80 divide-x divide-gray-300 overflow-hidden">
+            <div className={`flex items-center border ${isDarkHeader ? 'border-white/20 bg-black/20 divide-white/20' : 'border-gray-300 bg-card/80 divide-gray-300'} overflow-hidden rounded-md backdrop-blur-sm`}>
 
               {/* LinkedIn Action */}
               <a
                 href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=dhidroid-rndev"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-3 px-4 py-2 hover:bg-muted/5 transition-colors duration-300"
+                className={`group flex items-center gap-3 px-4 py-2 ${isDarkHeader ? 'hover:bg-white/10' : 'hover:bg-muted/5'} transition-colors duration-300`}
               >
-                <div className="w-8 h-8 flex items-center justify-center bg-blue-50 text-[#0A66C2] group-hover:bg-[#0A66C2] group-hover:text-white transition-all duration-300">
+                <div className={`w-8 h-8 flex items-center justify-center ${isDarkHeader ? 'bg-white/10 text-white' : 'bg-blue-50 text-[#0A66C2]'} group-hover:bg-[#0A66C2] group-hover:text-white transition-all duration-300 rounded-sm`}>
                   <FaLinkedin size={14} />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-bold font-display text-foreground leading-none mb-0.5">LinkedIn</span>
-                  <span className="text-[10px] text-muted-foreground font-medium leading-none">Follow Me</span>
+                  <span className={`text-xs font-bold font-display ${foregroundColor} leading-none mb-0.5`}>LinkedIn</span>
+                  <span className={`text-[10px] ${mutedColor} font-medium leading-none`}>Follow Me</span>
                 </div>
               </a>
 
               {/* Hire Me Action */}
               <Link
                 to="/schedule"
-                className="group flex items-center gap-3 px-4 py-2 hover:bg-muted/5 transition-colors duration-300"
+                className={`group flex items-center gap-3 px-4 py-2 ${isDarkHeader ? 'hover:bg-white/10' : 'hover:bg-muted/5'} transition-colors duration-300`}
               >
-                <div className="w-8 h-8 flex items-center justify-center bg-muted/20 text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                <div className={`w-8 h-8 flex items-center justify-center ${isDarkHeader ? 'bg-white/10 text-white' : 'bg-muted/20 text-foreground'} group-hover:bg-primary group-hover:text-white transition-all duration-300 rounded-sm`}>
                   <ArrowRight size={14} className="-rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-bold font-display text-foreground leading-none mb-0.5">Hire Me</span>
-                  <span className="text-[10px] text-muted-foreground font-medium leading-none">Book Call</span>
+                  <span className={`text-xs font-bold font-display ${foregroundColor} leading-none mb-0.5`}>Hire Me</span>
+                  <span className={`text-[10px] ${mutedColor} font-medium leading-none`}>Book Call</span>
                 </div>
               </Link>
 
@@ -101,7 +108,7 @@ const Header = () => {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden p-2 text-gray-600"
+            className={`md:hidden p-2 ${textColor}`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}

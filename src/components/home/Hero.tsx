@@ -6,6 +6,7 @@ import HeroTerminal from "./HeroTerminal";
 import CredlyBadge from "../ui/CredlyBadge";
 import { SectionWrapper } from "../layout/SectionWrapper";
 import { fadeInUp, staggerContainer, textReveal } from "../../utils/motion";
+import FaultyTerminal from "../ui/FaultyTerminal";
 
 import { Modal } from "../ui/Modal";
 
@@ -62,7 +63,7 @@ const Hero = () => {
         <div className="lg:col-span-8 flex flex-col justify-center">
           {/* Badge / Pill */}
           <motion.div variants={fadeInUp} className="mb-6">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-white/50 backdrop-blur-sm text-sm font-medium text-gray-600">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-sm font-medium text-white">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               Available for new projects
             </span>
@@ -73,7 +74,7 @@ const Hero = () => {
             <div className="overflow-hidden">
               <motion.h1
                 variants={textReveal}
-                className="text-[14vw] lg:text-[10rem] font-bold text-foreground block"
+                className="text-[14vw] lg:text-[10rem] font-bold text-white block"
               >
                 CREATIVE
               </motion.h1>
@@ -81,7 +82,7 @@ const Hero = () => {
             <div className="overflow-hidden">
               <motion.h1
                 variants={textReveal}
-                className="text-[14vw] lg:text-[10rem] font-light italic text-foreground block ml-[5vw] lg:ml-24"
+                className="text-[14vw] lg:text-[10rem] font-light italic text-white block ml-[5vw] lg:ml-24"
               >
                 DEVELOPER
               </motion.h1>
@@ -90,28 +91,28 @@ const Hero = () => {
 
           <motion.p
             variants={fadeInUp}
-            className="mt-8 text-lg md:text-xl text-gray-500 max-w-xl font-body leading-relaxed ml-2"
+            className="mt-8 text-lg md:text-xl text-gray-300 max-w-xl font-body leading-relaxed ml-2"
           >
             Crafting digital experiences that blend high-end aesthetics with robust engineering.
             Based in India, working globally.
           </motion.p>
 
           <motion.div variants={fadeInUp} className="mt-12 w-full max-w-4xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 border border-border/60 divide-y md:divide-y-0 md:divide-x divide-border/60 bg-card shadow-lg">
+            <div className="grid grid-cols-1 md:grid-cols-3 border border-white/20 divide-y md:divide-y-0 md:divide-x divide-white/20 bg-black/20 backdrop-blur-sm shadow-lg">
 
               {/* 1. My Works */}
               <Link
                 to="/works"
-                className="group relative p-8 flex flex-row items-center gap-4 hover:bg-muted/5 transition-colors duration-500 text-left"
+                className="group relative p-8 flex flex-row items-center gap-4 hover:bg-white/5 transition-colors duration-500 text-left"
               >
-                <div className="w-10 h-10 flex items-center justify-center bg-muted/10 text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                <div className="w-10 h-10 flex items-center justify-center bg-white/10 text-white group-hover:bg-primary group-hover:text-white transition-all duration-300">
                   <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold font-display text-foreground group-hover:text-primary transition-colors mb-1">
+                  <h3 className="text-xl font-bold font-display text-white group-hover:text-primary transition-colors mb-1">
                     My Works
                   </h3>
-                  <p className="text-sm text-muted-foreground font-sans">
+                  <p className="text-sm text-gray-400 font-sans">
                     Explore my portfolio
                   </p>
                 </div>
@@ -120,16 +121,16 @@ const Hero = () => {
               {/* 2. Hire Me */}
               <button
                 onClick={handleHireMe}
-                className="group relative p-8 flex flex-row items-center gap-4 hover:bg-muted/5 transition-colors duration-500 text-left"
+                className="group relative p-8 flex flex-row items-center gap-4 hover:bg-white/5 transition-colors duration-500 text-left"
               >
-                <div className="w-10 h-10 flex items-center justify-center bg-muted/10 text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                <div className="w-10 h-10 flex items-center justify-center bg-white/10 text-white group-hover:bg-primary group-hover:text-white transition-all duration-300">
                   <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold font-display text-foreground group-hover:text-primary transition-colors mb-1">
+                  <h3 className="text-xl font-bold font-display text-white group-hover:text-primary transition-colors mb-1">
                     Hire Me
                   </h3>
-                  <p className="text-sm text-muted-foreground font-sans">
+                  <p className="text-sm text-gray-400 font-sans">
                     Start a project together
                   </p>
                 </div>
@@ -138,16 +139,16 @@ const Hero = () => {
               {/* 3. View Resume */}
               <button
                 onClick={() => setIsResumeOpen(true)}
-                className="group relative p-8 flex flex-row items-center gap-4 hover:bg-muted/5 transition-colors duration-500 text-left"
+                className="group relative p-8 flex flex-row items-center gap-4 hover:bg-white/5 transition-colors duration-500 text-left"
               >
-                <div className="w-10 h-10 flex items-center justify-center bg-muted/10 text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                <div className="w-10 h-10 flex items-center justify-center bg-white/10 text-white group-hover:bg-primary group-hover:text-white transition-all duration-300">
                   <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold font-display text-foreground group-hover:text-primary transition-colors mb-1">
+                  <h3 className="text-xl font-bold font-display text-white group-hover:text-primary transition-colors mb-1">
                     View Resume
                   </h3>
-                  <p className="text-sm text-muted-foreground font-sans">
+                  <p className="text-sm text-gray-400 font-sans">
                     See my qualifications
                   </p>
                 </div>
@@ -184,6 +185,16 @@ const Hero = () => {
           </motion.div>
         </div>
       </motion.div>
+
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <FaultyTerminal
+          tint="#5235F6"
+          flickerAmount={0.05}
+          scanlineIntensity={0.2}
+          glitchAmount={1.0}
+          brightness={0.8}
+        />
+      </div>
 
       {/* Resume Modal */}
       <Modal
