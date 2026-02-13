@@ -30,8 +30,23 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    // Increase warning limit and split large third-party libs (AI/WASM) into their own chunk
+    chunkSizeWarningLimit: 2000,
     rollupOptions: {
-      external: ['@xenova/transformers']
+      external: ['@xenova/transformers'],
+      output: {
+        manualChunks(id: string) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@xenova') || id.includes('onnxruntime') || id.includes('onnx')) {
+              return 'vendor-ai';
+            }
+            if (id.includes('react')) {
+              return 'vendor-react';
+            }
+            return 'vendor';
+          }
+        }
+      }
     }
   }
 })
