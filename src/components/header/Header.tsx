@@ -31,7 +31,7 @@ const Header = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
-  const isHome = location.pathname === '/';
+  const isHome = location.pathname === '';
   const isDarkHeader = isHome && !isScrolled;
 
   const textColor = isDarkHeader ? "text-white" : "text-gray-600";
