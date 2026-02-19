@@ -40,9 +40,6 @@ export default defineConfig({
             if (id.includes('@xenova') || id.includes('onnxruntime') || id.includes('onnx')) {
               return 'vendor-ai';
             }
-            if (id.includes('react')) {
-              return 'vendor-react';
-            }
             return 'vendor';
           }
         }
