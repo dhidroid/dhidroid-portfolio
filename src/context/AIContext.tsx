@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import * as React from 'react';
 
 interface AIContextType {
   worker: Worker | null;
@@ -9,7 +9,7 @@ interface AIContextType {
   isTTSReady: boolean;
 }
 
-const AIContext = createContext<AIContextType>({
+const AIContext = React.createContext<AIContextType>({
   worker: null,
   isModelReady: false,
   loadingProgress: null,
@@ -18,15 +18,15 @@ const AIContext = createContext<AIContextType>({
   isTTSReady: false,
 });
 
-export const useAI = () => useContext(AIContext);
+export const useAI = () => React.useContext(AIContext);
 
 export const AIProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const workerRef = useRef<Worker | null>(null);
-  const [isModelReady, setIsModelReady] = useState(false);
-  const [isTTSReady, setIsTTSReady] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState<number | null>(null);
+  const workerRef = React.useRef<Worker | null>(null);
+  const [isModelReady, setIsModelReady] = React.useState(false);
+  const [isTTSReady, setIsTTSReady] = React.useState(false);
+  const [loadingProgress, setLoadingProgress] = React.useState<number | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Only create worker if it doesn't exist
     if (!workerRef.current) {
       const worker = new Worker(new URL('../workers/ai-worker.js', import.meta.url), {
