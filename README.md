@@ -4,6 +4,7 @@ Personal portfolio website showcasing projects, blog, and services
 
 ![CI](https://github.com/dhidroid/actions/workflows/ci.yml/badge.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![Daily Sitemap Generator](https://github.com/dhidroid/dhidroid-portfolio/actions/workflows/sitemap-generator.yml/badge.svg)](https://github.com/dhidroid/dhidroid-portfolio/actions/workflows/sitemap-generator.yml)
 
 ## About
 
