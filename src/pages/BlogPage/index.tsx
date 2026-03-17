@@ -19,7 +19,7 @@ import PodcastPlayer from "../../components/blog/PodcastPlayer";
 
 const builder = imageUrlBuilder(client);
 
-function urlFor(source: any) {
+function urlFor(source) {
     return builder.image(source);
 }
 
