@@ -33,17 +33,17 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
         'fr': { model: 'Xenova/mms-tts-fra' }
     };
 
+    const ttsRef = useRef<any>(null);
+    useEffect(() => {
+        KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-ONNX', { dtype: "q8" })
+            .then(model => { ttsRef.current = model; });
+    }, []);
 
-    // new tts playback refs
-    const ismodeliD: string = 'onnx-community/Kokoro-82M-ONNX'
-    const tts = KokoroTTS.from_pretrained(ismodeliD, {
-        dtype: "q8", // Options: "fp32", "fp16", "q8", "q4", "q4f16"
-    });
-    const newModel = {
-        model: ismodeliD,
-        embeddings: 'https://huggingface.co/datasets/onnx-community/Kokoro-82M-ONNX/resolve/main/speaker_embeddings.bin'
-
-    }
+    const voices = {
+        en: 'af_heart',   // American English female
+        es: 'ef_dora',    // Spanish
+        fr: 'ff_siwis',   // French
+    };
 
     const speechAudioRef = useRef<HTMLAudioElement>(new Audio());
     const audioQueue = useRef<string[]>([]);
@@ -145,7 +145,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
             audio.removeEventListener('ended', onEnded);
         };
     }, []);
-
+    const isPlayingRef = useRef(false);
     // Listen for worker messages for audio data
     useEffect(() => {
         if (!worker) return;
@@ -172,8 +172,8 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
         };
         worker.addEventListener('message', handleMessage);
         return () => worker.removeEventListener('message', handleMessage);
-    }, [worker, isPlaying]); // Depend on isPlaying to resume if buffering
-
+    }, [worker]);
+    
     // WAV Encoder helper
     const encodeWAV = (samples: Float32Array, sampleRate: number) => {
         const buffer = new ArrayBuffer(44 + samples.length * 2);
