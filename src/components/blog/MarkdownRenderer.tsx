@@ -1,12 +1,75 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
+import { Copy, Check } from "lucide-react";
 
 interface MarkdownRendererProps {
   content: string;
 }
+
+const CodeBlock: React.FC<{ code: string; language: string }> = ({ code, language }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  return (
+    <div className="rounded-xl overflow-hidden my-8 shadow-2xl border border-gray-800">
+      <div className="flex items-center justify-between px-4 py-2 bg-[#1a1b26] border-b border-gray-700/50">
+        <div className="flex items-center gap-4">
+          <div className="flex space-x-2">
+            <div className="w-3 h-3 rounded-full bg-red-500" />
+            <div className="w-3 h-3 rounded-full bg-yellow-500" />
+            <div className="w-3 h-3 rounded-full bg-green-500" />
+          </div>
+          <div className="text-xs text-gray-400 font-mono">
+            {language}
+          </div>
+        </div>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 px-3 py-1 text-xs text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-all duration-200"
+          title="Copy code"
+        >
+          {copied ? (
+            <>
+              <Check size={14} className="text-green-400" />
+              <span className="text-green-400">Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy size={14} />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
+      </div>
+      <SyntaxHighlighter
+        style={atomDark}
+        language={language}
+        PreTag="div"
+        customStyle={{
+          margin: 0,
+          padding: "1.5rem",
+          background: "#1a1b26",
+          fontSize: "0.9rem",
+          lineHeight: "1.6",
+        }}
+      >
+        {code}
+      </SyntaxHighlighter>
+    </div>
+  );
+};
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   return (
@@ -16,35 +79,9 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
         components={{
           code({ node, inline, className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || "");
+            const codeString = String(children).replace(/\n$/, "");
             return !inline && match ? (
-              <div className="rounded-xl overflow-hidden my-8 shadow-2xl border border-gray-800">
-                {/* Mac Terminal Header */}
-                <div className="flex items-center px-4 py-2 bg-[#1a1b26] border-b border-gray-700/50">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
-                  </div>
-                  <div className="ml-4 text-xs text-gray-400 font-mono">
-                    {match[1]}
-                  </div>
-                </div>
-                <SyntaxHighlighter
-                  style={atomDark}
-                  language={match[1]}
-                  PreTag="div"
-                  customStyle={{
-                    margin: 0,
-                    padding: "1.5rem",
-                    background: "#1a1b26",
-                    fontSize: "0.9rem",
-                    lineHeight: "1.6",
-                  }}
-                  {...props}
-                >
-                  {String(children).replace(/\n$/, "")}
-                </SyntaxHighlighter>
-              </div>
+              <CodeBlock code={codeString} language={match[1]} />
             ) : (
               <code className={className} {...props}>
                 {children}

@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router";
 import SEO from "../../components/SEO";
 import { Container } from "../../components/ui/Container";
 import { client } from "../../senity/senity";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Copy, Check } from "lucide-react";
 import CTA from "../../components/home/CTA";
 import MarkdownRenderer from "../../components/blog/MarkdownRenderer";
 import { PortableText } from '@portabletext/react';
@@ -22,6 +22,68 @@ const builder = imageUrlBuilder(client);
 function urlFor(source) {
     return builder.image(source);
 }
+
+const CodeBlock: React.FC<{ code: string; language: string }> = ({ code, language }) => {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(code);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy:', err);
+        }
+    };
+
+    return (
+        <div className="rounded-xl overflow-hidden my-8 shadow-2xl border border-gray-800">
+            <div className="flex items-center justify-between px-4 py-2 bg-[#1a1b26] border-b border-gray-700/50">
+                <div className="flex items-center gap-4">
+                    <div className="flex space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500" />
+                        <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                        <div className="w-3 h-3 rounded-full bg-green-500" />
+                    </div>
+                    <div className="text-xs text-gray-400 font-mono">
+                        {language}
+                    </div>
+                </div>
+                <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-1.5 px-3 py-1 text-xs text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-all duration-200"
+                    title="Copy code"
+                >
+                    {copied ? (
+                        <>
+                            <Check size={14} className="text-green-400" />
+                            <span className="text-green-400">Copied!</span>
+                        </>
+                    ) : (
+                        <>
+                            <Copy size={14} />
+                            <span>Copy</span>
+                        </>
+                    )}
+                </button>
+            </div>
+            <SyntaxHighlighter
+                style={atomDark}
+                language={language}
+                PreTag="div"
+                customStyle={{
+                    margin: 0,
+                    padding: "1.5rem",
+                    background: "#1a1b26",
+                    fontSize: "0.9rem",
+                    lineHeight: "1.6",
+                }}
+            >
+                {code}
+            </SyntaxHighlighter>
+        </div>
+    );
+};
 
 // Re-using the same styling logic for Portable Text to match MarkdownRenderer
 const PortableTextRenderer = ({ value }: { value: any }) => {
@@ -53,33 +115,7 @@ const PortableTextRenderer = ({ value }: { value: any }) => {
                         },
                         code: ({ value }) => {
                             return (
-                                <div className="rounded-xl overflow-hidden my-8 shadow-2xl border border-gray-800">
-                                    {/* Mac Terminal Header */}
-                                    <div className="flex items-center px-4 py-2 bg-[#1a1b26] border-b border-gray-700/50">
-                                        <div className="flex space-x-2">
-                                            <div className="w-3 h-3 rounded-full bg-red-500" />
-                                            <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                                            <div className="w-3 h-3 rounded-full bg-green-500" />
-                                        </div>
-                                        <div className="ml-4 text-xs text-gray-400 font-mono">
-                                            {value.language || 'code'}
-                                        </div>
-                                    </div>
-                                    <SyntaxHighlighter
-                                        style={atomDark}
-                                        language={value.language || 'text'}
-                                        PreTag="div"
-                                        customStyle={{
-                                            margin: 0,
-                                            padding: "1.5rem",
-                                            background: "#1a1b26",
-                                            fontSize: "0.9rem",
-                                            lineHeight: "1.6",
-                                        }}
-                                    >
-                                        {value.code}
-                                    </SyntaxHighlighter>
-                                </div>
+                                <CodeBlock code={value.code} language={value.language || 'code'} />
                             );
                         }
                     },
@@ -201,6 +237,8 @@ const BlogPage = () => {
     const hasContent = post.body; 
 
     const bodyTextStr = post && post.bodyText ? post.bodyText : "";
+    
+    const wordCount = bodyTextStr ? bodyTextStr.split(/\s+/).filter(Boolean).length : 0;
 
     const meta = post ? generateMetaForRoute(`/blog/${slug}`, {
         title: post.title,
@@ -209,7 +247,10 @@ const BlogPage = () => {
         keywords: post.categories?.map((c: any) => c.title) || [],
         type: 'article',
         publishedAt: post.publishedAt,
-        authorName: post.author?.name
+        updatedAt: post._updatedAt,
+        authorName: post.author?.name,
+        section: post.categories?.[0]?.title,
+        wordCount: wordCount
     }) : null;
 
     const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
@@ -225,6 +266,10 @@ const BlogPage = () => {
                     url={meta.canonical}
                     type="article"
                     structuredData={meta.structuredData}
+                    publishedAt={post.publishedAt}
+                    modifiedAt={post._updatedAt}
+                    author={post.author?.name}
+                    section={post.categories?.[0]?.title}
                 />
             )}
 
