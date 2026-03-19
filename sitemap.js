@@ -15,35 +15,44 @@ const client = createClient({
     apiVersion: '2023-01-01',
 });
 
-
 const sitemapPath = join(__dirname, 'public', 'sitemap.xml');
 
 async function generateSitemap() {
     const stream = new SitemapStream({ hostname: 'https://dhidroid.vercel.app' });
 
-
-
     try {
-
         const posts = await client.fetch(`*[_type == "post" && defined(slug.current)] {
-            "slug": slug.current
+            "slug": slug.current,
+            _updatedAt
           }`);
 
-        const links = [
+        // Static pages with priorities
+        const staticLinks = [
             { url: '/', changefreq: 'daily', priority: 1.0 },
-            { url: '/about', changefreq: 'monthly', priority: 1.0 },
-            { url: '/services', changefreq: 'monthly', priority: 1.0 },
-            { url: '/bloglist', changefreq: 'monthly', priority: 1.0 },
-            { url: "/works", changefreq: "monthly", priority: 1.0 },
-            { url: "/contact", changefreq: "monthly", priority: 1.0 },
-            { url: "blog/:slug", changefreq: "daily", priority: 1.0 },
-            { url: "/skills", changefreq: "monthly", priority: 1.0 },
-            ...posts.map(p => ({
-                url: `/blog/${p.slug}`,
-                changefreq: 'daily',
-                priority: 1.0,
-            })),
+            { url: '/about', changefreq: 'monthly', priority: 0.9 },
+            { url: '/works', changefreq: 'weekly', priority: 0.9 },
+            { url: '/skills', changefreq: 'monthly', priority: 0.8 },
+            { url: '/services', changefreq: 'monthly', priority: 0.8 },
+            { url: '/pricing', changefreq: 'monthly', priority: 0.8 },
+            { url: '/bloglist', changefreq: 'daily', priority: 0.9 },
+            { url: '/contact', changefreq: 'monthly', priority: 0.7 },
+            { url: '/schedule', changefreq: 'monthly', priority: 0.7 },
+            { url: '/changelog', changefreq: 'weekly', priority: 0.5 },
+            { url: '/licenses', changefreq: 'yearly', priority: 0.3 },
+            { url: '/style-guide', changefreq: 'yearly', priority: 0.3 },
+            { url: '/privacy', changefreq: 'yearly', priority: 0.3 },
+            { url: '/terms', changefreq: 'yearly', priority: 0.3 },
         ];
+
+        // Dynamic blog posts
+        const blogLinks = posts.map(p => ({
+            url: `/blog/${p.slug}`,
+            changefreq: 'monthly',
+            priority: 0.7,
+            lastmod: p._updatedAt ? new Date(p._updatedAt).toISOString().split('T')[0] : undefined,
+        }));
+
+        const links = [...staticLinks, ...blogLinks];
 
         // Create a writable stream to save the sitemap
         const writeStream = createWriteStream(sitemapPath);
@@ -56,8 +65,6 @@ async function generateSitemap() {
 
         // End the stream properly
         stream.end();
-
-
 
         await streamToPromise(stream);
         console.log('Sitemap generated successfully at:', sitemapPath);

@@ -4,6 +4,7 @@ import SEO from "../../components/SEO";
 
 import { Container } from "../../components/ui/Container";
 import { DynamicIcon } from "../../components/ui/DynamicIcon";
+import { LinkPreview } from "../../components/ui/LinkPreview";
 import { PERSONAL_INFO } from "../../config/personal";
 import { fadeInUp, staggerContainer } from "../../utils/motion";
 
@@ -42,15 +43,71 @@ const skillCategories = [
       { name: "Flutter", desc: "Hybrid Apps", url: "https://flutter.dev" },
       { name: "Docker", desc: "Containerization", url: "https://www.docker.com" },
       { name: "Git", desc: "Version Control", url: "https://git-scm.com" },
-      { name: "Figma", desc: "UI Design", url: "https://www.figma.com" },
+      { name: "Figma", desc: "UI Design", url: "https://figma.com" },
       { name: "AWS", desc: "Cloud Services", url: "https://aws.amazon.com" },
       { name: "Vercel", desc: "Deployment", url: "https://vercel.com" },
-      { name: "Netlify", desc: "Hosting", url: "https://www.netlify.com" },
-      {name: "Jest", desc: "Testing", url: "https://jestjs.io" },
-      {name: "CodeRabbits", desc: "CI/CD", url: "https://coderabbits.com" },
+      { name: "Netlify", desc: "Hosting", url: "https://netlify.com" },
+      { name: "Jest", desc: "Testing", url: "https://jestjs.io" },
     ]
   }
 ];
+
+const SkillCard: React.FC<{ skill: { name: string; desc: string; url: string } }> = ({ skill }) => {
+  return (
+    <LinkPreview href={skill.url} showPreview={false}>
+      <div className="group relative flex flex-col items-start gap-4 cursor-pointer">
+        {/* Icon Container */}
+        <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-primary group-hover:bg-primary/5 group-hover:border-primary/20 transition-all duration-500 relative z-10">
+          <DynamicIcon name={skill.name} className="w-8 h-8 md:w-10 md:h-10 transition-transform duration-500 group-hover:scale-110" />
+        </div>
+
+        <div className="relative z-10">
+          <h3 className="text-lg font-bold uppercase tracking-wide text-gray-900 group-hover:text-primary transition-colors">
+            {skill.name}
+          </h3>
+          <p className="text-xs font-mono uppercase tracking-wider text-gray-400 mt-1">
+            {skill.desc}
+          </p>
+        </div>
+
+        {/* Enhanced Hover Card */}
+        <div className="absolute left-0 bottom-full mb-4 w-[300px] p-0 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-50 pointer-events-none group-hover:pointer-events-auto">
+          <div className="bg-white border border-gray-200 shadow-2xl overflow-hidden rounded-xl">
+            {/* Gradient Header */}
+            <div className="h-20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-b border-gray-100 flex items-center justify-center relative">
+              <div className="w-14 h-14 rounded-xl bg-white shadow-lg flex items-center justify-center -mt-8 border border-gray-100">
+                <DynamicIcon name={skill.name} className="w-7 h-7 text-primary" />
+              </div>
+            </div>
+
+            <div className="p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <h4 className="font-bold font-display text-lg text-gray-900">{skill.name}</h4>
+                <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider rounded">
+                  {skill.desc}
+                </span>
+              </div>
+              
+              <p className="text-gray-500 text-sm mb-4 leading-relaxed">
+                Official documentation and resources for {skill.name}.
+              </p>
+
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                <span className="text-xs text-gray-400">Opens in new tab</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Arrow */}
+          <div className="absolute left-8 -bottom-2 w-4 h-4 bg-white border-b border-r border-gray-200 rotate-45"></div>
+        </div>
+      </div>
+    </LinkPreview>
+  );
+};
 
 const SkillsPage = () => {
   return (
@@ -109,52 +166,7 @@ const SkillsPage = () => {
                 {/* Skills List */}
                 <div className="md:col-span-9 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
                   {category.skills.map((skill) => (
-                    <div key={skill.name} className="group relative flex flex-col items-start gap-4">
-
-                      {/* Icon Container */}
-                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-primary group-hover:bg-primary/5 group-hover:border-primary/20 transition-all duration-500 relative z-10 cursor-pointer">
-                        <DynamicIcon name={skill.name} className="w-8 h-8 md:w-10 md:h-10 transition-transform duration-500 group-hover:scale-110" />
-                      </div>
-
-                      <div className="relative z-10">
-                        <h3 className="text-lg font-bold uppercase tracking-wide text-gray-900 group-hover:text-primary transition-colors">
-                          {skill.name}
-                        </h3>
-                        <p className="text-xs font-mono uppercase tracking-wider text-gray-400 mt-1">
-                          {skill.desc}
-                        </p>
-                      </div>
-
-                      {/* Hover "Pricing Style" Card */}
-                      <div className="absolute left-0 bottom-full mb-4 w-[280px] p-0 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-50 pointer-events-none group-hover:pointer-events-auto">
-                        <div className="bg-white border border-gray-200 shadow-2xl overflow-hidden rounded-none">
-                          {/* Header like Pricing Popular tag if needed, or just clean header */}
-                          <div className="bg-gray-50 border-b border-gray-100 p-4 flex items-center justify-between">
-                            <span className="font-bold font-display text-lg">{skill.name}</span>
-                            <DynamicIcon name={skill.name} className="w-5 h-5 text-gray-400" />
-                          </div>
-
-                          <div className="p-5">
-                            <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-                              Official documentation and resources for {skill.name}.
-                            </p>
-
-                            <a
-                              href={skill.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="block w-full py-3 px-4 bg-white border border-gray-900 text-gray-900 font-bold text-center text-sm hover:bg-gray-900 hover:text-white transition-colors duration-300 uppercase tracking-widest"
-                            >
-                              View Docs
-                            </a>
-                          </div>
-                        </div>
-
-                        {/* Arrow */}
-                        <div className="absolute left-8 -bottom-2 w-4 h-4 bg-white border-b border-r border-gray-200 rotate-45"></div>
-                      </div>
-
-                    </div>
+                    <SkillCard key={skill.name} skill={skill} />
                   ))}
                 </div>
               </motion.div>

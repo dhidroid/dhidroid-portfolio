@@ -1,9 +1,7 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, FastForward, RotateCcw, Loader2 } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Play, Pause, Volume2, RotateCcw, Loader2 } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { useAI } from '../../context/AIContext';
-import { KokoroTTS } from "kokoro-js";
 
 interface PodcastPlayerProps {
     title: string;
@@ -11,69 +9,136 @@ interface PodcastPlayerProps {
     description?: string;
     content?: string;
     spotifyUrl?: string;
+    coverImage?: string;
 }
 
 const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
     title,
     seriesTitle = "Audio Article",
     content,
-    spotifyUrl
+    spotifyUrl,
+    coverImage
 }) => {
-    const { generateSpeech, worker, isTTSReady } = useAI();
     const [isPlaying, setIsPlaying] = useState(false);
-    const [progress, setProgress] = useState(0);
-    const [currentTime, setCurrentTime] = useState("00:00");
-    // const [duration, setDuration] = useState("00:00"); // Duration is hard to know with streaming
     const [isWaitingForData, setIsWaitingForData] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'es' | 'fr'>('en');
+    const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'es' | 'fr' | 'de' | 'ja' | 'zh'>('en');
+    const [isTTSReady, setIsTTSReady] = useState(false);
+    const [generationProgress, setGenerationProgress] = useState({ current: 0, total: 0, status: '' });
 
-    const languageModels = {
-        'en': { model: 'Xenova/speecht5_tts', embeddings: 'https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/speaker_embeddings.bin' },
-        'es': { model: 'Xenova/mms-tts-spa' },
-        'fr': { model: 'Xenova/mms-tts-fra' }
+    const kokoroConfig = {
+        'en': { voice: 'af_heart', lang: 'en' },
+        'es': { voice: 'ef_dora', lang: 'es' },
+        'fr': { voice: 'ff_siwis', lang: 'fr' },
+        'de': { voice: 'ef_anna', lang: 'de' },
+        'ja': { voice: 'jf_athena', lang: 'ja' },
+        'zh': { voice: 'zf_xiang', lang: 'zh' },
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ttsRef = useRef<any>(null);
-    useEffect(() => {
-        KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-ONNX', { dtype: "q8" })
-            .then(model => { ttsRef.current = model; });
-    }, []);
-
-    const voices = {
-        en: 'af_heart',   // American English female
-        es: 'ef_dora',    // Spanish
-        fr: 'ff_siwis',   // French
-    };
+    const ttsLoadingRef = useRef(false);
 
     const speechAudioRef = useRef<HTMLAudioElement>(new Audio());
     const audioQueue = useRef<string[]>([]);
     const isPlayingChunk = useRef(false);
     const hasStartedGeneration = useRef(false);
+    const generationAbortRef = useRef<AbortController | null>(null);
+
+    useEffect(() => {
+        const loadKokoro = async () => {
+            if (ttsRef.current || ttsLoadingRef.current) return;
+            ttsLoadingRef.current = true;
+            setGenerationProgress({ current: 0, total: 0, status: 'Loading AI model...' });
+            
+            try {
+                const { KokoroTTS } = await import("kokoro-js");
+                ttsRef.current = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-ONNX', { 
+                    dtype: "q8" 
+                });
+                setIsTTSReady(true);
+                setGenerationProgress({ current: 0, total: 0, status: '' });
+            } catch (err) {
+                console.error('Failed to load Kokoro TTS:', err);
+                setGenerationProgress({ current: 0, total: 0, status: 'Failed to load AI' });
+            } finally {
+                ttsLoadingRef.current = false;
+            }
+        };
+        loadKokoro();
+    }, []);
 
     const stopAll = () => {
         speechAudioRef.current.pause();
         speechAudioRef.current.currentTime = 0;
         setIsPlaying(false);
-        setProgress(0);
-        setCurrentTime("00:00");
 
-        // Clear queue
         audioQueue.current = [];
         isPlayingChunk.current = false;
         hasStartedGeneration.current = false;
+        
+        if (generationAbortRef.current) {
+            generationAbortRef.current.abort();
+            generationAbortRef.current = null;
+        }
+        
+        setGenerationProgress({ current: 0, total: 0, status: '' });
     };
 
-    const processContent = async () => {
-        if (!worker || !content) return;
+    const splitIntoSentences = (text: string): string[] => {
+        const sentences = text.match(/[^.!?。]+[.!?。]+|[^.!?。]+$/g) || [text];
+        return sentences.filter(s => s.trim().length > 0);
+    };
+
+    const processContent = useCallback(async () => {
+        if (!ttsRef.current || !content) return;
+        
         setIsWaitingForData(true);
         hasStartedGeneration.current = true;
+        generationAbortRef.current = new AbortController();
 
-        const config = languageModels[selectedLanguage] as { model: string; embeddings?: string };
-        generateSpeech(content, {
-            model: config.model,
-            speaker_embeddings: config.embeddings
-        });
-    };
+        const config = kokoroConfig[selectedLanguage];
+        const voice = config.voice;
+        
+        const sentences = splitIntoSentences(content);
+        const totalSentences = sentences.length;
+        setGenerationProgress({ current: 0, total: totalSentences, status: 'Generating audio...' });
+        
+        for (let i = 0; i < sentences.length; i++) {
+            if (generationAbortRef.current?.signal.aborted) break;
+            
+            const sentence = sentences[i];
+            setGenerationProgress({ 
+                current: i + 1, 
+                total: totalSentences, 
+                status: `Processing ${i + 1} of ${totalSentences}...` 
+            });
+            
+            try {
+                const audio = await ttsRef.current.generate(sentence, {
+                    voice: voice,
+                });
+                
+                const wavBuffer = audio.wav;
+                const blob = new Blob([wavBuffer], { type: 'audio/wav' });
+                const url = URL.createObjectURL(blob);
+                
+                audioQueue.current.push(url);
+                
+                if (!isPlayingChunk.current && !hasStartedGeneration.current) {
+                    playNextChunk();
+                } else if (!isPlayingChunk.current && audioQueue.current.length === 1) {
+                    playNextChunk();
+                }
+            } catch (err) {
+                if ((err as Error).name !== 'AbortError') {
+                    console.error('TTS generation error:', err);
+                }
+            }
+        }
+        
+        setIsWaitingForData(false);
+        setGenerationProgress({ current: 0, total: 0, status: '' });
+    }, [content, selectedLanguage]);
 
     const playNextChunk = () => {
         if (audioQueue.current.length > 0) {
@@ -90,13 +155,6 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
             }
         } else {
             isPlayingChunk.current = false;
-            // If we are waiting for more generation, keep playing state true? 
-            // Ideally we'd know if generation is DONE. For now, if queue empty and stopped, we pause.
-            // But if generation is still happening, we might just be buffering.
-            // Simplified: if queue empty, just stop for now, user can click play again if more comes.
-            // Or better: show buffering if we expect more? 
-            // For this iteration, let's auto-pause if empty.
-            // setIsPlaying(false); // Only pause if we really think we are done.
         }
     };
 
@@ -116,97 +174,39 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
         }
     };
 
-    const formatTime = (time: number) => {
-        const m = Math.floor((time / 60));
-        const s = Math.floor(time % 60);
-        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    };
-
     useEffect(() => {
         const audio = speechAudioRef.current;
 
-        const updateProgress = () => {
-            const current = audio.currentTime;
-            // const total = audio.duration; 
-            // Progress is tricky with chunks. We might just show visualizer active.
-            setCurrentTime(formatTime(current));
-        };
-
         const onEnded = () => {
-            // Chunk ended, play next
             playNextChunk();
         };
 
-        audio.addEventListener('timeupdate', updateProgress);
         audio.addEventListener('ended', onEnded);
 
         return () => {
-            audio.removeEventListener('timeupdate', updateProgress);
             audio.removeEventListener('ended', onEnded);
         };
-    }, []);
-    const isPlayingRef = useRef(false);
-    // Listen for worker messages for audio data
+    }, [playNextChunk]);
+
     useEffect(() => {
-        if (!worker) return;
-        const handleMessage = (e: MessageEvent) => {
-            const { type, status, output, isChunk } = e.data;
-            if (type === 'tts' && status === 'complete') {
-                setIsWaitingForData(false);
-
-                const blob = new Blob([encodeWAV(output.audio, output.sampling_rate)], { type: 'audio/wav' });
-                const url = URL.createObjectURL(blob);
-
-                audioQueue.current.push(url);
-
-                if (!isPlayingChunk.current && isPlaying) {
-                    // If we were waiting for data (buffering) and playing was active, resume
-                    playNextChunk();
-                } else if (!isPlayingChunk.current && !hasStartedGeneration.current) {
-                    // First chunk after manual start? logic handles this in togglePlay mostly
-                } else if (!isPlayingChunk.current && audioQueue.current.length === 1 && hasStartedGeneration.current) {
-                    // Auto-start first chunk
-                    playNextChunk();
-                }
-            }
+        return () => {
+            audioQueue.current.forEach(url => URL.revokeObjectURL(url));
+            audioQueue.current = [];
         };
-        worker.addEventListener('message', handleMessage);
-        return () => worker.removeEventListener('message', handleMessage);
-    }, [worker]);
-    
-    // WAV Encoder helper
-    const encodeWAV = (samples: Float32Array, sampleRate: number) => {
-        const buffer = new ArrayBuffer(44 + samples.length * 2);
-        const view = new DataView(buffer);
-        const writeString = (offset: number, string: string) => {
-            for (let i = 0; i < string.length; i++) {
-                view.setUint8(offset + i, string.charCodeAt(i));
-            }
-        };
+    }, []);
 
-        writeString(0, 'RIFF');
-        view.setUint32(4, 36 + samples.length * 2, true);
-        writeString(8, 'WAVE');
-        writeString(12, 'fmt ');
-        view.setUint32(16, 16, true);
-        view.setUint16(20, 1, true);
-        view.setUint16(22, 1, true);
-        view.setUint32(24, sampleRate, true);
-        view.setUint32(28, sampleRate * 2, true);
-        view.setUint16(32, 2, true);
-        view.setUint16(34, 16, true);
-        writeString(36, 'data');
-        view.setUint32(40, samples.length * 2, true);
+    const getStatusMessage = () => {
+        if (!isTTSReady) return 'Loading AI...';
+        if (generationProgress.status) return generationProgress.status;
+        if (isWaitingForData) return 'Generating audio...';
+        return 'AI Generated';
+    };
 
-        const floatTo16BitPCM = (output: DataView, offset: number, input: Float32Array) => {
-            for (let i = 0; i < input.length; i++, offset += 2) {
-                const s = Math.max(-1, Math.min(1, input[i]));
-                output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-            }
-        };
-
-        floatTo16BitPCM(view, 44, samples);
-        return buffer;
+    const getProgressPercent = () => {
+        if (generationProgress.total > 0) {
+            return Math.round((generationProgress.current / generationProgress.total) * 100);
+        }
+        return 0;
     };
 
 
@@ -216,40 +216,67 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
 
                 {/* Header & Meta - Pricing Style */}
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                    <div>
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest">
-                                {seriesTitle}
-                            </span>
-                            <div className="flex items-center gap-2 text-[10px] font-mono font-medium text-gray-500 uppercase tracking-wider">
-                                <Volume2 size={12} className={isTTSReady ? "text-green-600" : "text-gray-400"} />
-                                <span>{isTTSReady ? "AI Module Active" : "Initializing..."}</span>
+                    <div className="flex items-start gap-5">
+                        {coverImage && (
+                            <div className="hidden md:flex w-20 h-20 rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                                <img src={coverImage} alt={title} className="w-full h-full object-cover" />
                             </div>
+                        )}
+                        <div>
+                            <div className="flex items-center gap-3 mb-4">
+                                <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest">
+                                    {seriesTitle}
+                                </span>
+                                <div className="flex items-center gap-2 text-[10px] font-mono font-medium text-gray-500 uppercase tracking-wider">
+                                    <Volume2 size={12} className={isTTSReady ? "text-green-600" : "text-gray-400"} />
+                                    <span>{isTTSReady ? "AI Module Active" : "Initializing..."}</span>
+                                </div>
+                            </div>
+                            <h3 className="text-3xl md:text-4xl font-display font-bold text-slate-900 leading-tight">
+                                {title}
+                            </h3>
                         </div>
-                        <h3 className="text-3xl md:text-4xl font-display font-bold text-slate-900 leading-tight">
-                            {title}
-                        </h3>
                     </div>
 
                     {/* Minimal Language Selector */}
                     <div className="flex items-center border border-gray-200 h-10 px-2 bg-gray-50/50">
                         <select
                             value={selectedLanguage}
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             onChange={(e) => setSelectedLanguage(e.target.value as any)}
                             className="bg-transparent text-sm font-medium text-gray-600 focus:outline-none cursor-pointer tracking-wide"
                         >
-                            <option value="en">English US</option>
+                            <option value="en">English</option>
                             <option value="es">Español</option>
                             <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                            <option value="ja">日本語</option>
+                            <option value="zh">中文</option>
                         </select>
                     </div>
                 </div>
 
                 {/* Progress / Status */}
                 <div className="space-y-3">
-                    <div className="h-1 w-full bg-gray-100 overflow-hidden">
-                        {isWaitingForData && (
-                            <div className="h-full bg-primary/20 w-full animate-pulse" />
+                    <div className="h-1 w-full bg-gray-100 overflow-hidden rounded-full">
+                        {isWaitingForData && generationProgress.total > 0 && (
+                            <div 
+                                className="h-full bg-primary transition-all duration-300 ease-out"
+                                style={{ width: `${getProgressPercent()}%` }}
+                            />
+                        )}
+                        {isWaitingForData && generationProgress.total > 0 && (
+                            <div className="flex items-center justify-between mt-2">
+                                <span className="text-[10px] text-gray-500 font-mono">
+                                    {generationProgress.status}
+                                </span>
+                                <span className="text-[10px] text-gray-500 font-mono">
+                                    {getProgressPercent()}%
+                                </span>
+                            </div>
+                        )}
+                        {isWaitingForData && !generationProgress.total && (
+                            <div className="h-full bg-primary/30 w-full animate-pulse rounded-full" />
                         )}
                     </div>
                 </div>
@@ -279,7 +306,7 @@ const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                                 {isPlaying ? "Now Playing" : "Listen Audio"}
                             </span>
                             <span className="text-[10px] uppercase tracking-wider text-gray-400 font-mono mt-1">
-                                {isWaitingForData ? "Buffering..." : "AI Generated"}
+                                {getStatusMessage()}
                             </span>
                         </div>
 

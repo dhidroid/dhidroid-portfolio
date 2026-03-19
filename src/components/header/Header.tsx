@@ -4,6 +4,7 @@ import { Menu, X, ArrowRight } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { Button } from "../ui/Button";
 import { Container } from "../ui/Container";
+import { LinkPreview } from "../ui/LinkPreview";
 import DhiDroidLogo from '../../assets/logo.svg';
 
 const Header = () => {
@@ -26,7 +27,6 @@ const Header = () => {
     { title: "Skills", href: "/skills" },
     { title: "Services", href: "/services" },
     { title: "Contact", href: "/contact" },
-    // { title: "Pricing", href: "/pricing" },
     { title: "Blog", href: "/bloglist" },
   ];
 
@@ -46,26 +46,26 @@ const Header = () => {
     >
       <Container>
         <div className="flex items-center justify-between">
-          <Link to="/" className={`flex items-center gap-2 font-bold text-xl tracking-tight ${foregroundColor}`}>
+          <LinkPreview href="/" className={`flex items-center gap-2 font-bold text-xl tracking-tight ${foregroundColor}`}>
             <img
               src={DhiDroidLogo}
               alt="DhiDroid Logo"
               className="h-8 w-8 rounded-full"
             />
             <span>Dhidroid</span>
-          </Link>
+          </LinkPreview>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {links.map((link) => (
-              <Link
+              <LinkPreview
                 key={link.title}
-                to={link.href}
+                href={link.href}
                 className={`text-sm font-medium transition-colors hover:text-primary ${isActive(link.href) ? activeColor : textColor
                   }`}
               >
                 {link.title}
-              </Link>
+              </LinkPreview>
             ))}
           </nav>
 
@@ -74,10 +74,8 @@ const Header = () => {
             <div className={`flex items-center border ${isDarkHeader ? 'border-white/20 bg-black/20 divide-white/20' : 'border-gray-300 bg-card/80 divide-gray-300'} overflow-hidden rounded-md backdrop-blur-sm`}>
 
               {/* LinkedIn Action */}
-              <a
+              <LinkPreview
                 href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=dhidroid-rndev"
-                target="_blank"
-                rel="noopener noreferrer"
                 className={`group flex items-center gap-3 px-4 py-2 ${isDarkHeader ? 'hover:bg-white/10' : 'hover:bg-muted/5'} transition-colors duration-300`}
               >
                 <div className={`w-8 h-8 flex items-center justify-center ${isDarkHeader ? 'bg-white/10 text-white' : 'bg-blue-50 text-[#0A66C2]'} group-hover:bg-[#0A66C2] group-hover:text-white transition-all duration-300 rounded-sm`}>
@@ -87,11 +85,11 @@ const Header = () => {
                   <span className={`text-xs font-bold font-display ${foregroundColor} leading-none mb-0.5`}>LinkedIn</span>
                   <span className={`text-[10px] ${mutedColor} font-medium leading-none`}>Follow Me</span>
                 </div>
-              </a>
+              </LinkPreview>
 
               {/* Hire Me Action */}
-              <Link
-                to="/schedule"
+              <LinkPreview
+                href="/schedule"
                 className={`group flex items-center gap-3 px-4 py-2 ${isDarkHeader ? 'hover:bg-white/10' : 'hover:bg-muted/5'} transition-colors duration-300`}
               >
                 <div className={`w-8 h-8 flex items-center justify-center ${isDarkHeader ? 'bg-white/10 text-white' : 'bg-muted/20 text-foreground'} group-hover:bg-primary group-hover:text-white transition-all duration-300 rounded-sm`}>
@@ -101,7 +99,7 @@ const Header = () => {
                   <span className={`text-xs font-bold font-display ${foregroundColor} leading-none mb-0.5`}>Hire Me</span>
                   <span className={`text-[10px] ${mutedColor} font-medium leading-none`}>Book Call</span>
                 </div>
-              </Link>
+              </LinkPreview>
 
             </div>
           </div>
@@ -132,16 +130,13 @@ const Header = () => {
               </Link>
             ))}
             <div className="pt-4 border-t border-gray-100 flex flex-col gap-3">
-              <a
+              <LinkPreview
                 href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=dhidroid-rndev"
-                target="_blank"
-                rel="noopener noreferrer"
                 className="w-full flex items-center justify-center gap-2 bg-[#0A66C2] text-white px-4 py-3 rounded-full font-medium shadow-sm"
-                onClick={() => setIsMobileMenuOpen(false)}
               >
                 <FaLinkedin size={18} />
                 <span>Follow on LinkedIn</span>
-              </a>
+              </LinkPreview>
               <Link to="/schedule" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button className="w-full rounded-full group flex items-center justify-center gap-2">
                   Get Started

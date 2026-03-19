@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { PERSONAL_INFO } from '../config/personal';
+import { SITE_STRUCTURED_DATA, PERSON_STRUCTURED_DATA } from '../utils/seo';
 
 interface SEOProps {
   title?: string;
@@ -11,6 +12,11 @@ interface SEOProps {
   canonical?: string;
   type?: string;
   structuredData?: any;
+  publishedAt?: string;
+  modifiedAt?: string;
+  author?: string;
+  section?: string;
+  noindex?: boolean;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -21,7 +27,12 @@ const SEO: React.FC<SEOProps> = ({
   url,
   canonical,
   structuredData,
-  type = "website"
+  type = "website",
+  publishedAt,
+  modifiedAt,
+  author,
+  section,
+  noindex = false
 }) => {
   const siteTitle = PERSONAL_INFO.seo.defaultTitle;
   const siteUrl = PERSONAL_INFO.siteUrl;
@@ -46,6 +57,9 @@ const SEO: React.FC<SEOProps> = ({
     ? (effectiveUrl.startsWith('http') ? effectiveUrl : `${siteUrl}${effectiveUrl.startsWith('/') ? '' : '/'}${effectiveUrl}`)
     : siteUrl;
 
+  // Determine if we should show sitelinks (only on homepage and about)
+  const showSiteLinks = finalUrl === siteUrl || finalUrl === `${siteUrl}/about`;
+
   return (
     <Helmet>
       {/* Primary Meta Tags */}
@@ -53,8 +67,9 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="title" content={finalTitle} />
       <meta name="description" content={finalDescription} />
       <meta name="keywords" content={finalKeywords} />
-      <meta name="author" content={PERSONAL_INFO.name} />
-      <meta name="robots" content="index, follow" />
+      <meta name="author" content={author || PERSONAL_INFO.name} />
+      <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+      <meta name="googlebot" content={noindex ? "noindex, nofollow" : "index, follow"} />
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -64,6 +79,20 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={finalImage} />
       <meta property="og:image:alt" content={finalTitle} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:locale" content="en_IN" />
+      <meta property="og:updated_time" content={modifiedAt || new Date().toISOString()} />
+      
+      {/* Article specific Open Graph */}
+      {type === 'article' && publishedAt && (
+        <>
+          <meta property="article:published_time" content={publishedAt} />
+          <meta property="article:modified_time" content={modifiedAt || publishedAt} />
+          <meta property="article:author" content={author || PERSONAL_INFO.name} />
+          {section && <meta property="article:section" content={section} />}
+        </>
+      )}
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -72,14 +101,32 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="twitter:title" content={finalTitle} />
       <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={finalImage} />
+      <meta name="twitter:image:alt" content={finalTitle} />
+      
+      {/* Additional SEO Meta */}
+      <meta name="theme-color" content="#000000" />
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-title" content="Dhidroid" />
       
       {/* Canonical */}
       <link rel="canonical" href={finalUrl} />
 
-      {/* JSON-LD structured data (if provided) */}
-      {structuredData && (
+      {/* JSON-LD structured data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          ...structuredData,
+          ...(showSiteLinks && { 
+            hasPart: SITE_STRUCTURED_DATA.hasPart,
+            potentialAction: SITE_STRUCTURED_DATA.potentialAction
+          })
+        })}
+      </script>
+      
+      {/* Person Schema - always include for author recognition */}
+      {(type === 'article' || showSiteLinks) && (
         <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
+          {JSON.stringify(PERSON_STRUCTURED_DATA)}
         </script>
       )}
     </Helmet>
