@@ -101,7 +101,7 @@ const Header = () => {
                 </div>
               </LinkPreview>
 
-            </div>
+            </div> 
           </div>
 
           {/* Mobile Menu Toggle */}

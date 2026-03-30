@@ -8,13 +8,11 @@ import ScrollToTop from "./components/ui/ScrollToTop";
 const App = () => {
   return (
     <AIProvider>
-      <LinkPreviewProvider>
         <ScrollToTop />
 
         <SpeedInsights />
         <Router />
         <Analytics />
-      </LinkPreviewProvider>
     </AIProvider>
   );
 };

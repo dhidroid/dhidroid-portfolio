@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 
 interface LinkPreviewData {
   title: string;
@@ -156,77 +156,28 @@ export const LinkPreview: React.FC<LinkPreviewProps> = ({
   children,
   className = '',
   externalIcon = true,
-  showPreview = true,
 }) => {
-  const { getPreview, setHoveredLink, setLinkPosition, hoveredLink } = useLinkPreview();
-  const linkRef = useRef<HTMLAnchorElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const preview = getPreview(href);
   const isExternal = href.startsWith('http') || href.startsWith('//');
-  const isHovered = hoveredLink === href;
-
-  const handleMouseEnter = useCallback(() => {
-    if (!showPreview) return;
-    
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    
-    timeoutRef.current = setTimeout(() => {
-      if (linkRef.current) {
-        setLinkPosition(linkRef.current.getBoundingClientRect());
-      }
-      setHoveredLink(href);
-    }, 300);
-  }, [href, showPreview, setHoveredLink, setLinkPosition]);
-
-  const handleMouseLeave = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    
-    timeoutRef.current = setTimeout(() => {
-      setHoveredLink(null);
-      setLinkPosition(null);
-    }, 150);
-  }, [setHoveredLink, setLinkPosition]);
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
 
   return (
-    <>
-      <a
-        ref={linkRef}
-        href={href}
-        target={isExternal ? '_blank' : undefined}
-        rel={isExternal ? 'noopener noreferrer' : undefined}
-        className={className}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {children}
-        {isExternal && externalIcon && (
-          <svg
-            className="inline-block ml-1 w-3 h-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-        )}
-      </a>
-      
-      {isHovered && preview && (
-        <LinkPreviewPopup preview={preview} isExternal={isExternal} />
+    <a
+      href={href}
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
+      className={className}
+    >
+      {children}
+      {isExternal && externalIcon && (
+        <svg
+          className="inline-block ml-1 w-3 h-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
       )}
-    </>
+    </a>
   );
 };
 
