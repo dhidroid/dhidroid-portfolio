@@ -1,10 +1,8 @@
-# dhidroid Portfolio
+# dhidroid 
 
 Personal portfolio website showcasing projects, blog, and services
 
 ![CI](https://github.com/dhidroid/actions/workflows/ci.yml/badge.svg)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-[![Daily Sitemap Generator](https://github.com/dhidroid/dhidroid-portfolio/actions/workflows/sitemap-generator.yml/badge.svg)](https://github.com/dhidroid/dhidroid-portfolio/actions/workflows/sitemap-generator.yml)
 
 ## About
 
@@ -96,10 +94,6 @@ npm run build
 - `npm run lint` - Run ESLint
 
 - `npm run format` - Format code with Prettier
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contributors
 
