@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Github } from "lucide-react";
 import { client } from "../../senity/senity";
 import imageUrlBuilder from '@sanity/image-url';
 import SEO from "../../components/SEO";
@@ -9,20 +11,22 @@ import ProjectGallery from "../../components/project/ProjectGallery";
 import { AISummary } from "../../components/ui/AISummary";
 import { DynamicIcon } from "../../components/ui/DynamicIcon";
 import { generateMetaForRoute } from "../../utils/seo";
+import { fadeInUp, staggerContainer } from "../../utils/motion";
 
 interface ProjectDetail {
   title: string;
   tagline?: string;
   year?: string;
   role?: string;
-  description?: string; // Overview
+  description?: string;
   image: { asset: { url: string; _id: string } };
   challenge?: string;
   results?: string;
   link?: string;
+  github?: string;
   gallery?: { asset: { url: string } }[];
   categories?: { title: string }[];
-  solution?: any[]; // Block content
+  solution?: any[];
 }
 
 const ProjectDetailPage = () => {
@@ -46,6 +50,7 @@ const ProjectDetailPage = () => {
             challenge,
             results,
             link,
+            github,
             solution,
             image {
               asset->{ _id, url }
@@ -58,8 +63,8 @@ const ProjectDetailPage = () => {
         `;
         const data = await client.fetch(query, { slug });
         if (!data) {
-           console.error("Project not found query returned null for slug:", slug);
-           // navigate('/404'); // Temporarily disable redirect to see if it's a fetch issue
+          console.error("Project not found query returned null for slug:", slug);
+          // navigate('/404'); // Temporarily disable redirect to see if it's a fetch issue
         }
         setProject(data);
       } catch (error) {
@@ -73,9 +78,9 @@ const ProjectDetailPage = () => {
   }, [slug, navigate]);
 
   if (loading) {
-     return <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
-     </div>;
+    return <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="w-8 h-8 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
+    </div>;
   }
 
   if (!project) return null;
@@ -84,11 +89,11 @@ const ProjectDetailPage = () => {
   const ogImage = project.image ? builder.image(project.image).width(1200).height(630).fit('crop').url() : undefined;
 
   const meta = generateMetaForRoute(`/works/${slug}`, {
-      title: project.title,
-      description: project.tagline || project.description?.slice(0, 160),
-      image: ogImage,
-      keywords: ["case study", project.title, ...(project.role ? [project.role] : [])],
-      type: 'article', // Treat case studies as articles for better rich snippets
+    title: project.title,
+    description: project.tagline || project.description?.slice(0, 160),
+    image: ogImage,
+    keywords: ["case study", project.title, ...(project.role ? [project.role] : [])],
+    type: 'article', // Treat case studies as articles for better rich snippets
   });
 
   return (
@@ -97,41 +102,104 @@ const ProjectDetailPage = () => {
         {...meta}
       />
       <main className="bg-white min-h-screen">
-         <ProjectHero 
-           title={project.title}
-           client={project.tagline} 
-           year={project.year}
-           role={project.role}
-           image={project.image?.asset?.url}
-         />
-         
-         <div className="max-w-[1800px] mx-auto px-6 mb-24">
-            <div className="md:grid md:grid-cols-2 lg:gap-32 gap-12 items-start">
-                <div className="mb-12 md:mb-0">
-                   <AISummary summary={project.description} type="project" />
+        <ProjectHero
+          title={project.title}
+          client={project.tagline}
+          year={project.year}
+          role={project.role}
+          image={project.image?.asset?.url}
+        />
+        {(project.link || project.github) && (
+          <section className="py-24 md:py-32 border-t border-gray-100">
+            <div className="max-w-[1800px] mx-auto px-6">
+              <motion.div
+                variants={staggerContainer}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+                className="flex flex-row items-start justify-between gap-12"
+              >
+                <div className="overflow-hidden mb-2">
+                  <div className="overflow-hidden mb-4">
+                    <motion.span
+                      variants={fadeInUp}
+                      className="text-sm font-mono uppercase tracking-widest text-gray-400"
+                    >
+                      Live Links
+                    </motion.span>
+                  </div>
+                  <div className="overflow-hidden mb-16">
+                    <motion.h2
+                      variants={fadeInUp}
+                      className="text-[12vw] md:text-[8rem] font-bold font-display uppercase leading-[0.85] tracking-tighter text-foreground"
+                    >
+                      VIEW
+                      <span className="block italic font-serif opacity-50 ml-[5vw]">PROJECT.</span>
+                    </motion.h2>
+                  </div>
                 </div>
-                <div>
-                   <h3 className="text-sm font-mono uppercase tracking-widest text-gray-500 mb-6 border-b border-gray-100 pb-2">Tech Stack</h3>
-                   <div className="flex flex-wrap gap-4">
+                <div className="flex flex-col gap-12">
+                  <motion.div
+                    variants={fadeInUp}
+                    className="flex flex-col items-start gap-4"
+                  >
+                    {project.link && (
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full font-medium text-lg hover:bg-primary transition-all duration-300"
+                      >
+                        Visit Live Site
+                        <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:rotate-45" />
+                      </a>
+                    )}
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center gap-3 px-8 py-4 border-2 border-black text-black rounded-full font-medium text-lg hover:bg-black hover:text-white transition-all duration-300"
+                      >
+                        <Github className="w-5 h-5" />
+                        View Code
+                      </a>
+                    )}
+                  </motion.div>
+                  <div>
+                    <h3 className="text-sm font-mono uppercase tracking-widest text-gray-500 mb-6 border-b border-gray-100 pb-2">Tech Stack</h3>
+                    <div className="flex flex-wrap gap-4">
                       {project.categories?.map((cat: any) => (
-                         <div key={cat.title} className="flex items-center gap-2 text-base font-medium text-slate-900 bg-gray-50 px-4 py-2 rounded-lg border border-gray-100">
-                             <DynamicIcon name={cat.title} className="w-5 h-5 text-gray-400" />
-                             {cat.title}
-                         </div>
+                        <div key={cat.title} className="flex items-center gap-2 text-base font-medium text-slate-900 bg-gray-50 px-4 py-2 rounded-lg border border-gray-100">
+                          <DynamicIcon name={cat.title} className="w-5 h-5 text-gray-400" />
+                          {cat.title}
+                        </div>
                       ))}
-                   </div>
+                    </div>
+                  </div>
                 </div>
+
+              </motion.div>
             </div>
-         </div>
-         
-         <ProjectTabs 
-            overview={project.description}
-            challenge={project.challenge}
-            results={project.results}
-            solution={project.solution}
-         />
-         
-         <ProjectGallery images={project.gallery} />
+          </section>
+        )}
+
+        <div className="max-w-[1800px] mx-auto px-6 mb-24">
+          <div className="md:grid md:grid-cols-2 lg:gap-32 gap-12 items-start">
+            <div className="mb-12 md:mb-0">
+              {/* <AISummary summary={project.description} type="project" /> */}
+            </div>
+          </div>
+        </div>
+
+        <ProjectTabs
+          overview={project.description}
+          challenge={project.challenge}
+          results={project.results}
+          solution={project.solution}
+        />
+
+        <ProjectGallery images={project.gallery} />
       </main>
     </React.Fragment>
   );

@@ -69,6 +69,11 @@ export default defineType({
             type: "url"
         }),
         defineField({
+            name: "github",
+            title: "GitHub Repo Link",
+            type: "url"
+        }),
+        defineField({
             name: "image",
             title: "Cover Image",
             type: "image",
