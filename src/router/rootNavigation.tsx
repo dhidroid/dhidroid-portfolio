@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { Route, Routes } from "react-router";
+import React, { Suspense, useState, useEffect } from "react";
+import { Route, Routes, useLocation } from "react-router";
 import { Loader2 } from "lucide-react";
 import Header from "../components/header/Header";
 import Footer from "../components/Footer/Footer";
@@ -45,8 +45,20 @@ function BlogCreate() {
 }
 
 export function Router() {
+  const location = useLocation();
+  const [transitioning, setTransitioning] = useState(false);
+
+  useEffect(() => {
+    setTransitioning(true);
+    const timer = setTimeout(() => {
+      setTransitioning(false);
+    }, 2500); // 2.5s route change overlay timer
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
+
   return (
     <Suspense fallback={<LoadingFallback />}>
+      {transitioning && <Loader />}
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow">

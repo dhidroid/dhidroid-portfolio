@@ -142,7 +142,7 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
       const timeout = setTimeout(() => {
         setLines((prev) => [...prev, commands[currentLineIndex]]);
         setCurrentLineIndex((prev) => prev + 1);
-      }, 300);
+      }, 450);
 
       return () => clearTimeout(timeout);
     }
@@ -500,7 +500,7 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
           className="h-full bg-[#5235F6]"
           initial={{ width: "0%" }}
           animate={{ width: "100%" }}
-          transition={{ duration: 1.8, ease: "easeInOut" }}
+          transition={{ duration: 2.5, ease: "easeInOut" }}
         />
       </div>
     </div>

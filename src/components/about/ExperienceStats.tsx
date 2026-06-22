@@ -54,8 +54,7 @@ const ExperienceStats = () => {
                         value={stats.projects}
                         subtitle="Successfully delivered mobile and web apps."
                         variant="grid"
-                        index={1}
-                        className="bg-[#0f0f0f]" 
+                        index={3}
                     />
 
                     <StatsCard 

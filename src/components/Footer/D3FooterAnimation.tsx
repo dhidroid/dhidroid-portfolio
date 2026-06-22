@@ -44,6 +44,9 @@ export const D3FooterAnimation: React.FC = () => {
     canvas.height = height * dpr;
     ctx.scale(dpr, dpr);
 
+    // Calculate dynamic font size to ensure it scales cleanly from mobile to desktop
+    const textFontSize = Math.min(80, Math.max(38, width * 0.08));
+
     // Setup offscreen canvas to render static "DHIDROID" text for lookup
     const offscreen = document.createElement("canvas");
     offscreen.width = width;
@@ -52,8 +55,8 @@ export const D3FooterAnimation: React.FC = () => {
     
     if (octx) {
       octx.fillStyle = "#000000";
-      // Large bold display font for Swiss style
-      octx.font = "900 68px 'Instrument Sans', sans-serif";
+      // Massive blocky font to create thick shapes for matrix overlapping
+      octx.font = `900 ${textFontSize}px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
       octx.textAlign = "center";
       octx.textBaseline = "middle";
       octx.fillText("DHIDROID", width / 2, height / 2);
