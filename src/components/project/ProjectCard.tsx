@@ -33,7 +33,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     >
       <Link to={`/works/${slug}`} className="block w-full">
         {/* Image Container */}
-        <div className="relative w-full aspect-[4/3] md:aspect-[16/10] overflow-hidden bg-gray-100">
+        <div className="relative w-full aspect-[4/3] md:aspect-[16/10] overflow-hidden bg-slate-100/50 dark:bg-zinc-950/40 border border-slate-200 dark:border-zinc-800 rounded-md">
            {/* Image */}
            <img 
               src={image} 
@@ -42,27 +42,27 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
            />
            
            {/* Dark Overlay on Hover */}
-           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
+           <div className="absolute inset-0 bg-slate-950/10 dark:bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
 
            {/* Hover Content: View Button */}
            <div className="absolute top-8 right-8 scale-0 group-hover:scale-100 transition-transform duration-500 delay-100 ease-out-expo">
-              <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center text-black">
-                  <ArrowUpRight className="w-6 h-6" />
+              <div className="w-14 h-14 rounded-md bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-black">
+                  <ArrowUpRight className="w-5 h-5" />
               </div>
            </div>
         </div>
 
         {/* Text Meta */}
-        <div className="mt-6 flex items-start justify-between border-t border-gray-200 pt-4 group-hover:border-black/20 transition-colors">
+        <div className="mt-6 flex items-start justify-between border-t border-slate-200 dark:border-zinc-800 pt-4 group-hover:border-primary/45 dark:group-hover:border-primary/45 transition-colors duration-500">
            <div>
-               <h3 className="text-2xl font-bold font-display uppercase tracking-tight text-foreground">{title}</h3>
+               <h3 className="text-xl md:text-2xl font-extrabold font-display uppercase tracking-tighter text-slate-900 dark:text-white">{title}</h3>
                {category && (
-                   <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mt-1 block">{category}</span>
+                   <span className="text-xs font-mono text-slate-400 dark:text-zinc-500 uppercase tracking-wider mt-1 block">{category}</span>
                )}
            </div>
            
            {year && (
-               <span className="font-mono text-sm text-gray-400">{year}</span>
+               <span className="font-mono text-xs text-slate-500 dark:text-zinc-400 tracking-wider bg-slate-100/80 dark:bg-zinc-800/80 px-2 py-0.5 rounded-sm border border-slate-200/50 dark:border-zinc-700/50">{year}</span>
            )}
         </div>
       </Link>

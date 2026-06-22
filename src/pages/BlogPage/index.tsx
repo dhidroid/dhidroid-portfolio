@@ -216,17 +216,17 @@ const BlogPage = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-white">
-                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            <div className="min-h-screen flex items-center justify-center bg-background">
+                <div className="w-12 h-12 border-4 border-[#5235F6] border-t-transparent rounded-full animate-spin" />
             </div>
         );
     }
 
     if (!post) {
         return (
-            <div className="min-h-screen flex items-center justify-center flex-col gap-4">
+            <div className="min-h-screen flex items-center justify-center flex-col gap-4 bg-background">
                 <h1 className="text-2xl font-bold mb-4">Post not found</h1>
-                <Link to="/bloglist" className="text-primary hover:underline">
+                <Link to="/bloglist" className="text-[#5235F6] hover:underline">
                     Back to Blog
                 </Link>
             </div>
@@ -273,12 +273,12 @@ const BlogPage = () => {
                 />
             )}
 
-            <article className="bg-white min-h-screen">
+            <article className="bg-background min-h-screen">
                 {/* Navigation / Breadcrumb - Fixed Header Offset */}
                 <div className="pt-24 md:pt-28">
-                    <div className="border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-20 z-30">
+                    <div className="border-b border-border bg-background/80 backdrop-blur-md sticky top-20 z-30">
                         <Container className="py-4">
-                            <Link to="/bloglist" className="inline-flex items-center text-sm text-gray-500 hover:text-primary transition-colors font-medium">
+                            <Link to="/bloglist" className="inline-flex items-center text-sm text-slate-500 dark:text-zinc-400 hover:text-[#5235F6] transition-colors font-medium">
                                 <ChevronLeft className="w-4 h-4 mr-1" />
                                 Back to Blog
                             </Link>
@@ -319,8 +319,8 @@ const BlogPage = () => {
                                 <PortableTextRenderer value={post.body} />
                             )
                         ) : (
-                            <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                                <p className="text-gray-500">
+                            <div className="text-center py-20 bg-slate-50/50 dark:bg-zinc-900/50 rounded-xl border border-dashed border-slate-200 dark:border-zinc-800">
+                                <p className="text-slate-500 dark:text-zinc-400">
                                     No content available for this post.
                                 </p>
                             </div>

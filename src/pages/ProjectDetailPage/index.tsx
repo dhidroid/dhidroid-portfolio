@@ -78,8 +78,8 @@ const ProjectDetailPage = () => {
   }, [slug, navigate]);
 
   if (loading) {
-    return <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
+    return <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="w-8 h-8 border-4 border-border border-t-[#5235F6] rounded-full animate-spin" />
     </div>;
   }
 
@@ -101,7 +101,7 @@ const ProjectDetailPage = () => {
       <SEO
         {...meta}
       />
-      <main className="bg-white min-h-screen">
+      <main className="bg-background min-h-screen">
         <ProjectHero
           title={project.title}
           client={project.tagline}
@@ -110,7 +110,7 @@ const ProjectDetailPage = () => {
           image={project.image?.asset?.url}
         />
         {(project.link || project.github) && (
-          <section className="py-24 md:py-32 border-t border-gray-100">
+          <section className="py-24 md:py-32 border-t border-border">
             <div className="max-w-[1800px] mx-auto px-6">
               <motion.div
                 variants={staggerContainer}
@@ -148,7 +148,7 @@ const ProjectDetailPage = () => {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full font-medium text-lg hover:bg-primary transition-all duration-300"
+                        className="group inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-full font-medium text-lg hover:bg-[#5235F6] hover:text-white transition-all duration-300"
                       >
                         Visit Live Site
                         <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:rotate-45" />
@@ -159,7 +159,7 @@ const ProjectDetailPage = () => {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-3 px-8 py-4 border-2 border-black text-black rounded-full font-medium text-lg hover:bg-black hover:text-white transition-all duration-300"
+                        className="group inline-flex items-center gap-3 px-8 py-4 border-2 border-foreground text-foreground rounded-full font-medium text-lg hover:bg-foreground hover:text-background transition-all duration-300"
                       >
                         <Github className="w-5 h-5" />
                         View Code
@@ -167,10 +167,10 @@ const ProjectDetailPage = () => {
                     )}
                   </motion.div>
                   <div>
-                    <h3 className="text-sm font-mono uppercase tracking-widest text-gray-500 mb-6 border-b border-gray-100 pb-2">Tech Stack</h3>
+                    <h3 className="text-sm font-mono uppercase tracking-widest text-slate-500 dark:text-zinc-400 mb-6 border-b border-border pb-2">Tech Stack</h3>
                     <div className="flex flex-wrap gap-4">
                       {project.categories?.map((cat: any) => (
-                        <div key={cat.title} className="flex items-center gap-2 text-base font-medium text-slate-900 bg-gray-50 px-4 py-2 rounded-lg border border-gray-100">
+                        <div key={cat.title} className="flex items-center gap-2 text-base font-medium text-foreground bg-slate-50/50 dark:bg-zinc-900/50 px-4 py-2 rounded-lg border border-border">
                           <DynamicIcon name={cat.title} className="w-5 h-5 text-gray-400" />
                           {cat.title}
                         </div>

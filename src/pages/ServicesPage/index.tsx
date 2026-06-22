@@ -13,7 +13,7 @@ const ServicesPage = () => {
                 {...generateMetaForRoute('/services')}
             />
             
-            <main className="bg-white min-h-screen">
+            <main className="bg-background min-h-screen">
                 <ServicesHero />
                 <ServiceList />
                 <ServiceFAQ />

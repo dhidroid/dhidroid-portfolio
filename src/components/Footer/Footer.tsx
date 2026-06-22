@@ -16,21 +16,21 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-white border-t border-gray-100 mt-auto font-sans">
+    <footer className="bg-background border-t border-slate-200 dark:border-zinc-800 mt-auto font-sans">
       <Newsletter />
       <div className="pt-24 pb-12">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20 select-none">
           <div className="md:col-span-1">
-              <LinkPreview href="/" className="flex items-center gap-3 font-bold text-xl tracking-tighter mb-6 uppercase">
+              <LinkPreview href="/" className="flex items-center gap-3 font-bold text-xl tracking-tighter mb-6 uppercase text-slate-900 dark:text-white font-display">
               <img
                 src={DhiDroidLogo}
                 alt="DhiDroid Logo"
-                  className="h-8 w-8"
+                  className="h-8 w-8 rounded-full"
               />
               <span>Dhidroid</span>
             </LinkPreview>
-              <p className="text-gray-400 text-sm leading-relaxed mb-10 max-w-[240px]">
+              <p className="text-slate-500 dark:text-zinc-400 text-sm leading-relaxed mb-10 max-w-[240px] font-sans">
                 Senior software engineer specializing in high-fidelity digital experiences and modern web architecture.
               </p>
               <div className="flex gap-3">
@@ -40,7 +40,7 @@ const Footer = () => {
                     href={social.href}
                     className="group"
                   >
-                    <IconContainer size="sm" variant="outline">
+                    <IconContainer size="sm" variant="outline" className="border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-300">
                       <social.icon />
                     </IconContainer>
                   </LinkPreview>
@@ -49,55 +49,55 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6">Pages</h4>
+            <h4 className="font-mono text-xs text-slate-400 dark:text-zinc-500 tracking-wider uppercase mb-6">[ PAGES ]</h4>
             <ul className="space-y-4">
               <li>
-                <LinkPreview href="/" className="text-gray-500 hover:text-primary transition-colors">Home</LinkPreview>
+                <LinkPreview href="/" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Home</LinkPreview>
               </li>
               <li>
-                <LinkPreview href="/about" className="text-gray-500 hover:text-primary transition-colors">About</LinkPreview>
+                <LinkPreview href="/about" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">About</LinkPreview>
               </li>
               <li>
-                <LinkPreview href="/services" className="text-gray-500 hover:text-primary transition-colors">Services</LinkPreview>
+                <LinkPreview href="/services" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Services</LinkPreview>
               </li>
               <li>
-                <LinkPreview href="/works" className="text-gray-500 hover:text-primary transition-colors">Projects</LinkPreview>
+                <LinkPreview href="/works" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Projects</LinkPreview>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold mb-6">My Studio</h4>
+            <h4 className="font-mono text-xs text-slate-400 dark:text-zinc-500 tracking-wider uppercase mb-6">[ MY STUDIO ]</h4>
             <ul className="space-y-4">
               <li>
-                <LinkPreview href="/contact" className="text-gray-500 hover:text-primary transition-colors">Contact</LinkPreview>
+                <LinkPreview href="/contact" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Contact</LinkPreview>
               </li>
               <li>
-                <LinkPreview href="/bloglist" className="text-gray-500 hover:text-primary transition-colors">Blog</LinkPreview>
+                <LinkPreview href="/bloglist" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Blog</LinkPreview>
               </li>
               <li>
-                <LinkPreview href="/schedule" className="text-gray-500 hover:text-primary transition-colors">Schedule Demo</LinkPreview>
+                <LinkPreview href="/schedule" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Schedule Demo</LinkPreview>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-bold mb-6">Resources</h4>
+            <h4 className="font-mono text-xs text-slate-400 dark:text-zinc-500 tracking-wider uppercase mb-6">[ RESOURCES ]</h4>
             <ul className="space-y-4">
               <li>
-                <LinkPreview href="/style-guide" className="text-gray-500 hover:text-primary transition-colors">Style Guide</LinkPreview>
+                <LinkPreview href="/style-guide" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Style Guide</LinkPreview>
               </li>
               <li>
-                <LinkPreview href="/licenses" className="text-gray-500 hover:text-primary transition-colors">Licenses</LinkPreview>
+                <LinkPreview href="/licenses" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Licenses</LinkPreview>
               </li>
               <li>
-                <LinkPreview href="/changelog" className="text-gray-500 hover:text-primary transition-colors">Changelog</LinkPreview>
+                <LinkPreview href="/changelog" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Changelog</LinkPreview>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+        <div className="border-t border-slate-200 dark:border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500 dark:text-zinc-400 font-mono">
           <p>&copy; {currentYear} Dhidroid. All rights reserved.</p>
           <div className="flex gap-8 mt-4 md:mt-0">
             <LinkPreview href="/privacy" className="hover:text-primary">Privacy Policy</LinkPreview>

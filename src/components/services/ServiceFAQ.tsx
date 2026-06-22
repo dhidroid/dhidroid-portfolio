@@ -37,7 +37,7 @@ const faqs = [
 
 const ServiceFAQ = () => {
   return (
-    <section className="bg-white py-24 md:py-32">
+    <section className="bg-background py-24 md:py-32 border-t border-slate-200 dark:border-zinc-800">
         <Container className="max-w-[1800px] px-6">
             
             {/* Massive Header like Skills Page */}
@@ -46,29 +46,29 @@ const ServiceFAQ = () => {
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true }}
-                className="mb-24 md:mb-32"
+                className="mb-24 md:mb-32 select-none"
             >
                  <motion.h1
                     variants={fadeInUp}
-                    className="text-[10vw] md:text-[7rem] font-bold font-display uppercase leading-[0.85] tracking-tighter text-foreground mb-8"
+                    className="text-[10vw] md:text-[7rem] font-extrabold font-display uppercase leading-[0.85] tracking-tighter text-slate-900 dark:text-white mb-8"
                 >
                     Common<br />
-                    <span className="text-gray-300">Questions</span>
-                </motion.h1>
-                <motion.div variants={fadeInUp} className="flex flex-col md:flex-row gap-8 md:items-start border-t border-gray-200 pt-8">
-                    <span className="font-mono text-sm uppercase tracking-widest text-gray-500 md:w-48">FAQ</span>
-                    <p className="max-w-xl text-xl md:text-2xl text-gray-800 leading-relaxed font-light">
+                    <span className="text-slate-400 dark:text-zinc-600">Questions</span>
+                 </motion.h1>
+                <motion.div variants={fadeInUp} className="flex flex-col md:flex-row gap-8 md:items-start border-t border-slate-200 dark:border-zinc-800 pt-8">
+                    <span className="font-mono text-sm uppercase tracking-widest text-slate-500 dark:text-zinc-400 md:w-48">[ FAQ INDEX ]</span>
+                    <p className="max-w-xl text-xl md:text-2xl text-slate-700 dark:text-zinc-300 leading-relaxed font-light font-body">
                         Answers to the most frequent inquiries about our process, technology, and collaboration style.
                     </p>
                 </motion.div>
             </motion.div>
 
             {/* Content Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-black/10 pt-12">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-slate-200 dark:border-zinc-800 pt-12">
                 
                 {/* Section Title */}
-                <div className="md:col-span-3">
-                    <h2 className="text-4xl md:text-5xl font-bold font-display uppercase tracking-tight text-gray-900 sticky top-32">
+                <div className="md:col-span-3 select-none">
+                    <h2 className="text-4xl md:text-5xl font-extrabold font-display uppercase tracking-tight text-slate-900 dark:text-white sticky top-32">
                         Inquiries
                     </h2>
                 </div>
@@ -76,62 +76,43 @@ const ServiceFAQ = () => {
                 {/* FAQ Cards Grid */}
                 <div className="md:col-span-9 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-12">
                     {faqs.map((faq) => (
-                        <div key={faq.id} className="group relative flex flex-col items-start gap-6 p-6 rounded-none border border-transparent hover:border-gray-100 transition-colors duration-300">
+                        <div key={faq.id} className="group relative flex flex-col items-start gap-6 p-6 rounded-none border border-transparent hover:border-slate-200 dark:hover:border-zinc-800/80 transition-colors duration-300">
                              
                              {/* Icon & Category */}
                              <div className="flex items-center gap-4">
-                                <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 group-hover:text-primary group-hover:bg-primary/5 group-hover:border-primary/20 transition-all duration-500">
+                                <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-center text-slate-400 dark:text-zinc-500 group-hover:text-primary group-hover:bg-primary/5 group-hover:border-primary/20 transition-all duration-500">
                                     <faq.icon className="w-8 h-8 transition-transform duration-500 group-hover:scale-110" />
                                 </div>
-                                <div>
-                                    <span className="text-xs font-mono uppercase tracking-wider text-gray-400 block mb-1">
+                                <div className="select-none">
+                                    <span className="text-xs font-mono uppercase tracking-wider text-slate-400 dark:text-zinc-500 block mb-1">
                                         {faq.category}
                                     </span>
-                                    <h3 className="text-xl font-bold uppercase tracking-wide text-gray-900 group-hover:text-primary transition-colors">
+                                    <h3 className="text-lg font-bold uppercase tracking-wide text-slate-900 dark:text-white group-hover:text-primary transition-colors">
                                         {faq.question}
                                     </h3>
                                 </div>
                              </div>
 
-                             {/* Answer "Card" (Always visible or Hover? User asked for 'like skills based' which has hover tooltip. But for FAQ, text is long. 
-                                Let's make it visible on hover OR just part of the card design.
-                                Actually, Skills page uses a "Tooltip" style.
-                                Let's adapt it: The answer is displayed in a "Pricing Style" card that appears/floats OR just sits there.
-                                
-                                Better UX for FAQ:
-                                Display the answer in a "Clean Box" below the title, mimicking the Skills hover card visual but maybe static or appearing?、
-                                
-                                Let's stick to the Skills "Hover Reveal" but positioned nicely.
-                                Actually, let's make it *look* like the tooltip but rendered inline for better readability on this layout, 
-                                OR use the exact Hover Tooltip if the text fits. `answer` is ~2-3 sentences. It fits in 300px.
-                                
-                                Let's implement the Hover Effect! It's super sleek.
-                             */}
+                             {/* Answer "Card" */}
                              <div className="absolute left-0 top-full mt-4 w-full md:w-[400px] z-50 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto">
-                                <div className="bg-white border border-gray-200 shadow-2xl overflow-hidden rounded-none">
-                                    <div className="bg-gray-50 border-b border-gray-100 p-4 flex items-center justify-between">
-                                        <span className="font-bold font-display text-sm uppercase text-gray-600">The Answer</span>
-                                        <MessageSquare className="w-4 h-4 text-gray-400" />
+                                <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 shadow-2xl overflow-hidden rounded-none">
+                                    <div className="bg-slate-50 dark:bg-zinc-950 border-b border-slate-200 dark:border-zinc-800 p-4 flex items-center justify-between">
+                                        <span className="font-bold font-display text-sm uppercase text-slate-600 dark:text-zinc-400">The Answer</span>
+                                        <MessageSquare className="w-4 h-4 text-slate-400" />
                                     </div>
                                     <div className="p-6">
-                                        <p className="text-gray-600 leading-relaxed mb-6">
+                                        <p className="text-slate-600 dark:text-zinc-400 leading-relaxed mb-6 text-sm">
                                             {faq.answer}
                                         </p>
-                                        <button className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest hover:underline">
+                                        <button className="flex items-center gap-2 text-primary font-bold uppercase text-xs tracking-widest hover:underline cursor-pointer">
                                            Ask More <ArrowRight className="w-3 h-3" />
                                         </button>
                                     </div>
                                 </div>
                                 {/* Arrow */}
-                                <div className="absolute left-8 -top-2 w-4 h-4 bg-gray-50 border-t border-l border-gray-200 rotate-45"></div>
+                                <div className="absolute left-8 -top-2 w-4 h-4 bg-slate-50 dark:bg-zinc-950 border-t border-l border-slate-200 dark:border-zinc-800 rotate-45"></div>
                              </div>
 
-                             {/* Mobile / Fallback View (Visible only on touch/small? No, let's trust hover for desktop. For Mobile, we might need click. 
-                                But for now, let's strictly mimic the Skills Page desktop behavior as requested). 
-                                
-                                However, to ensure usability, I will also render a short excerpt or 'Hover to view' hint?
-                                No, the Skills page is minimal.
-                             */}
                               <div className="md:hidden mt-2">
                                 <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
                               </div>

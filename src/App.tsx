@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AIProvider } from "./context/AIContext";
 import { LinkPreviewProvider } from "./components/ui/LinkPreview";
 import ScrollToTop from "./components/ui/ScrollToTop";
+import ChatBot from "./components/ChatBot/ChatBot";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
 
         <SpeedInsights />
         <Router />
+        <ChatBot />
         <Analytics />
     </AIProvider>
   );

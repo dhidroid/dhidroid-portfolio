@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "../../utils/motion";
 
+import { D3MeshBackground } from "./D3MeshBackground";
+
 interface ProjectHeroProps {
   title: string;
   client?: string;
@@ -18,8 +20,9 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
     image 
 }) => {
   return (
-    <section className="pt-32 md:pt-48 pb-12 px-6">
-      <div className="max-w-[1800px] mx-auto">
+    <section className="pt-32 md:pt-48 pb-12 px-6 relative overflow-hidden bg-background border-b border-border">
+      <D3MeshBackground />
+      <div className="max-w-[1800px] mx-auto relative z-10">
         <motion.div 
             variants={staggerContainer}
             initial="initial"
@@ -39,22 +42,22 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
           {/* Meta Row */}
           <motion.div 
             variants={fadeInUp}
-            className="flex flex-wrap items-center gap-6 md:gap-12 border-t border-gray-200 pt-6 text-sm md:text-base font-mono uppercase tracking-wide text-gray-500"
+            className="flex flex-wrap items-center gap-6 md:gap-12 border-t border-border pt-6 text-sm md:text-base font-mono uppercase tracking-wide text-slate-500 dark:text-zinc-400"
           >
              {client && (
                <div>
-                  <span className="text-gray-400 mr-2">Client</span>
-                  <span className="text-black font-semibold">{client}</span>
+                  <span className="text-slate-400 dark:text-zinc-500 mr-2">Client</span>
+                  <span className="text-foreground font-semibold">{client}</span>
                </div>
              )}
              <div>
-                  <span className="text-gray-400 mr-2">Year</span>
-                  <span className="text-black font-semibold">{year}</span>
+                  <span className="text-slate-400 dark:text-zinc-500 mr-2">Year</span>
+                  <span className="text-foreground font-semibold">{year}</span>
              </div>
              {role && (
                <div>
-                  <span className="text-gray-400 mr-2">Role</span>
-                  <span className="text-black font-semibold">{role}</span>
+                  <span className="text-slate-400 dark:text-zinc-500 mr-2">Role</span>
+                  <span className="text-foreground font-semibold">{role}</span>
                </div>
              )}
           </motion.div>
@@ -63,7 +66,7 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
           {image && (
              <motion.div 
                variants={fadeInUp}
-               className="relative w-full aspect-video md:aspect-[2.35/1] overflow-hidden bg-gray-100 mt-8"
+               className="relative w-full aspect-video md:aspect-[2.35/1] overflow-hidden bg-slate-100/50 dark:bg-zinc-950/40 border border-border mt-8 rounded-md"
              >
                <img 
                  src={image} 

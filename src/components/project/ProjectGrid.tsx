@@ -59,16 +59,18 @@ const ProjectGrid = () => {
   }, [selectedCategory, projects]);
 
   return (
-    <section className="bg-white min-h-screen pb-32">
+    <section className="bg-background min-h-screen pb-32 border-t border-slate-200 dark:border-zinc-800">
       <Container className="max-w-[1800px] px-6">
-        {/* Category Filter - Minimalist Text */}
-        <div className="flex gap-6 mb-16 overflow-x-auto pb-4 scrollbar-hide">
+        {/* Category Filter - Swiss Monospace Buttons */}
+        <div className="flex gap-4 mb-16 overflow-x-auto pb-4 select-none">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`text-sm font-medium uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 ${
-                selectedCategory === cat ? 'text-black border-b border-black' : 'text-gray-400 hover:text-gray-600'
+              className={`text-xs font-mono uppercase tracking-wider px-3.5 py-1.5 border rounded-sm transition-all duration-300 cursor-pointer whitespace-nowrap flex-shrink-0 ${
+                selectedCategory === cat 
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-black border-slate-900 dark:border-white' 
+                : 'text-slate-500 dark:text-zinc-400 border-slate-200 dark:border-zinc-800 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               {cat}

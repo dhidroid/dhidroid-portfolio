@@ -36,7 +36,7 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
     }));
 
   return (
-    <SectionWrapper className="bg-white">
+    <SectionWrapper className="bg-background border-t border-slate-200 dark:border-zinc-800">
       <div className="max-w-[1800px] mx-auto">
         <motion.div
           initial="initial"
@@ -45,11 +45,15 @@ const WorkExperience: React.FC<WorkExperienceProps> = ({
           variants={fadeInUp}
           className="mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold font-display uppercase tracking-tight mb-6 text-slate-900">
+          <div className="mb-4">
+            <span className="text-xs font-mono text-slate-400 dark:text-zinc-500 bg-slate-100 dark:bg-zinc-800/80 px-2.5 py-1 rounded-md border border-slate-200/50 dark:border-zinc-700/50">
+              03 // EXPERIENCE TIMELINE
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-extrabold font-display uppercase tracking-tighter mb-6 text-slate-900 dark:text-white">
             {title}
           </h2>
-          <div className="h-1 w-20 bg-primary mb-6" />
-          <div className="text-lg text-gray-500 leading-relaxed max-w-2xl">
+          <div className="text-lg text-slate-500 dark:text-zinc-400 leading-relaxed max-w-2xl font-body">
             {subtitle || "A timeline of my professional journey and the companies I've helped build."}
           </div>
         </motion.div>

@@ -1,144 +1,254 @@
 import React, { useEffect, useRef, useState } from "react";
-import { 
-  FaReact, FaNodeJs, FaDocker, FaGithub, FaAndroid, FaSwift, FaHtml5, FaCss3Alt, FaGitAlt 
-} from "react-icons/fa";
-import { 
-  SiTypescript, SiJavascript, SiGo, SiPostgresql, SiPrisma, SiFirebase, SiMongodb, SiTailwindcss, SiNextdotjs, SiGraphql 
-} from "react-icons/si";
+import * as d3 from "d3";
 import { Container } from "../ui/Container";
 
-const icons = [
-  { icon: <FaReact />, color: "#61DAFB", name: "React" },
-  { icon: <SiTypescript />, color: "#3178C6", name: "TypeScript" },
-  { icon: <SiJavascript />, color: "#F7DF1E", name: "JavaScript" },
-  { icon: <FaNodeJs />, color: "#339933", name: "Node.js" },
-  { icon: <SiGo />, color: "#00ADD8", name: "Go" },
-  { icon: <SiPostgresql />, color: "#4169E1", name: "PostgreSQL" },
-  { icon: <SiPrisma />, color: "#2D3748", name: "Prisma" },
-  { icon: <FaDocker />, color: "#2496ED", name: "Docker" },
-  { icon: <FaGithub />, color: "#181717", name: "GitHub" },
-  { icon: <FaAndroid />, color: "#3DDC84", name: "Android" },
-  { icon: <FaSwift />, color: "#F05138", name: "Swift" },
-  { icon: <SiFirebase />, color: "#FFCA28", name: "Firebase" },
-  { icon: <SiTailwindcss />, color: "#06B6D4", name: "Tailwind" },
-  { icon: <SiNextdotjs />, color: "#000000", name: "Next.js" },
-  { icon: <SiGraphql />, color: "#E10098", name: "GraphQL" },
-  { icon: <FaHtml5 />, color: "#E34F26", name: "HTML5" },
-  { icon: <FaCss3Alt />, color: "#1572B6", name: "CSS3" },
-  { icon: <SiMongodb />, color: "#47A248", name: "MongoDB" },
-  { icon: <FaGitAlt />, color: "#F05032", name: "Git" },
-];
-
-interface Point {
-  icon: React.ReactNode;
-  color: string;
+interface NodeData {
   name: string;
-  x: number;
-  y: number;
-  z: number;
-  phi: number;
-  theta: number;
+  children?: NodeData[];
 }
 
-const TechSphere = () => {
+const expertiseData: NodeData = {
+  name: "STUDIO",
+  children: [
+    {
+      name: "FRONTEND STACK",
+      children: [
+        { name: "React.js" },
+        { name: "TypeScript" },
+        { name: "Next.js" },
+        { name: "Tailwind v4" },
+        { name: "JavaScript" },
+        { name: "HTML5 / CSS3" }
+      ]
+    },
+    {
+      name: "MOBILE CORE",
+      children: [
+        { name: "React Native" },
+        { name: "Kotlin (Android)" },
+        { name: "Swift (iOS)" },
+        { name: "Bridge Modules" }
+      ]
+    },
+    {
+      name: "BACKEND & DEVOPS",
+      children: [
+        { name: "Go (Golang)" },
+        { name: "Node.js (Express)" },
+        { name: "AWS (S3/EC2)" },
+        { name: "PostgreSQL" },
+        { name: "MongoDB" },
+        { name: "GraphQL APIs" }
+      ]
+    },
+    {
+      name: "WORKFLOW TOOLS",
+      children: [
+        { name: "Docker" },
+        { name: "Git / GitHub" },
+        { name: "Figma (UI/UX)" },
+        { name: "CI/CD Actions" }
+      ]
+    }
+  ]
+};
+
+export const TechSphere: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [points, setPoints] = useState<Point[]>([]);
-  const animationRef = useRef<number>();
-  const rotationRef = useRef({ x: 0, y: 0 });
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 600, height: 600 });
+  const [hoveredNode, setHoveredNode] = useState<any>(null);
+  const [angleOffset, setAngleOffset] = useState(0);
+  const rotationActive = useRef(true);
 
+  // Resize listener
   useEffect(() => {
-    // Distribute points on a sphere
-    const newPoints = icons.map((item, i) => {
-      const phi = Math.acos(-1 + (2 * i) / icons.length);
-      const theta = Math.sqrt(icons.length * Math.PI) * phi;
-      
-      return {
-        ...item,
-        x: Math.cos(theta) * Math.sin(phi),
-        y: Math.sin(theta) * Math.sin(phi),
-        z: Math.cos(phi),
-        phi,
-        theta
-      };
-    });
-    setPoints(newPoints);
+    if (!containerRef.current) return;
+
+    const handleResize = () => {
+      const { clientWidth } = containerRef.current!;
+      const size = Math.max(320, Math.min(600, clientWidth));
+      setDimensions({ width: size, height: size });
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Natural slow rotation loop
   useEffect(() => {
+    let animationId: number;
     const animate = () => {
-      rotationRef.current.x += 0.005;
-      rotationRef.current.y += 0.005;
-      
-      setPoints(prevPoints => prevPoints.map(point => {
-         // Rotate around Y axis
-         const x = point.x * Math.cos(0.005) - point.z * Math.sin(0.005);
-         let z = point.x * Math.sin(0.005) + point.z * Math.cos(0.005);
-         
-         // Rotate around X axis (optional/minimal)
-         const y = point.y * Math.cos(0.002) - z * Math.sin(0.002);
-         z = point.y * Math.sin(0.002) + z * Math.cos(0.002);
-
-         return { ...point, x, y, z };
-      }));
-      
-      animationRef.current = requestAnimationFrame(animate);
+      if (rotationActive.current) {
+        setAngleOffset((prev) => (prev + 0.001) % (2 * Math.PI));
+      }
+      animationId = requestAnimationFrame(animate);
     };
-    
-    // Start animation
     animate();
-    
-    return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
-    };
+    return () => cancelAnimationFrame(animationId);
   }, []);
+
+  const { width, height } = dimensions;
+  const radius = width / 2;
+  const innerRadius = radius - 100;
+
+  // D3 Cluster computation
+  const root = d3.hierarchy(expertiseData);
+  const clusterLayout = d3.cluster<NodeData>().size([2 * Math.PI, innerRadius]);
+  clusterLayout(root);
+
+  // Helper to project radial coords to 2D screen coords
+  const project = (x: number, y: number) => {
+    // Apply angle offset for auto-rotation
+    const angle = x + angleOffset - Math.PI / 2;
+    return [y * Math.cos(angle), y * Math.sin(angle)];
+  };
+
+  // Check if a node is in the path of the hovered node
+  const isHighlighted = (node: any) => {
+    if (!hoveredNode) return false;
+    let curr = hoveredNode;
+    while (curr) {
+      if (curr === node) return true;
+      curr = curr.parent;
+    }
+    // Also highlight children of hovered node
+    let isChild = false;
+    const checkChildren = (n: any) => {
+      if (n === node) {
+        isChild = true;
+        return;
+      }
+      if (n.children) {
+        n.children.forEach(checkChildren);
+      }
+    };
+    checkChildren(hoveredNode);
+    return isChild;
+  };
+
+  const links = root.links();
+  const descNodes = root.descendants();
 
   return (
-    <section className="py-20 min-h-[600px] overflow-hidden bg-white">
-      <Container>
-        <div className="flex flex-col items-center mb-12">
-           <h2 className="text-4xl font-bold mb-4 font-display">Technical Expertise</h2>
-           <p className="text-gray-500 text-center max-w-2xl">
-             A dynamic ecosystem of tools and technologies I use to build scalable solutions.
-           </p>
+    <section className="py-24 bg-background border-t border-border overflow-hidden select-none">
+      <Container className="px-6">
+        <div className="flex flex-col items-center mb-16 text-center">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-[#5235F6] mb-3">
+            [ SKILLS & ECOSYSTEM CLUSTER ]
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold font-display uppercase tracking-tight text-foreground mb-4">
+            Technical Expertise
+          </h2>
+          <p className="text-slate-500 dark:text-zinc-400 text-sm max-w-xl leading-relaxed">
+            A dynamic ecosystem of tools and technologies I use to build scalable mobile apps and web solutions, mapped as a radial dependency graph.
+          </p>
         </div>
 
-        <div 
-          ref={containerRef} 
-          className="relative w-full max-w-[500px] h-[500px] mx-auto perspective-1000"
-          style={{ perspective: '1000px' }}
+        <div
+          ref={containerRef}
+          className="relative w-full flex items-center justify-center"
         >
-          {points.map((point, index) => {
-            // Project 3D to 2D
-            // Radius of sphere in pixels
-            const radius = 220;
-            const screenX = point.x * radius;
-            const screenY = point.y * radius;
-            // Scale based on Z (depth)
-            const scale = (point.z + 2) / 3; // Normalize z (-1 to 1) to a scale factor
-            const opacity = (point.z + 1.5) / 2.5; 
-            const isBack = point.z < 0;
+          <svg
+            ref={svgRef}
+            width={width}
+            height={height}
+            className="overflow-visible"
+            onMouseEnter={() => {
+              rotationActive.current = false;
+            }}
+            onMouseLeave={() => {
+              rotationActive.current = true;
+              setHoveredNode(null);
+            }}
+          >
+            {/* Center origin */}
+            <g transform={`translate(${width / 2}, ${height / 2})`}>
+              
+              {/* Draw fanning grid links */}
+              {links.map((link, i) => {
+                const [x1, y1] = project(link.source.x, link.source.y);
+                const [x2, y2] = project(link.target.x, link.target.y);
+                
+                const active = isHighlighted(link.target) || isHighlighted(link.source);
 
-            return (
-              <div
-                key={index}
-                className="absolute top-1/2 left-1/2 flex flex-col items-center justify-center pointer-events-none"
-                style={{
-                  transform: `translate3d(${screenX}px, ${screenY}px, ${point.z * 100}px) scale(${scale})`,
-                  opacity: Math.max(0.2, Math.min(1, opacity)),
-                  zIndex: Math.floor(point.z * 100),
-                  filter: isBack ? 'blur(2px)' : 'none',
-                  color: point.color
-                }}
-              >
-                <div className="text-5xl drop-shadow-lg transition-colors p-2 bg-white/50 backdrop-blur-sm rounded-full">
-                   {point.icon}
-                </div>
-                <span className="text-xs font-bold text-gray-800 bg-white/80 px-2 py-0.5 rounded mt-1 shadow-sm whitespace-nowrap">
-                  {point.name}
-                </span>
-              </div>
-            );
-          })}
+                return (
+                  <path
+                    key={i}
+                    d={`M${x1},${y1}C${(x1 + x2) / 2},${(y1 + y2) / 2} ${x1},${y2} ${x2},${y2}`}
+                    fill="none"
+                    stroke={active ? "#5235F6" : "var(--border)"}
+                    strokeWidth={active ? "1.5" : "0.5"}
+                    opacity={active ? 0.95 : 0.4}
+                    className="transition-all duration-300"
+                  />
+                );
+              })}
+
+              {/* Draw Nodes */}
+              {descNodes.map((node: any, i) => {
+                const [cx, cy] = project(node.x, node.y);
+                const active = isHighlighted(node);
+                const isRoot = node.depth === 0;
+                const isBranch = node.depth === 1;
+
+                // Rotate labels aligned along node angles
+                const labelAngle = ((node.x + angleOffset) * 180) / Math.PI - 90;
+                const textAnchor = (node.x + angleOffset) % (2 * Math.PI) < Math.PI ? "start" : "end";
+                const rotateText = (node.x + angleOffset) % (2 * Math.PI) < Math.PI ? labelAngle : labelAngle + 180;
+
+                return (
+                  <g
+                    key={i}
+                    transform={`translate(${cx}, ${cy})`}
+                    className="cursor-pointer transition-all duration-300"
+                    onMouseEnter={() => setHoveredNode(node)}
+                  >
+                    {/* Node Dot */}
+                    <circle
+                      r={isRoot ? 6 : isBranch ? 4 : 2.5}
+                      fill={active ? "#5235F6" : isRoot ? "#5235F6" : "var(--foreground)"}
+                      opacity={active ? 1.0 : isRoot ? 0.9 : 0.55}
+                      className="transition-all duration-200"
+                    />
+
+                    {/* Label (Leaves / Branches only) */}
+                    {node.depth > 0 && (
+                      <g transform={`rotate(${rotateText})`}>
+                        <text
+                          dy="0.31em"
+                          dx={textAnchor === "start" ? 8 : -8}
+                          textAnchor={textAnchor}
+                          className={cn(
+                            "font-mono text-[9px] select-none pointer-events-none transition-all duration-300",
+                            active 
+                              ? "fill-[#5235F6] font-bold" 
+                              : isBranch 
+                              ? "fill-foreground font-semibold" 
+                              : "fill-slate-400 dark:fill-zinc-500"
+                          )}
+                        >
+                          {node.data.name}
+                        </text>
+                      </g>
+                    )}
+
+                    {/* Root Label in Center */}
+                    {isRoot && (
+                      <text
+                        dy="0.31em"
+                        textAnchor="middle"
+                        className="font-mono text-[10px] font-bold fill-[#5235F6] select-none pointer-events-none uppercase tracking-widest"
+                      >
+                        {node.data.name}
+                      </text>
+                    )}
+                  </g>
+                );
+              })}
+            </g>
+          </svg>
         </div>
       </Container>
     </section>

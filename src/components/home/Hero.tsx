@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import CredlyBadge from "../ui/CredlyBadge";
 import { SectionWrapper } from "../layout/SectionWrapper";
 import { fadeInUp, staggerContainer } from "../../utils/motion";
-import { InteractiveWave } from "./InteractiveWave";
+import { VoronoiStipplingAscii } from "./VoronoiStipplingAscii";
 
 import { Modal } from "../ui/Modal";
 
@@ -93,11 +93,11 @@ const Hero = () => {
         className="w-full relative z-10"
       >
         {/* The Swiss/Editorial Grid Container */}
-        <div className="relative w-full border border-slate-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-950/40 backdrop-blur-md overflow-hidden rounded-3xl transition-colors duration-500 shadow-xl">
+        <div className="relative w-full border border-slate-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-950/40 backdrop-blur-md overflow-hidden rounded-md transition-colors duration-500">
           
-          {/* Interactive D3 Wave Background layer */}
+          {/* Interactive D3 Voronoi Stippling ASCII Background layer */}
           <div className="absolute inset-0 z-0 opacity-85 pointer-events-none">
-            <InteractiveWave />
+            <VoronoiStipplingAscii />
           </div>
 
           {/* Header Row */}
@@ -150,10 +150,7 @@ const Hero = () => {
                   </div>
                 </div>
 
-                {/* Concentric rotating SVG */}
-                <div className="w-full flex justify-center py-2">
-                  <TechCompassSVG />
-                </div>
+                {/* Rotating SVG removed for minimal clean design */}
               </div>
 
               {/* Verification & Credentials Box */}
@@ -212,7 +209,7 @@ const Hero = () => {
                   Explore Projects
                 </span>
               </div>
-              <div className="w-10 h-10 flex items-center justify-center bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 rounded-full shadow-sm">
+              <div className="w-10 h-10 flex items-center justify-center bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 rounded-md">
                 <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
               </div>
             </Link>
@@ -227,7 +224,7 @@ const Hero = () => {
                   Start a Project
                 </span>
               </div>
-              <div className="w-10 h-10 flex items-center justify-center bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 rounded-full shadow-sm">
+              <div className="w-10 h-10 flex items-center justify-center bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 rounded-md">
                 <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
               </div>
             </button>
@@ -242,7 +239,7 @@ const Hero = () => {
                   Curriculum Vitae
                 </span>
               </div>
-              <div className="w-10 h-10 flex items-center justify-center bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 rounded-full shadow-sm">
+              <div className="w-10 h-10 flex items-center justify-center bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 rounded-md">
                 <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
               </div>
             </button>
