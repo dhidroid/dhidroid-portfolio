@@ -8,15 +8,11 @@ interface LoaderProps {
   pageDescription?: string;
 }
 
-interface D3Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  angle?: number;
-  speed?: number;
-  baseRadius?: number;
+interface ScatterPoint {
+  label: string;
+  category: string;
+  x: number; // 0 - 100
+  y: number; // 0 - 100
 }
 
 const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Element => {
@@ -27,6 +23,7 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
 
   const d3ContainerRef = useRef<HTMLDivElement>(null);
   const d3CanvasRef = useRef<HTMLCanvasElement>(null);
+  const startTimeRef = useRef<number>(Date.now());
 
   const getPageTitle = (path: string) => {
     if (path === "/") return "HOME";
@@ -129,10 +126,71 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
     ];
   };
 
+  // Get dynamic scatter points data based on page content
+  const getScatterDataForPath = (path: string): ScatterPoint[] => {
+    if (path === "/") {
+      return [
+        { label: "Hero Banner", category: "UI Component", x: 15, y: 85 },
+        { label: "Mesh BG Canvas", category: "Asset", x: 80, y: 92 },
+        { label: "Featured Projects Grid", category: "UI Component", x: 45, y: 70 },
+        { label: "Client Trust Index", category: "Data", x: 60, y: 45 },
+        { label: "Work Timeline Data", category: "Data", x: 75, y: 60 },
+        { label: "Matrix Rain Footer", category: "Logic", x: 90, y: 25 },
+        { label: "Vercel Analytics SDK", category: "System", x: 95, y: 15 },
+      ];
+    }
+    if (path === "/about") {
+      return [
+        { label: "Profile Image Node", category: "Asset", x: 20, y: 90 },
+        { label: "Biography Content Schema", category: "Data", x: 35, y: 80 },
+        { label: "Skills Radar Grid", category: "UI Component", x: 55, y: 72 },
+        { label: "Timeline Nodes Path", category: "Logic", x: 72, y: 55 },
+        { label: "SEO Config Matrix", category: "System", x: 88, y: 35 },
+        { label: "Professional History Cache", category: "Data", x: 62, y: 65 },
+      ];
+    }
+    if (path === "/works" || path === "/project" || path.startsWith("/works/")) {
+      return [
+        { label: "Sanity Client Gateway", category: "System", x: 22, y: 88 },
+        { label: "Case Studies JSON", category: "Data", x: 42, y: 76 },
+        { label: "Project Gallery CDN", category: "Asset", x: 58, y: 62 },
+        { label: "Live Deployment API", category: "System", x: 78, y: 50 },
+        { label: "Dynamic Tags Filter", category: "Logic", x: 68, y: 44 },
+        { label: "D3 Architecture Topology", category: "UI Component", x: 92, y: 24 },
+      ];
+    }
+    if (path === "/bloglist" || path.startsWith("/blog/")) {
+      return [
+        { label: "Sanity Query Engine", category: "System", x: 18, y: 82 },
+        { label: "Articles Payload", category: "Data", x: 38, y: 74 },
+        { label: "Markdown AST Parser", category: "Logic", x: 58, y: 62 },
+        { label: "SpeechSynthesis TTS", category: "System", x: 74, y: 48 },
+        { label: "Audio Podcast Controls", category: "UI Component", x: 86, y: 32 },
+        { label: "Reading Time Calculator", category: "Logic", x: 92, y: 18 },
+      ];
+    }
+    if (path === "/contact" || path === "/schedule") {
+      return [
+        { label: "EmailJS API Controller", category: "System", x: 12, y: 88 },
+        { label: "Interactive Forms Validator", category: "UI Component", x: 34, y: 72 },
+        { label: "SMTP Gateway Server", category: "System", x: 54, y: 64 },
+        { label: "Cal.com Scheduler Integration", category: "UI Component", x: 76, y: 48 },
+        { label: "Spam Detection Logic", category: "Logic", x: 90, y: 28 },
+      ];
+    }
+    return [
+      { label: "Router Engine Core", category: "System", x: 15, y: 85 },
+      { label: "Navigation State Map", category: "Logic", x: 45, y: 65 },
+      { label: "UI Layout Wrapper", category: "UI Component", x: 75, y: 45 },
+      { label: "Local Assets Buffer", category: "Asset", x: 90, y: 25 },
+    ];
+  };
+
   // Keep track of logs
   useEffect(() => {
     setLines([]);
     setCurrentLineIndex(0);
+    startTimeRef.current = Date.now();
   }, [location.pathname]);
 
   useEffect(() => {
@@ -165,7 +223,7 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Handle D3 dynamically based on route
+  // Handle D3 Scatterplot with Shapes
   useEffect(() => {
     const canvas = d3CanvasRef.current;
     if (!canvas) return;
@@ -183,240 +241,163 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
     ctx.scale(dpr, dpr);
 
     const path = location.pathname;
+    const points = getScatterDataForPath(path);
+
+    // Margins to fix alignment and avoid clipping
+    const margin = { top: 50, right: 60, bottom: 50, left: 60 };
+
+    // Scales
+    const xScale = d3.scaleLinear().domain([0, 100]).range([margin.left, width - margin.right]);
+    const yScale = d3.scaleLinear().domain([0, 100]).range([height - margin.bottom, margin.top]);
 
     // Theme values
     const primaryColor = "#5235F6";
-    const fgColor = isDark ? "rgba(243, 244, 246, 0.9)" : "rgba(17, 17, 17, 0.9)";
-    const muteColor = isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(17, 17, 17, 0.05)";
-    const lineColor = isDark ? "rgba(255, 255, 255, 0.15)" : "rgba(17, 17, 17, 0.12)";
+    const fgColor = isDark ? "#F3F4F6" : "#111111";
+    const gridColor = isDark ? "rgba(255, 255, 255, 0.06)" : "rgba(17, 17, 17, 0.05)";
+    const axisColor = isDark ? "rgba(255, 255, 255, 0.15)" : "rgba(17, 17, 17, 0.12)";
+    const textColor = isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(17, 17, 17, 0.4)";
 
-    // Set up D3 animation loop variables
-    let particles: D3Particle[] = [];
+    // D3 symbol maps based on Observable standard
+    const getSymbolType = (category: string) => {
+      switch (category) {
+        case "UI Component": return d3.symbolTriangle; // Triangle
+        case "Asset": return d3.symbolStar; // Star
+        case "Data": return d3.symbolDiamond; // Diamond
+        case "System": return d3.symbolSquare; // Square
+        case "Logic": return d3.symbolCross; // Cross
+        default: return d3.symbolCircle; // Circle
+      }
+    };
+
     let animationFrameId: number;
-
-    if (path === "/") {
-      // 1. Orbit Vortex for Home Page
-      const count = 40;
-      particles = Array.from({ length: count }, (_, i) => {
-        const radius = 20 + (i * (Math.min(width, height) * 0.4)) / count;
-        return {
-          x: width / 2,
-          y: height / 2,
-          vx: 0,
-          vy: 0,
-          radius: 1.5,
-          angle: Math.random() * Math.PI * 2,
-          speed: (0.015 + Math.random() * 0.02) * (i % 2 === 0 ? 1 : -1),
-          baseRadius: radius
-        };
-      });
-    } else if (path === "/about") {
-      // 2. Delaunay Triangulation for About Page
-      const count = 25;
-      particles = Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.8,
-        vy: (Math.random() - 0.5) * 0.8,
-        radius: 2
-      }));
-    } else if (path === "/works" || path === "/project" || path.startsWith("/works/")) {
-      // 3. Constellation Node Net for Portfolio/Case Study
-      const count = 35;
-      particles = Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6,
-        radius: 2.5
-      }));
-    } else if (path === "/bloglist" || path.startsWith("/blog/")) {
-      // 4. Data bubble stream for Blog list/details
-      const count = 45;
-      particles = Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: height + Math.random() * 100,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: -0.5 - Math.random() * 0.8,
-        radius: 2 + Math.random() * 4
-      }));
-    } else {
-      // 5. Default: Radar / Pulser
-      particles = Array.from({ length: 4 }, (_, i) => ({
-        x: width / 2,
-        y: height / 2,
-        vx: 0,
-        vy: 0,
-        radius: 0,
-        speed: 0.5 + i * 0.5
-      }));
-    }
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Draw subtle background grid
-      ctx.strokeStyle = muteColor;
+      // Compute loader progress (0 to 1 over 2.5s)
+      const elapsed = Date.now() - startTimeRef.current;
+      const progress = Math.min(1, elapsed / 2500);
+
+      // Draw dynamic grids (x and y gridlines)
+      ctx.strokeStyle = gridColor;
       ctx.lineWidth = 0.5;
-      const gridSize = 30;
-      for (let x = 0; x < width; x += gridSize) {
+
+      const xTicks = [20, 40, 60, 80];
+      const yTicks = [20, 40, 60, 80];
+
+      xTicks.forEach(tick => {
+        const x = xScale(tick);
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
+        ctx.moveTo(x, margin.top);
+        ctx.lineTo(x, height - margin.bottom);
         ctx.stroke();
-      }
-      for (let y = 0; y < height; y += gridSize) {
+      });
+
+      yTicks.forEach(tick => {
+        const y = yScale(tick);
         ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
+        ctx.moveTo(margin.left, y);
+        ctx.lineTo(width - margin.right, y);
         ctx.stroke();
-      }
+      });
 
-      if (path === "/") {
-        // Draw Vortex
-        ctx.strokeStyle = muteColor;
-        ctx.lineWidth = 0.5;
+      // Draw Main Axes border lines (Swiss box-plot frame style)
+      ctx.strokeStyle = axisColor;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(margin.left, margin.top, width - margin.left - margin.right, height - margin.top - margin.bottom);
 
-        // Draw orbital concentric rings
-        for (let i = 1; i <= 6; i++) {
-          ctx.beginPath();
-          ctx.arc(width / 2, height / 2, (Math.min(width, height) * 0.4) * (i / 6), 0, Math.PI * 2);
-          ctx.stroke();
-        }
+      // Render Axes labeling (Monospace details)
+      ctx.fillStyle = textColor;
+      ctx.font = "7px monospace";
+      ctx.textAlign = "center";
 
-        // Draw dots
-        particles.forEach(p => {
-          p.angle = (p.angle || 0) + (p.speed || 0);
-          p.x = width / 2 + Math.cos(p.angle) * (p.baseRadius || 50);
-          p.y = height / 2 + Math.sin(p.angle) * (p.baseRadius || 50);
+      // X-Axis ticks text
+      xTicks.forEach(tick => {
+        ctx.fillText(`${tick}%`, xScale(tick), height - margin.bottom + 15);
+      });
 
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = primaryColor;
-          ctx.fill();
+      // Y-Axis ticks text
+      ctx.textAlign = "right";
+      yTicks.forEach(tick => {
+        ctx.fillText(`${tick}%`, margin.left - 10, yScale(tick) + 2.5);
+      });
 
-          // Connect back to center with very faint line
-          ctx.beginPath();
-          ctx.moveTo(width / 2, height / 2);
-          ctx.lineTo(p.x, p.y);
-          ctx.strokeStyle = "rgba(82, 53, 246, 0.05)";
-          ctx.stroke();
-        });
-      } else if (path === "/about") {
-        // Draw Delaunay Triangulation
-        particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
+      // Axis Labels
+      ctx.fillStyle = fgColor;
+      ctx.font = "bold 8px monospace";
+      ctx.textAlign = "center";
+      // X-Axis Label: complexity
+      ctx.fillText("[ COMPLEXITY COMPILATION SCALE ]", width / 2, height - margin.bottom + 32);
 
-          if (p.x < 0 || p.x > width) p.vx *= -1;
-          if (p.y < 0 || p.y > height) p.vy *= -1;
-        });
+      // Y-Axis Label: load order (Rotated)
+      ctx.save();
+      ctx.translate(margin.left - 38, height / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText("[ SYSTEM EXECUTION SEQUENCE ]", 0, 0);
+      ctx.restore();
 
-        // Compute Delaunay
-        const points = particles.map(p => [p.x, p.y]);
-        const delaunay = d3.Delaunay.from(points);
-        const { halfedges, triangles } = delaunay;
+      // Render dynamic scatter points (Scatterplot with shapes)
+      const symbolGen = d3.symbol();
 
-        // Draw triangles
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 0.5;
-        for (let i = 0; i < halfedges.length; ++i) {
-          const j = halfedges[i];
-          if (j < i) continue;
-          const ti = triangles[i];
-          const tj = triangles[j];
-          ctx.beginPath();
-          ctx.moveTo(points[ti][0], points[ti][1]);
-          ctx.lineTo(points[tj][0], points[tj][1]);
-          ctx.stroke();
-        }
+      points.forEach(point => {
+        // Fly in & grow scaling animations based on load progress
+        const targetX = xScale(point.x);
+        const targetY = yScale(point.y);
 
-        // Draw node points
-        particles.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = primaryColor;
-          ctx.fill();
-        });
-      } else if (path === "/works" || path === "/project" || path.startsWith("/works/")) {
-        // Draw constellation networks
-        particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
+        // Fly in from center of screen on initial stages
+        const x = d3.interpolateNumber(width / 2, targetX)(progress);
+        const y = d3.interpolateNumber(height / 2, targetY)(progress);
 
-          if (p.x < 0 || p.x > width) p.vx *= -1;
-          if (p.y < 0 || p.y > height) p.vy *= -1;
-        });
+        // Size pulsing
+        const baseSize = 48; // Symbol area size
+        const sizePulse = 1 + Math.sin(Date.now() * 0.005 + point.x) * 0.15;
+        const currentSize = baseSize * Math.min(1, progress * 1.5) * sizePulse;
 
-        // Draw links between nearby particles
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 0.75;
-        for (let i = 0; i < particles.length; i++) {
-          const p1 = particles[i];
-          for (let j = i + 1; j < particles.length; j++) {
-            const p2 = particles[j];
-            const dx = p1.x - p2.x;
-            const dy = p1.y - p2.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
+        ctx.save();
+        ctx.translate(x, y);
 
-            if (dist < 70) {
-              ctx.beginPath();
-              ctx.moveTo(p1.x, p1.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = isDark ? `rgba(255, 255, 255, ${0.12 * (1 - dist / 70)})` : `rgba(17, 17, 17, ${0.1 * (1 - dist / 70)})`;
-              ctx.stroke();
-            }
-          }
-        }
-
-        // Draw particles
-        particles.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = fgColor;
-          ctx.fill();
-        });
-      } else if (path === "/bloglist" || path.startsWith("/blog/")) {
-        // Bubble streams rising
-        particles.forEach(p => {
-          p.y += p.vy;
-          p.x += p.vx;
-
-          if (p.y < -20) {
-            p.y = height + 20;
-            p.x = Math.random() * width;
-          }
-          if (p.x < 0 || p.x > width) p.vx *= -1;
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = isDark ? "rgba(82, 53, 246, 0.4)" : "rgba(82, 53, 246, 0.2)";
-          ctx.fill();
-          ctx.strokeStyle = primaryColor;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        });
-      } else {
-        // Concentric pulsing sonar pings
-        particles.forEach((p, idx) => {
-          p.radius += p.speed || 1;
-          if (p.radius > Math.max(width, height) * 0.6) {
-            p.radius = 0;
-          }
-
-          ctx.beginPath();
-          ctx.arc(width / 2, height / 2, p.radius, 0, Math.PI * 2);
-          ctx.strokeStyle = isDark ? `rgba(255, 255, 255, ${0.15 * (1 - p.radius / (Math.max(width, height) * 0.6))})` : `rgba(17, 17, 17, ${0.1 * (1 - p.radius / (Math.max(width, height) * 0.6))})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        });
-
-        // Pulsing core dot
+        // Draw symbol shape path
         ctx.beginPath();
-        ctx.arc(width / 2, height / 2, 4, 0, Math.PI * 2);
-        ctx.fillStyle = primaryColor;
+        symbolGen.type(getSymbolType(point.category)).size(currentSize).context(ctx)();
+        
+        // Color encoding: Primary color if loaded, foreground if preparing
+        ctx.fillStyle = progress > (point.x / 100) ? primaryColor : fgColor;
         ctx.fill();
-      }
+
+        ctx.restore();
+
+        // Render point labels (fly-in monospace text labels next to points)
+        if (progress > 0.4) {
+          ctx.fillStyle = fgColor;
+          ctx.font = "8px monospace";
+          ctx.textAlign = "left";
+          ctx.fillText(
+            point.label.toUpperCase(),
+            x + 8,
+            y + 3
+          );
+        }
+      });
+
+      // Draw Category Legend at top-left to avoid overlaps
+      ctx.fillStyle = fgColor;
+      ctx.font = "bold 7px monospace";
+      ctx.textAlign = "left";
+      ctx.fillText("[ SYMBOL LEGEND ]", margin.left + 8, margin.top - 20);
+
+      const categories = [
+        { label: "UI COMPONENT (▲)", color: primaryColor },
+        { label: "ASSET (★)", color: fgColor },
+        { label: "DATA (◆)", color: primaryColor },
+        { label: "SYSTEM (■)", color: fgColor },
+        { label: "LOGIC (✚)", color: primaryColor }
+      ];
+
+      categories.forEach((cat, idx) => {
+        ctx.fillStyle = cat.color;
+        ctx.font = "7px monospace";
+        ctx.fillText(cat.label, margin.left + 8 + (idx * 60), margin.top - 8);
+      });
 
       animationFrameId = requestAnimationFrame(render);
     };
@@ -435,7 +416,7 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
         <span>[ DHIDROID SYSTEM RUNTIME ]</span>
         <span className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 bg-[#5235F6] rounded-full animate-ping" />
-          ROUTING CONTROLLER INJECTED
+          ROUTING SCATTERPLOT SHAPES MAP
         </span>
       </div>
 
@@ -477,9 +458,9 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
         </div>
 
         {/* Right Column: D3 Animation (4 columns) */}
-        <div className="lg:col-span-4 flex flex-col relative h-[300px] lg:h-full overflow-hidden bg-slate-50/50 dark:bg-zinc-950/20">
+        <div className="lg:col-span-4 flex flex-col relative h-[380px] lg:h-full overflow-hidden bg-slate-50/50 dark:bg-zinc-950/20">
           <div className="absolute top-4 left-4 z-10 font-mono text-[9px] text-slate-400 dark:text-zinc-500">
-            [ D3_VISUALIZATION // {location.pathname.toUpperCase()} ]
+            [ D3_SCATTERPLOT // {location.pathname.toUpperCase()} ]
           </div>
 
           {/* Dynamic D3 Loader Canvas */}
@@ -488,8 +469,8 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
           </div>
 
           <div className="absolute bottom-4 left-4 right-4 flex justify-between font-mono text-[9px] text-slate-400 dark:text-zinc-500">
-            <span>MEM: SYNCED</span>
-            <span>ENG: STABLE</span>
+            <span>SCATTER: SYNCED</span>
+            <span>SHAPES: SHAPE-MAPPING</span>
           </div>
         </div>
       </div>
