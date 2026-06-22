@@ -6,9 +6,9 @@ import { client } from "../../senity/senity";
 import imageUrlBuilder from '@sanity/image-url';
 import SEO from "../../components/SEO";
 import ProjectHero from "../../components/project/ProjectHero";
-import ProjectTabs from "../../components/project/ProjectTabs";
 import ProjectGallery from "../../components/project/ProjectGallery";
-import { AISummary } from "../../components/ui/AISummary";
+import { D3ProjectNetwork } from "../../components/project/D3ProjectNetwork";
+import { PortableText } from "@portabletext/react";
 import { DynamicIcon } from "../../components/ui/DynamicIcon";
 import { generateMetaForRoute } from "../../utils/seo";
 import { fadeInUp, staggerContainer } from "../../utils/motion";
@@ -64,7 +64,6 @@ const ProjectDetailPage = () => {
         const data = await client.fetch(query, { slug });
         if (!data) {
           console.error("Project not found query returned null for slug:", slug);
-          // navigate('/404'); // Temporarily disable redirect to see if it's a fetch issue
         }
         setProject(data);
       } catch (error) {
@@ -78,9 +77,11 @@ const ProjectDetailPage = () => {
   }, [slug, navigate]);
 
   if (loading) {
-    return <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-border border-t-[#5235F6] rounded-full animate-spin" />
-    </div>;
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-border border-t-[#5235F6] rounded-full animate-spin" />
+      </div>
+    );
   }
 
   if (!project) return null;
@@ -93,14 +94,12 @@ const ProjectDetailPage = () => {
     description: project.tagline || project.description?.slice(0, 160),
     image: ogImage,
     keywords: ["case study", project.title, ...(project.role ? [project.role] : [])],
-    type: 'article', // Treat case studies as articles for better rich snippets
+    type: 'article',
   });
 
   return (
     <React.Fragment>
-      <SEO
-        {...meta}
-      />
+      <SEO {...meta} />
       <main className="bg-background min-h-screen">
         <ProjectHero
           title={project.title}
@@ -109,97 +108,200 @@ const ProjectDetailPage = () => {
           role={project.role}
           image={project.image?.asset?.url}
         />
+
+        {/* Asymmetric Swiss-Grid Project URLS & Tech Stack */}
         {(project.link || project.github) && (
-          <section className="py-24 md:py-32 border-t border-border">
-            <div className="max-w-[1800px] mx-auto px-6">
-              <motion.div
-                variants={staggerContainer}
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true }}
-                className="flex flex-row items-start justify-between gap-12"
-              >
-                <div className="overflow-hidden mb-2">
-                  <div className="overflow-hidden mb-4">
-                    <motion.span
-                      variants={fadeInUp}
-                      className="text-sm font-mono uppercase tracking-widest text-gray-400"
+          <section className="border-b border-border bg-white/50 dark:bg-zinc-950/20">
+            <div className="max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-8 md:p-16">
+              <div className="lg:col-span-4 flex flex-col justify-between">
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <span className="text-xs font-mono uppercase tracking-widest text-slate-400 dark:text-zinc-500 block mb-4">
+                    [ ACCESS // LINKS ]
+                  </span>
+                  <h2 className="text-3xl md:text-5xl font-bold font-display uppercase tracking-tight text-foreground leading-[0.9]">
+                    Project URLs
+                  </h2>
+                </motion.div>
+              </div>
+              <div className="lg:col-span-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-sm font-medium text-lg hover:bg-[#5235F6] hover:text-white transition-all duration-300"
                     >
-                      Live Links
-                    </motion.span>
-                  </div>
-                  <div className="overflow-hidden mb-16">
-                    <motion.h2
-                      variants={fadeInUp}
-                      className="text-[12vw] md:text-[8rem] font-bold font-display uppercase leading-[0.85] tracking-tighter text-foreground"
+                      Visit Live Site
+                      <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:rotate-45" />
+                    </a>
+                  )}
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center gap-3 px-8 py-4 border-2 border-foreground text-foreground rounded-sm font-medium text-lg hover:bg-foreground hover:text-background transition-all duration-300"
                     >
-                      VIEW
-                      <span className="block italic font-serif opacity-50 ml-[5vw]">PROJECT.</span>
-                    </motion.h2>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-12">
-                  <motion.div
-                    variants={fadeInUp}
-                    className="flex flex-col items-start gap-4"
-                  >
-                    {project.link && (
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-full font-medium text-lg hover:bg-[#5235F6] hover:text-white transition-all duration-300"
-                      >
-                        Visit Live Site
-                        <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:rotate-45" />
-                      </a>
-                    )}
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-3 px-8 py-4 border-2 border-foreground text-foreground rounded-full font-medium text-lg hover:bg-foreground hover:text-background transition-all duration-300"
-                      >
-                        <Github className="w-5 h-5" />
-                        View Code
-                      </a>
-                    )}
-                  </motion.div>
-                  <div>
-                    <h3 className="text-sm font-mono uppercase tracking-widest text-slate-500 dark:text-zinc-400 mb-6 border-b border-border pb-2">Tech Stack</h3>
-                    <div className="flex flex-wrap gap-4">
-                      {project.categories?.map((cat: any) => (
-                        <div key={cat.title} className="flex items-center gap-2 text-base font-medium text-foreground bg-slate-50/50 dark:bg-zinc-900/50 px-4 py-2 rounded-lg border border-border">
-                          <DynamicIcon name={cat.title} className="w-5 h-5 text-gray-400" />
-                          {cat.title}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                      <Github className="w-5 h-5" />
+                      View Code
+                    </a>
+                  )}
                 </div>
 
-              </motion.div>
+                <div className="w-full md:w-auto max-w-sm">
+                  <h3 className="text-xs font-mono uppercase tracking-widest text-slate-400 dark:text-zinc-500 mb-3 border-b border-border pb-2">
+                    [ STACK INDEX ]
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {project.categories?.map((cat: any) => (
+                      <div
+                        key={cat.title}
+                        className="flex items-center gap-2 text-xs font-mono uppercase tracking-wide text-foreground bg-slate-100/50 dark:bg-zinc-900/50 px-3 py-1.5 rounded-sm border border-border"
+                      >
+                        <DynamicIcon name={cat.title} className="w-3.5 h-3.5 text-gray-400" />
+                        {cat.title}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         )}
 
-        <div className="max-w-[1800px] mx-auto px-6 mb-24">
-          <div className="md:grid md:grid-cols-2 lg:gap-32 gap-12 items-start">
-            <div className="mb-12 md:mb-0">
-              {/* <AISummary summary={project.description} type="project" /> */}
+        {/* Sequential Editorial Grid Block Sections */}
+        <section className="border-b border-border">
+          <div className="max-w-[1800px] mx-auto divide-y divide-border">
+            
+            {/* 01 // OVERVIEW */}
+            {project.description && (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-8 md:p-16">
+                <div className="lg:col-span-4">
+                  <div className="sticky top-24">
+                    <span className="font-mono text-xs text-slate-400 dark:text-zinc-500 block mb-4">
+                      [ 01 // OVERVIEW ]
+                    </span>
+                    <h2 className="text-3xl md:text-5xl font-bold font-display uppercase tracking-tight text-foreground leading-[0.9]">
+                      Project Summary
+                    </h2>
+                  </div>
+                </div>
+                <div className="lg:col-span-8">
+                  <div className="prose prose-lg md:prose-xl dark:prose-invert text-foreground leading-relaxed font-sans max-w-none whitespace-pre-wrap">
+                    {project.description}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 02 // TECHNICAL DEPS (D3 Network Graph) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-8 md:p-16">
+              <div className="lg:col-span-4">
+                <div className="sticky top-24">
+                  <span className="font-mono text-xs text-slate-400 dark:text-zinc-500 block mb-4">
+                    [ 02 // TECHNICAL DEPS ]
+                  </span>
+                  <h2 className="text-3xl md:text-5xl font-bold font-display uppercase tracking-tight text-foreground leading-[0.9]">
+                    Blueprint Topology
+                  </h2>
+                  <p className="text-sm font-mono text-slate-500 dark:text-zinc-400 mt-4 leading-relaxed max-w-xs">
+                    An interactive visualization of structural modules, layers, and packages powering this system.
+                  </p>
+                </div>
+              </div>
+              <div className="lg:col-span-8">
+                <D3ProjectNetwork
+                  projectTitle={project.title}
+                  tags={project.categories?.map((cat: any) => cat.title) || []}
+                />
+              </div>
             </div>
+
+            {/* 03 // THE CHALLENGE */}
+            {project.challenge && (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-8 md:p-16">
+                <div className="lg:col-span-4">
+                  <div className="sticky top-24">
+                    <span className="font-mono text-xs text-slate-400 dark:text-zinc-500 block mb-4">
+                      [ 03 // THE CHALLENGE ]
+                    </span>
+                    <h2 className="text-3xl md:text-5xl font-bold font-display uppercase tracking-tight text-foreground leading-[0.9]">
+                      The Problem
+                    </h2>
+                  </div>
+                </div>
+                <div className="lg:col-span-8">
+                  <div className="prose prose-lg md:prose-xl dark:prose-invert text-foreground leading-relaxed font-sans max-w-none whitespace-pre-wrap">
+                    {project.challenge}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 04 // THE RESOLUTION */}
+            {project.solution && project.solution.length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-8 md:p-16">
+                <div className="lg:col-span-4">
+                  <div className="sticky top-24">
+                    <span className="font-mono text-xs text-slate-400 dark:text-zinc-500 block mb-4">
+                      [ 04 // THE RESOLUTION ]
+                    </span>
+                    <h2 className="text-3xl md:text-5xl font-bold font-display uppercase tracking-tight text-foreground leading-[0.9]">
+                      Our Solution
+                    </h2>
+                  </div>
+                </div>
+                <div className="lg:col-span-8">
+                  <div className="prose prose-lg md:prose-xl dark:prose-invert text-foreground leading-relaxed font-sans max-w-none">
+                    <PortableText value={project.solution} />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 05 // OUTCOMES */}
+            {project.results && (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-8 md:p-16">
+                <div className="lg:col-span-4">
+                  <div className="sticky top-24">
+                    <span className="font-mono text-xs text-slate-400 dark:text-zinc-500 block mb-4">
+                      [ 05 // OUTCOMES ]
+                    </span>
+                    <h2 className="text-3xl md:text-5xl font-bold font-display uppercase tracking-tight text-foreground leading-[0.9]">
+                      The Results
+                    </h2>
+                  </div>
+                </div>
+                <div className="lg:col-span-8">
+                  <div className="prose prose-lg md:prose-xl dark:prose-invert text-foreground leading-relaxed font-sans max-w-none whitespace-pre-wrap">
+                    {project.results}
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
-        </div>
+        </section>
 
-        <ProjectTabs
-          overview={project.description}
-          challenge={project.challenge}
-          results={project.results}
-          solution={project.solution}
-        />
-
-        <ProjectGallery images={project.gallery} />
+        {/* Gallery Section */}
+        {project.gallery && project.gallery.length > 0 && (
+          <section className="p-8 md:p-16">
+            <div className="max-w-[1800px] mx-auto mb-8">
+              <span className="font-mono text-xs text-slate-400 dark:text-zinc-500 block mb-4">
+                [ VISUAL INDEX // GALLERY ]
+              </span>
+              <h2 className="text-3xl md:text-5xl font-bold font-display uppercase tracking-tight text-foreground leading-[0.9] mb-12">
+                Project Gallery
+              </h2>
+            </div>
+            <ProjectGallery images={project.gallery} />
+          </section>
+        )}
       </main>
     </React.Fragment>
   );

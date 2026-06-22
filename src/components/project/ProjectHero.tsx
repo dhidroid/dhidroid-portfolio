@@ -66,7 +66,7 @@ const ProjectHero: React.FC<ProjectHeroProps> = ({
           {image && (
              <motion.div 
                variants={fadeInUp}
-               className="relative w-full aspect-video md:aspect-[2.35/1] overflow-hidden bg-slate-100/50 dark:bg-zinc-950/40 border border-border mt-8 rounded-md"
+               className="relative w-full aspect-video md:aspect-[2.35/1] overflow-hidden bg-slate-100/50 dark:bg-zinc-950/40 border border-border mt-8 rounded-sm"
              >
                <img 
                  src={image} 
