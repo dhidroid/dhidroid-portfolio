@@ -33,7 +33,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     >
       <Link to={`/works/${slug}`} className="block w-full">
         {/* Image Container */}
-        <div className="relative w-full aspect-[4/3] md:aspect-[16/10] overflow-hidden bg-slate-100/50 dark:bg-zinc-950/40 border border-slate-200 dark:border-zinc-800 rounded-md">
+        <div className="relative w-full aspect-[4/3] md:aspect-[16/10] overflow-hidden bg-slate-100/50 dark:bg-zinc-950/40 border border-border rounded-sm">
            {/* Image */}
            <img 
               src={image} 
@@ -46,14 +46,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
            {/* Hover Content: View Button */}
            <div className="absolute top-8 right-8 scale-0 group-hover:scale-100 transition-transform duration-500 delay-100 ease-out-expo">
-              <div className="w-14 h-14 rounded-md bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-black">
+              <div className="w-14 h-14 rounded-sm bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-black">
                   <ArrowUpRight className="w-5 h-5" />
               </div>
            </div>
         </div>
 
         {/* Text Meta */}
-        <div className="mt-6 flex items-start justify-between border-t border-slate-200 dark:border-zinc-800 pt-4 group-hover:border-primary/45 dark:group-hover:border-primary/45 transition-colors duration-500">
+        <div className="mt-6 flex items-start justify-between border-t border-border pt-4 group-hover:border-primary/45 dark:group-hover:border-primary/45 transition-colors duration-500">
            <div>
                <h3 className="text-xl md:text-2xl font-extrabold font-display uppercase tracking-tighter text-slate-900 dark:text-white">{title}</h3>
                {category && (
@@ -62,7 +62,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
            </div>
            
            {year && (
-               <span className="font-mono text-xs text-slate-500 dark:text-zinc-400 tracking-wider bg-slate-100/80 dark:bg-zinc-800/80 px-2 py-0.5 rounded-sm border border-slate-200/50 dark:border-zinc-700/50">{year}</span>
+               <span className="font-mono text-xs text-slate-500 dark:text-zinc-400 tracking-wider bg-slate-100/80 dark:bg-zinc-800/80 px-2 py-0.5 rounded-sm border border-border">{year}</span>
            )}
         </div>
       </Link>
