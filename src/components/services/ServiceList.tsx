@@ -37,14 +37,18 @@ const ServiceList = () => {
     ];
 
   return (
-    <section className="py-24 bg-[#111111]">
+    <section className="py-24 bg-background border-t border-slate-200 dark:border-zinc-800">
       <Container>
-         <div className="mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold font-display text-white mb-6">
+         <div className="mb-16 select-none">
+            <div className="mb-4">
+               <span className="text-xs font-mono text-slate-400 dark:text-zinc-500 bg-slate-100 dark:bg-zinc-800/80 px-2.5 py-1 rounded-md border border-slate-200/50 dark:border-zinc-700/50">
+                  04 // CAPABILITIES
+               </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-extrabold font-display text-slate-900 dark:text-white uppercase tracking-tighter mb-6">
                 Capabilities & Connect
             </h2>
-            <div className="h-1 w-20 bg-white mb-6" />
-            <p className="text-xl text-gray-400 max-w-2xl">
+            <p className="text-lg text-slate-500 dark:text-zinc-400 max-w-xl font-body">
                 Explore my technical expertise and professional presence across the digital ecosystem.
             </p>
          </div>

@@ -37,21 +37,21 @@ const CoreValues = () => {
   const [activeTab, setActiveTab] = useState(values[0].id);
 
   return (
-    <section className="py-24 md:py-32 bg-white">
+    <section className="py-24 md:py-32 bg-background border-t border-slate-200 dark:border-zinc-800">
       <Container>
         <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
           
           {/* Left: Tabs & Content */}
           <div className="lg:w-1/2 flex flex-col gap-12">
-            <div className="flex flex-wrap gap-4 border-b border-gray-100 pb-4">
+            <div className="flex flex-wrap gap-4 border-b border-slate-200 dark:border-zinc-800 pb-4 select-none">
               {values.map((item) => (
                  <button
                    key={item.id}
                    onClick={() => setActiveTab(item.id)}
-                   className={`text-lg md:text-xl font-medium px-4 py-2 rounded-full transition-all duration-300 ${
+                   className={`text-xs font-mono uppercase tracking-wider px-4 py-2 border transition-all duration-300 cursor-pointer ${
                       activeTab === item.id 
-                      ? 'bg-black text-white' 
-                      : 'text-gray-400 hover:text-black'
+                      ? 'bg-slate-900 dark:bg-white text-white dark:text-black border-slate-900 dark:border-white' 
+                      : 'text-slate-500 dark:text-zinc-400 border-slate-200 dark:border-zinc-800 hover:text-slate-900 dark:hover:text-white'
                    }`}
                  >
                    {item.label}

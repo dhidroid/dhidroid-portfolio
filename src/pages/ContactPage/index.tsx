@@ -167,74 +167,74 @@ const ContactForm = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="py-24 text-center border-t border-gray-100"
+                className="py-24 text-center border-t border-slate-200 dark:border-zinc-800 bg-background"
             >
-                <h3 className="text-[8vw] md:text-[8rem] font-display font-bold uppercase tracking-tighter leading-none mb-12">
+                <h3 className="text-[8vw] md:text-[6rem] font-display font-extrabold uppercase tracking-tighter leading-none mb-12 text-slate-900 dark:text-white">
                     Message<br />
-                    <span className="text-primary italic">Sent.</span>
+                    <span className="text-primary italic font-serif font-light lowercase tracking-normal">sent.</span>
                 </h3>
-                <p className="font-mono text-sm uppercase tracking-[0.4em] text-gray-500 mb-12">I'll get back to you shortly.</p>
-                <Button variant="outline" onClick={() => setStatus("idle")} className="rounded-none uppercase tracking-widest font-bold">Send Another</Button>
+                <p className="font-mono text-xs uppercase tracking-[0.3em] text-slate-400 dark:text-zinc-500 mb-12">I'll get back to you shortly.</p>
+                <Button variant="outline" onClick={() => setStatus("idle")} className="rounded-none uppercase tracking-widest font-bold border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200">Send Another</Button>
             </motion.div>
         );
     }
 
     return (
-        <section className="py-24 bg-white border-t border-gray-100">
+        <section className="py-24 bg-background border-t border-slate-200 dark:border-zinc-800">
             <Container>
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-24">
-                    <div className="lg:col-span-4">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-6">Inquiry Form</p>
-                        <h2 className="text-4xl font-display font-bold uppercase tracking-tight mb-8">Send a <span className="text-primary italic">Detailed</span> Message</h2>
-                        <p className="text-gray-500 leading-relaxed font-light">
+                    <div className="lg:col-span-4 select-none">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-400 dark:text-zinc-500 mb-6">[ 02 // INQUIRY FORM ]</p>
+                        <h2 className="text-3xl font-display font-extrabold uppercase tracking-tight text-slate-900 dark:text-white mb-8">Send a <span className="text-primary italic font-serif font-light lowercase tracking-normal">detailed</span> Message</h2>
+                        <p className="text-slate-500 dark:text-zinc-400 leading-relaxed font-light font-body">
                             Fill out the form to help me understand your project better. For urgent matters, please use the direct WhatsApp link.
                         </p>
                     </div>
                     <form onSubmit={handleSubmit} className="lg:col-span-8 flex flex-col gap-16">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
                             <div className="flex flex-col gap-4 group">
-                                <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-focus-within:text-primary transition-colors">Your Name</label>
+                                <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-400 dark:text-zinc-500 group-focus-within:text-primary transition-colors">Your Name</label>
                                 <input
                                     type="text"
                                     required
                                     placeholder="JOHN DOE"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="bg-transparent border-b border-gray-200 py-4 text-2xl font-display font-bold uppercase placeholder:text-gray-100 focus:outline-none focus:border-primary transition-all rounded-none"
+                                    className="bg-transparent border-b border-slate-200 dark:border-zinc-800 py-4 text-2xl font-display font-bold uppercase placeholder:text-slate-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-primary dark:focus:border-primary text-slate-900 dark:text-white transition-all rounded-none"
                                 />
                             </div>
                             <div className="flex flex-col gap-4 group">
-                                <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-focus-within:text-primary transition-colors">Email Address</label>
+                                <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-400 dark:text-zinc-500 group-focus-within:text-primary transition-colors">Email Address</label>
                                 <input
                                     type="email"
                                     required
                                     placeholder="HELLO@EXAMPLE.COM"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="bg-transparent border-b border-gray-200 py-4 text-2xl font-display font-bold uppercase placeholder:text-gray-100 focus:outline-none focus:border-primary transition-all rounded-none"
+                                    className="bg-transparent border-b border-slate-200 dark:border-zinc-800 py-4 text-2xl font-display font-bold uppercase placeholder:text-slate-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-primary dark:focus:border-primary text-slate-900 dark:text-white transition-all rounded-none"
                                 />
                             </div>
                         </div>
                         <div className="flex flex-col gap-4 group">
-                            <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-focus-within:text-primary transition-colors">Subject</label>
+                            <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-400 dark:text-zinc-500 group-focus-within:text-primary transition-colors">Subject</label>
                             <input
                                 type="text"
                                 required
                                 placeholder="PROJECT INQUIRY"
                                 value={formData.subject}
                                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                className="bg-transparent border-b border-gray-200 py-4 text-2xl font-display font-bold uppercase placeholder:text-gray-100 focus:outline-none focus:border-primary transition-all rounded-none"
+                                className="bg-transparent border-b border-slate-200 dark:border-zinc-800 py-4 text-2xl font-display font-bold uppercase placeholder:text-slate-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-primary dark:focus:border-primary text-slate-900 dark:text-white transition-all rounded-none"
                             />
                         </div>
                         <div className="flex flex-col gap-4 group">
-                            <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-focus-within:text-primary transition-colors">Message</label>
+                            <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-400 dark:text-zinc-500 group-focus-within:text-primary transition-colors">Message</label>
                             <textarea
                                 required
                                 rows={4}
                                 placeholder="TELL ME ABOUT YOUR PROJECT..."
                                 value={formData.message}
                                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                className="bg-transparent border-b border-gray-200 py-4 text-2xl font-display font-bold uppercase placeholder:text-gray-100 focus:outline-none focus:border-primary transition-all rounded-none resize-none"
+                                className="bg-transparent border-b border-slate-200 dark:border-zinc-800 py-4 text-2xl font-display font-bold uppercase placeholder:text-slate-300 dark:placeholder:text-zinc-800 focus:outline-none focus:border-primary dark:focus:border-primary text-slate-900 dark:text-white transition-all rounded-none resize-none"
                             />
                         </div>
                         <div className="flex justify-end">
@@ -242,7 +242,7 @@ const ContactForm = () => {
                                 type="submit"
                                 variant="primary"
                                 isLoading={status === "loading"}
-                                className="rounded-none h-20 px-16 text-sm font-bold uppercase tracking-[0.3em] group relative overflow-hidden"
+                                className="rounded-none h-20 px-16 text-sm font-bold uppercase tracking-[0.3em] group relative overflow-hidden cursor-pointer"
                             >
                                 <span className="relative z-10 flex items-center gap-3">
                                     Send Message <Send size={18} />
@@ -264,7 +264,7 @@ const ContactPage = () => {
                 {...generateMetaForRoute('/contact')}
             />
 
-            <section className="pt-32 pb-16 md:pt-48 md:pb-32 px-6 bg-white">
+            <section className="pt-32 pb-16 md:pt-48 md:pb-32 px-6 bg-background">
                 <div className="max-w-[1800px] mx-auto">
                     <motion.div
                         initial="initial"
@@ -272,30 +272,34 @@ const ContactPage = () => {
                         variants={staggerContainer}
                     >
                         <motion.div variants={fadeInUp}>
-                            <Badge className="mb-8 rounded-none px-4 py-1">Connect</Badge>
+                            <div className="mb-4 select-none">
+                              <span className="text-xs font-mono text-slate-400 dark:text-zinc-500 bg-slate-100 dark:bg-zinc-800/80 px-2.5 py-1 rounded-md border border-slate-200/50 dark:border-zinc-700/50">
+                                01 // CONNECT WITH ME
+                              </span>
+                            </div>
                         </motion.div>
                         <motion.h1
                             variants={fadeInUp}
-                            className="text-[12vw] md:text-[8rem] leading-[0.85] font-bold font-display tracking-tighter text-foreground uppercase mb-12"
+                            className="text-[11vw] md:text-[7.5rem] leading-[0.85] font-extrabold font-display tracking-tighter text-slate-900 dark:text-white uppercase mb-12 select-none"
                         >
                             Get in<br />
-                            <span className="text-gray-300 italic">Touch.</span>
+                            <span className="text-primary italic font-serif font-light lowercase tracking-normal ml-[5vw]">touch.</span>
                         </motion.h1>
 
-                        <motion.div variants={fadeInUp} className="flex flex-col md:flex-row gap-8 md:items-start border-t border-gray-100 pt-12 mt-12">
-                            <span className="font-mono text-sm uppercase tracking-widest text-gray-400 md:w-64">General inquiries</span>
+                        <motion.div variants={fadeInUp} className="flex flex-col md:flex-row gap-8 md:items-start border-t border-slate-200 dark:border-zinc-800 pt-12 mt-12">
+                            <span className="font-mono text-sm uppercase tracking-widest text-slate-400 dark:text-zinc-500 md:w-64">[ INQUIRIES ]</span>
                             <div className="max-w-2xl">
-                                <p className="text-xl md:text-3xl text-gray-800 leading-tight font-light mb-8">
+                                <p className="text-xl md:text-3xl text-slate-800 dark:text-zinc-200 leading-tight font-light mb-8 font-body">
                                     Have a vision you want to bring to life? I specialize in transforming complex ideas into high-fidelity digital products.
                                 </p>
-                                <div className="flex flex-wrap gap-8">
+                                <div className="flex flex-wrap gap-8 select-none">
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest mb-1">Response Time</span>
-                                        <span className="text-sm font-bold uppercase tracking-tight">~24 Hours</span>
+                                        <span className="text-[10px] font-mono text-slate-400 dark:text-zinc-500 uppercase tracking-widest mb-1">Response Time</span>
+                                        <span className="text-sm font-bold uppercase tracking-tight text-slate-800 dark:text-zinc-200">~24 Hours</span>
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest mb-1">Local Time</span>
-                                        <span className="text-sm font-bold uppercase tracking-tight">IST (GMT +5:30)</span>
+                                        <span className="text-[10px] font-mono text-slate-400 dark:text-zinc-500 uppercase tracking-widest mb-1">Local Time</span>
+                                        <span className="text-sm font-bold uppercase tracking-tight text-slate-800 dark:text-zinc-200">IST (GMT +5:30)</span>
                                     </div>
                                 </div>
                             </div>
@@ -305,10 +309,10 @@ const ContactPage = () => {
             </section>
 
             {/* Social Channels Section */}
-            <div className="bg-white py-24 border-b border-gray-100">
+            <div className="bg-background py-24 border-t border-b border-slate-200 dark:border-zinc-800">
                 <Container>
                     <div className="flex flex-col items-center">
-                        <p className="text-[10px] font-mono text-gray-400 uppercase tracking-[0.3em] mb-12">Social Channels</p>
+                        <p className="text-[10px] font-mono text-slate-400 dark:text-zinc-500 uppercase tracking-[0.3em] mb-12 select-none">[ SOCIAL CHANNELS ]</p>
                         <div className="flex flex-wrap justify-center gap-16 md:gap-24">
                             {socialLinks.map((social) => (
                                 <a
@@ -318,14 +322,14 @@ const ContactPage = () => {
                                     rel="noopener noreferrer"
                                     className="group flex items-center gap-4 transition-all"
                                 >
-                                    <IconContainer size="sm" animate={false} className="group-hover:bg-primary group-hover:border-primary text-gray-400 group-hover:text-white transition-all">
+                                    <IconContainer size="sm" animate={false} className="group-hover:bg-primary group-hover:border-primary text-slate-400 dark:text-zinc-500 group-hover:text-white border-slate-200 dark:border-zinc-800 transition-all">
                                         <social.icon strokeWidth={0.5} />
                                     </IconContainer>
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-gray-400 group-hover:text-primary transition-colors">
+                                        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-400 dark:text-zinc-500 group-hover:text-primary transition-colors">
                                             {social.label}
                                         </span>
-                                        <span className="text-xs font-bold uppercase tracking-tight flex items-center gap-1 mt-0.5 group-hover:translate-x-1 transition-transform">
+                                        <span className="text-xs font-bold uppercase tracking-tight flex items-center gap-1 mt-0.5 group-hover:translate-x-1 transition-transform text-slate-800 dark:text-zinc-200">
                                             Follow <ExternalLink size={10} strokeWidth={3} />
                                         </span>
                                     </div>
@@ -335,51 +339,52 @@ const ContactPage = () => {
                     </div>
                 </Container>
             </div>
-            <section className="py-24 bg-white">
+            
+            <section className="py-24 bg-background">
                 <Container>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-0 max-w-6xl mx-auto border border-border/60 divide-y md:divide-y-0 md:divide-x divide-border/60 bg-card">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-0 max-w-6xl mx-auto border border-slate-200 dark:border-zinc-800 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-zinc-800 bg-white/40 dark:bg-zinc-950/20 backdrop-blur-sm shadow-xl">
                         {contactMethods.map((method) => (
                             <div
                                 key={method.id}
                                 className={cn(
-                                    "relative p-12 flex flex-col hover:bg-muted/5 transition-all duration-500 group",
-                                    method.popular && "bg-muted/5"
+                                    "relative p-12 flex flex-col hover:bg-slate-50/50 dark:hover:bg-zinc-900/10 transition-all duration-500 group",
+                                    method.popular && "bg-slate-50/20 dark:bg-zinc-900/5"
                                 )}
                             >
                                 {method.popular && (
-                                    <div className="absolute top-0 left-0 w-full bg-primary/10 border-b border-primary/20 text-primary text-[10px] font-bold font-mono py-1.5 text-center uppercase tracking-widest">
+                                    <div className="absolute top-0 left-0 w-full bg-primary/10 border-b border-primary/20 text-primary text-[10px] font-bold font-mono py-1.5 text-center uppercase tracking-widest select-none">
                                         Recommended
                                     </div>
                                 )}
 
                                 <div className={cn("mb-10 flex flex-col items-start gap-6", method.popular && "mt-8")}>
-                                    <IconContainer size="lg" variant="filled">
+                                    <IconContainer size="lg" variant="outline" className="border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200 bg-white dark:bg-zinc-900">
                                         <method.icon />
                                     </IconContainer>
                                     <div>
-                                        <h3 className="text-2xl font-display font-bold uppercase tracking-tight mb-1">{method.name}</h3>
-                                        <p className="text-primary text-xs font-mono uppercase tracking-widest">{method.value}</p>
+                                        <h3 className="text-xl font-display font-extrabold uppercase tracking-tight text-slate-900 dark:text-white mb-1 select-none">{method.name}</h3>
+                                        <p className="text-primary text-[10px] font-mono uppercase tracking-widest">{method.value}</p>
                                     </div>
                                 </div>
 
-                                <p className="text-muted-foreground text-sm leading-relaxed mb-12 flex-grow font-sans">
+                                <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed mb-12 flex-grow font-sans">
                                     {method.description}
                                 </p>
 
                                 {method.action.href.startsWith('http') || method.action.href.startsWith('mailto') ? (
-                                    <a href={method.action.href} target="_blank" rel="noopener noreferrer">
+                                    <a href={method.action.href} target="_blank" rel="noopener noreferrer" className="cursor-pointer">
                                         <Button
                                             variant={method.popular ? "primary" : "outline"}
-                                            className="w-full rounded-none h-14 text-sm font-bold uppercase tracking-widest"
+                                            className="w-full rounded-none h-14 text-sm font-bold uppercase tracking-widest border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200"
                                         >
                                             {method.action.label}
                                         </Button>
                                     </a>
                                 ) : (
-                                    <Link to={method.action.href}>
+                                    <Link to={method.action.href} className="cursor-pointer">
                                         <Button
                                             variant={method.popular ? "primary" : "outline"}
-                                            className="w-full rounded-none h-14 text-sm font-bold uppercase tracking-widest"
+                                            className="w-full rounded-none h-14 text-sm font-bold uppercase tracking-widest border-slate-200 dark:border-zinc-800 text-slate-800 dark:text-zinc-200"
                                         >
                                             {method.action.label}
                                         </Button>

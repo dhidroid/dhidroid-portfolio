@@ -23,7 +23,7 @@ const CodeBlock: React.FC<{ code: string; language: string }> = ({ code, languag
   };
 
   return (
-    <div className="rounded-xl overflow-hidden my-8 shadow-2xl border border-gray-800">
+    <div className="rounded-sm overflow-hidden my-8 border border-border">
       <div className="flex items-center justify-between px-4 py-2 bg-[#1a1b26] border-b border-gray-700/50">
         <div className="flex items-center gap-4">
           <div className="flex space-x-2">
@@ -37,7 +37,7 @@ const CodeBlock: React.FC<{ code: string; language: string }> = ({ code, languag
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-3 py-1 text-xs text-gray-400 hover:text-white hover:bg-white/10 rounded-md transition-all duration-200"
+          className="flex items-center gap-1.5 px-3 py-1 text-xs text-slate-400 hover:text-[#5235F6] hover:bg-[#5235F6]/10 rounded-sm transition-all duration-200"
           title="Copy code"
         >
           {copied ? (
@@ -73,7 +73,7 @@ const CodeBlock: React.FC<{ code: string; language: string }> = ({ code, languag
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   return (
-    <div className="prose prose-lg md:prose-xl max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-strong:text-slate-900 prose-code:text-primary prose-code:bg-primary/5 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none">
+    <div className="prose prose-lg md:prose-xl max-w-none prose-headings:font-bold prose-headings:text-foreground prose-p:text-slate-600 dark:prose-p:text-zinc-300 prose-p:leading-relaxed prose-a:text-[#5235F6] prose-a:no-underline hover:prose-a:underline prose-img:rounded-sm prose-strong:text-foreground prose-code:text-[#5235F6] prose-code:bg-[#5235F6]/5 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-sm prose-code:before:content-none prose-code:after:content-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -93,48 +93,48 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
               <img
                 src={src}
                 alt={alt}
-                className="w-full h-auto rounded-xl shadow-md"
+                className="w-full h-auto rounded-sm border border-border"
                 loading="lazy"
               />
               {alt && (
-                <figcaption className="text-center text-sm text-gray-500 mt-3 italic">
+                <figcaption className="text-center text-sm text-slate-500 dark:text-zinc-500 mt-3 italic">
                   {alt}
                 </figcaption>
               )}
             </figure>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-primary pl-6 py-2 my-8 italic text-xl text-gray-800 bg-gray-50 rounded-r-lg">
+            <blockquote className="border-l-4 border-[#5235F6] pl-6 py-2 my-8 italic text-xl text-foreground bg-slate-50/50 dark:bg-zinc-900/50 rounded-sm">
               {children}
             </blockquote>
           ),
           h2: ({ children }) => (
-            <h2 className="text-3xl font-bold mt-12 mb-6 text-slate-900 group flex items-center">
+            <h2 className="text-3xl font-bold mt-12 mb-6 text-foreground group flex items-center">
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="text-2xl font-bold mt-10 mb-4 text-slate-900">
+            <h3 className="text-2xl font-bold mt-10 mb-4 text-foreground">
               {children}
             </h3>
           ),
           p: ({ children }) => (
-            <p className="mb-6 leading-8 text-gray-600/90 text-[1.125rem]">
+            <p className="mb-6 leading-8 text-slate-600 dark:text-zinc-300 text-[1.125rem]">
               {children}
             </p>
           ),
           ul: ({ children }) => (
-            <ul className="list-disc pl-6 mb-8 space-y-2 text-gray-600">
+            <ul className="list-disc pl-6 mb-8 space-y-2 text-slate-600 dark:text-zinc-400">
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className="list-decimal pl-6 mb-8 space-y-2 text-gray-600">
+            <ol className="list-decimal pl-6 mb-8 space-y-2 text-slate-600 dark:text-zinc-400">
               {children}
             </ol>
           ),
           hr: () => (
-             <hr className="my-12 border-gray-200" />
+             <hr className="my-12 border-border" />
           )
         }}
       >

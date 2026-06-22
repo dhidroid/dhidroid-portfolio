@@ -1,339 +1,282 @@
-
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Play, Pause, Volume2, RotateCcw, Loader2 } from 'lucide-react';
-import { cn } from '../../utils/cn';
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Play, Pause, RotateCcw, Volume2 } from "lucide-react";
+import { cn } from "../../utils/cn";
 
 interface PodcastPlayerProps {
-    title: string;
-    seriesTitle?: string;
-    description?: string;
-    content?: string;
-    spotifyUrl?: string;
-    coverImage?: string;
+  title: string;
+  seriesTitle?: string;
+  coverImage?: string;
+  content: string;
+  spotifyUrl?: string;
 }
 
-const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
-    title,
-    seriesTitle = "Audio Article",
-    content,
-    spotifyUrl,
-    coverImage
+export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
+  title,
+  seriesTitle = "Studio Podcast",
+  coverImage,
+  content,
+  spotifyUrl
 }) => {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isWaitingForData, setIsWaitingForData] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'es' | 'fr' | 'de' | 'ja' | 'zh'>('en');
-    const [isTTSReady, setIsTTSReady] = useState(false);
-    const [generationProgress, setGenerationProgress] = useState({ current: 0, total: 0, status: '' });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isTTSReady, setIsTTSReady] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
+  const [generationProgress, setGenerationProgress] = useState({
+    current: 0,
+    total: 0,
+    status: ""
+  });
 
-    const kokoroConfig = {
-        'en': { voice: 'af_heart', lang: 'en' },
-        'es': { voice: 'ef_dora', lang: 'es' },
-        'fr': { voice: 'ff_siwis', lang: 'fr' },
-        'de': { voice: 'ef_anna', lang: 'de' },
-        'ja': { voice: 'jf_athena', lang: 'ja' },
-        'zh': { voice: 'zf_xiang', lang: 'zh' },
-    };
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const currentSentenceIndex = useRef(0);
+  const sentencesRef = useRef<string[]>([]);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ttsRef = useRef<any>(null);
-    const ttsLoadingRef = useRef(false);
+  // Initialize SpeechSynthesis and check voices availability
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      setIsTTSReady(true);
 
-    const speechAudioRef = useRef<HTMLAudioElement>(new Audio());
-    const audioQueue = useRef<string[]>([]);
-    const isPlayingChunk = useRef(false);
-    const hasStartedGeneration = useRef(false);
-    const generationAbortRef = useRef<AbortController | null>(null);
-
-    useEffect(() => {
-        const loadKokoro = async () => {
-            if (ttsRef.current || ttsLoadingRef.current) return;
-            ttsLoadingRef.current = true;
-            setGenerationProgress({ current: 0, total: 0, status: 'Loading AI model...' });
-            
-            try {
-                const { KokoroTTS } = await import("kokoro-js");
-                ttsRef.current = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-ONNX', { 
-                    dtype: "q8" 
-                });
-                setIsTTSReady(true);
-                setGenerationProgress({ current: 0, total: 0, status: '' });
-            } catch (err) {
-                console.error('Failed to load Kokoro TTS:', err);
-                setGenerationProgress({ current: 0, total: 0, status: 'Failed to load AI' });
-            } finally {
-                ttsLoadingRef.current = false;
-            }
+      // Load voices once to warm up the cache
+      window.speechSynthesis.getVoices();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.getVoices();
         };
-        loadKokoro();
-    }, []);
+      }
+    }
 
-    const stopAll = () => {
-        speechAudioRef.current.pause();
-        speechAudioRef.current.currentTime = 0;
-        setIsPlaying(false);
+    return () => {
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
-        audioQueue.current = [];
-        isPlayingChunk.current = false;
-        hasStartedGeneration.current = false;
-        
-        if (generationAbortRef.current) {
-            generationAbortRef.current.abort();
-            generationAbortRef.current = null;
+  const splitIntoSentences = (text: string): string[] => {
+    // Strip HTML tags if any
+    const cleanText = text.replace(/<[^>]*>/g, "");
+    const sentences = cleanText.match(/[^.!?。]+[.!?。]+|[^.!?。]+$/g) || [cleanText];
+    return sentences.map(s => s.trim()).filter(s => s.length > 0);
+  };
+
+  const getVoiceForLanguage = (langCode: string): SpeechSynthesisVoice | null => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return null;
+    const voices = window.speechSynthesis.getVoices();
+    // Prioritize premium/high-quality voices
+    const sorted = voices.sort((a, b) => {
+      const aName = a.name.toLowerCase();
+      const bName = b.name.toLowerCase();
+      if (aName.includes("natural") || aName.includes("premium")) return -1;
+      if (bName.includes("natural") || bName.includes("premium")) return 1;
+      return 0;
+    });
+
+    const voice = sorted.find(v => v.lang.startsWith(langCode));
+    return voice || null;
+  };
+
+  const playSentence = useCallback((index: number) => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+
+    if (index >= sentencesRef.current.length) {
+      setIsPlaying(false);
+      setGenerationProgress({ current: 0, total: 0, status: "" });
+      currentSentenceIndex.current = 0;
+      return;
+    }
+
+    currentSentenceIndex.current = index;
+    setGenerationProgress({
+      current: index + 1,
+      total: sentencesRef.current.length,
+      status: `Reading segment ${index + 1} of ${sentencesRef.current.length}`
+    });
+
+    // Cancel current speaking before triggering next
+    window.speechSynthesis.cancel();
+
+    const textToSpeak = sentencesRef.current[index];
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    
+    const voice = getVoiceForLanguage(selectedLanguage);
+    if (voice) {
+      utterance.voice = voice;
+    }
+    utterance.lang = selectedLanguage;
+    utterance.rate = 1.0; // Clear speaking rate
+
+    utterance.onend = () => {
+      // Continue queue
+      playSentence(index + 1);
+    };
+
+    utterance.onerror = (e) => {
+      console.warn("SpeechSynthesis utterance error:", e);
+      if (e.error !== "interrupted") {
+        playSentence(index + 1);
+      }
+    };
+
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+  }, [selectedLanguage]);
+
+  const togglePlay = () => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+
+    if (isPlaying) {
+      // Pause
+      window.speechSynthesis.pause();
+      setIsPlaying(false);
+    } else {
+      if (window.speechSynthesis.paused && utteranceRef.current) {
+        // Resume
+        window.speechSynthesis.resume();
+        setIsPlaying(true);
+      } else {
+        // Start from beginning or current sentence
+        window.speechSynthesis.cancel();
+        if (sentencesRef.current.length === 0) {
+          sentencesRef.current = splitIntoSentences(content);
         }
+        setIsPlaying(true);
+        playSentence(currentSentenceIndex.current);
+      }
+    }
+  };
+
+  const stopAll = () => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    setIsPlaying(false);
+    setGenerationProgress({ current: 0, total: 0, status: "" });
+    currentSentenceIndex.current = 0;
+    utteranceRef.current = null;
+  };
+
+  const getProgressPercent = () => {
+    if (generationProgress.total > 0) {
+      return Math.round((generationProgress.current / generationProgress.total) * 100);
+    }
+    return 0;
+  };
+
+  return (
+    <div className="w-full bg-slate-50/50 dark:bg-zinc-900/50 border border-border p-6 md:p-8 font-mono select-none rounded-sm">
+      <div className="flex flex-col gap-6">
         
-        setGenerationProgress({ current: 0, total: 0, status: '' });
-    };
-
-    const splitIntoSentences = (text: string): string[] => {
-        const sentences = text.match(/[^.!?。]+[.!?。]+|[^.!?。]+$/g) || [text];
-        return sentences.filter(s => s.trim().length > 0);
-    };
-
-    const processContent = useCallback(async () => {
-        if (!ttsRef.current || !content) return;
-        
-        setIsWaitingForData(true);
-        hasStartedGeneration.current = true;
-        generationAbortRef.current = new AbortController();
-
-        const config = kokoroConfig[selectedLanguage];
-        const voice = config.voice;
-        
-        const sentences = splitIntoSentences(content);
-        const totalSentences = sentences.length;
-        setGenerationProgress({ current: 0, total: totalSentences, status: 'Generating audio...' });
-        
-        for (let i = 0; i < sentences.length; i++) {
-            if (generationAbortRef.current?.signal.aborted) break;
-            
-            const sentence = sentences[i];
-            setGenerationProgress({ 
-                current: i + 1, 
-                total: totalSentences, 
-                status: `Processing ${i + 1} of ${totalSentences}...` 
-            });
-            
-            try {
-                const audio = await ttsRef.current.generate(sentence, {
-                    voice: voice,
-                });
-                
-                const wavBuffer = audio.wav;
-                const blob = new Blob([wavBuffer], { type: 'audio/wav' });
-                const url = URL.createObjectURL(blob);
-                
-                audioQueue.current.push(url);
-                
-                if (!isPlayingChunk.current && !hasStartedGeneration.current) {
-                    playNextChunk();
-                } else if (!isPlayingChunk.current && audioQueue.current.length === 1) {
-                    playNextChunk();
-                }
-            } catch (err) {
-                if ((err as Error).name !== 'AbortError') {
-                    console.error('TTS generation error:', err);
-                }
-            }
-        }
-        
-        setIsWaitingForData(false);
-        setGenerationProgress({ current: 0, total: 0, status: '' });
-    }, [content, selectedLanguage]);
-
-    const playNextChunk = () => {
-        if (audioQueue.current.length > 0) {
-            const nextUrl = audioQueue.current.shift();
-            if (nextUrl) {
-                isPlayingChunk.current = true;
-                speechAudioRef.current.src = nextUrl;
-                speechAudioRef.current.play()
-                    .then(() => {
-                        setIsPlaying(true);
-                        setIsWaitingForData(false);
-                    })
-                    .catch(e => console.error("Playback error", e));
-            }
-        } else {
-            isPlayingChunk.current = false;
-        }
-    };
-
-    const togglePlay = () => {
-        if (isPlaying) {
-            speechAudioRef.current.pause();
-            setIsPlaying(false);
-        } else {
-            if (isPlayingChunk.current) {
-                speechAudioRef.current.play();
-                setIsPlaying(true);
-            } else if (hasStartedGeneration.current && audioQueue.current.length > 0) {
-                playNextChunk();
-            } else {
-                processContent();
-            }
-        }
-    };
-
-    useEffect(() => {
-        const audio = speechAudioRef.current;
-
-        const onEnded = () => {
-            playNextChunk();
-        };
-
-        audio.addEventListener('ended', onEnded);
-
-        return () => {
-            audio.removeEventListener('ended', onEnded);
-        };
-    }, [playNextChunk]);
-
-    useEffect(() => {
-        return () => {
-            audioQueue.current.forEach(url => URL.revokeObjectURL(url));
-            audioQueue.current = [];
-        };
-    }, []);
-
-    const getStatusMessage = () => {
-        if (!isTTSReady) return 'Loading AI...';
-        if (generationProgress.status) return generationProgress.status;
-        if (isWaitingForData) return 'Generating audio...';
-        return 'AI Generated';
-    };
-
-    const getProgressPercent = () => {
-        if (generationProgress.total > 0) {
-            return Math.round((generationProgress.current / generationProgress.total) * 100);
-        }
-        return 0;
-    };
-
-
-    return (
-        <div className="w-full bg-white border border-gray-200 p-8 md:p-10 font-sans shadow-sm">
-            <div className="flex flex-col gap-8">
-
-                {/* Header & Meta - Pricing Style */}
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                    <div className="flex items-start gap-5">
-                        {coverImage && (
-                            <div className="hidden md:flex w-20 h-20 rounded-lg overflow-hidden shadow-md flex-shrink-0">
-                                <img src={coverImage} alt={title} className="w-full h-full object-cover" />
-                            </div>
-                        )}
-                        <div>
-                            <div className="flex items-center gap-3 mb-4">
-                                <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest">
-                                    {seriesTitle}
-                                </span>
-                                <div className="flex items-center gap-2 text-[10px] font-mono font-medium text-gray-500 uppercase tracking-wider">
-                                    <Volume2 size={12} className={isTTSReady ? "text-green-600" : "text-gray-400"} />
-                                    <span>{isTTSReady ? "AI Module Active" : "Initializing..."}</span>
-                                </div>
-                            </div>
-                            <h3 className="text-3xl md:text-4xl font-display font-bold text-slate-900 leading-tight">
-                                {title}
-                            </h3>
-                        </div>
-                    </div>
-
-                    {/* Minimal Language Selector */}
-                    <div className="flex items-center border border-gray-200 h-10 px-2 bg-gray-50/50">
-                        <select
-                            value={selectedLanguage}
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            onChange={(e) => setSelectedLanguage(e.target.value as any)}
-                            className="bg-transparent text-sm font-medium text-gray-600 focus:outline-none cursor-pointer tracking-wide"
-                        >
-                            <option value="en">English</option>
-                            <option value="es">Español</option>
-                            <option value="fr">Français</option>
-                            <option value="de">Deutsch</option>
-                            <option value="ja">日本語</option>
-                            <option value="zh">中文</option>
-                        </select>
-                    </div>
-                </div>
-
-                {/* Progress / Status */}
-                <div className="space-y-3">
-                    <div className="h-1 w-full bg-gray-100 overflow-hidden rounded-full">
-                        {isWaitingForData && generationProgress.total > 0 && (
-                            <div 
-                                className="h-full bg-primary transition-all duration-300 ease-out"
-                                style={{ width: `${getProgressPercent()}%` }}
-                            />
-                        )}
-                        {isWaitingForData && generationProgress.total > 0 && (
-                            <div className="flex items-center justify-between mt-2">
-                                <span className="text-[10px] text-gray-500 font-mono">
-                                    {generationProgress.status}
-                                </span>
-                                <span className="text-[10px] text-gray-500 font-mono">
-                                    {getProgressPercent()}%
-                                </span>
-                            </div>
-                        )}
-                        {isWaitingForData && !generationProgress.total && (
-                            <div className="h-full bg-primary/30 w-full animate-pulse rounded-full" />
-                        )}
-                    </div>
-                </div>
-
-                {/* Pricing Style Controls */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-6">
-                        <button
-                            onClick={togglePlay}
-                            disabled={isWaitingForData && !isPlaying}
-                            className={cn(
-                                "w-16 h-16 bg-slate-900 text-white flex items-center justify-center hover:bg-slate-800 transition-all duration-200 shadow-xl",
-                                (isWaitingForData && !isPlaying) && "opacity-90 cursor-wait"
-                            )}
-                        >
-                            {isWaitingForData ? (
-                                <Loader2 className="w-6 h-6 animate-spin text-white/50" />
-                            ) : isPlaying ? (
-                                <Pause size={24} fill="currentColor" />
-                            ) : (
-                                <Play size={24} fill="currentColor" className="ml-1" />
-                            )}
-                        </button>
-
-                        <div className="flex flex-col">
-                            <span className="text-xs font-bold uppercase tracking-widest text-slate-900">
-                                {isPlaying ? "Now Playing" : "Listen Audio"}
-                            </span>
-                            <span className="text-[10px] uppercase tracking-wider text-gray-400 font-mono mt-1">
-                                {getStatusMessage()}
-                            </span>
-                        </div>
-
-                        <div className="hidden md:flex items-center gap-2 ml-4">
-                            <button onClick={() => stopAll()} className="p-3 text-gray-400 hover:text-red-500 transition-colors" title="Stop & Reset">
-                                <RotateCcw size={18} />
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        {spotifyUrl && (
-                            <a
-                                href={spotifyUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-[#1DB954] transition-colors"
-                            >
-                                <span className="w-1.5 h-1.5 rounded-full bg-current group-hover:animate-pulse" />
-                                Spotify
-                            </a>
-                        )}
-                    </div>
-                </div>
+        {/* Header Block */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="flex items-center gap-4">
+            {coverImage && (
+              <div className="w-16 h-16 border border-border overflow-hidden rounded-sm flex-shrink-0">
+                <img src={coverImage} alt={title} className="w-full h-full object-cover" />
+              </div>
+            )}
+            <div>
+              <div className="flex items-center gap-3 mb-1.5 text-[10px]">
+                <span className="bg-[#5235F6] text-white px-2 py-0.5 uppercase tracking-widest font-bold">
+                  {seriesTitle}
+                </span>
+                <span className="flex items-center gap-1.5 text-slate-400 dark:text-zinc-500 uppercase tracking-widest">
+                  <Volume2 size={12} className={isTTSReady ? "text-[#5235F6]" : "text-zinc-600"} />
+                  {isTTSReady ? "NATIVE VOICE SYNTHESIS" : "INITIALIZING..."}
+                </span>
+              </div>
+              <h3 className="text-lg md:text-xl font-bold text-foreground font-display uppercase tracking-tight leading-tight">
+                {title}
+              </h3>
             </div>
+          </div>
+
+          {/* Language select tab */}
+          <div className="flex items-center border border-border h-9 px-2 bg-background rounded-sm">
+            <select
+              value={selectedLanguage}
+              onChange={(e) => {
+                stopAll();
+                setSelectedLanguage(e.target.value);
+                sentencesRef.current = [];
+              }}
+              className="bg-transparent text-xs font-bold text-slate-500 dark:text-zinc-400 focus:outline-none cursor-pointer tracking-wider uppercase"
+            >
+              <option value="en">English (US)</option>
+              <option value="es">Español (ES)</option>
+              <option value="fr">Français (FR)</option>
+              <option value="de">Deutsch (DE)</option>
+              <option value="ja">日本語 (JP)</option>
+              <option value="zh">中文 (ZH)</option>
+            </select>
+          </div>
         </div>
-    );
+
+        {/* Telemetry Progress bar */}
+        {isPlaying && generationProgress.total > 0 && (
+          <div className="space-y-1.5">
+            <div className="h-1 w-full bg-border overflow-hidden rounded-sm">
+              <div
+                className="h-full bg-[#5235F6] transition-all duration-300 ease-out"
+                style={{ width: `${getProgressPercent()}%` }}
+              />
+            </div>
+            <div className="flex justify-between items-center text-[10px] text-slate-400 dark:text-zinc-500">
+              <span>{generationProgress.status}</span>
+              <span>{getProgressPercent()}%</span>
+            </div>
+          </div>
+        )}
+
+        {/* Action Controls */}
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={togglePlay}
+              className="w-12 h-12 bg-foreground text-background flex items-center justify-center hover:bg-[#5235F6] hover:text-white transition-all duration-200 rounded-sm cursor-pointer"
+            >
+              {isPlaying ? (
+                <Pause size={18} fill="currentColor" />
+              ) : (
+                <Play size={18} fill="currentColor" className="ml-0.5" />
+              )}
+            </button>
+
+            <div className="flex flex-col text-[10px]">
+              <span className="font-bold text-foreground uppercase tracking-widest">
+                {isPlaying ? "READING OUT LOUD" : "STREAM ARTICLE"}
+              </span>
+              <span className="text-slate-400 dark:text-zinc-500 uppercase mt-0.5">
+                {isPlaying ? "SPEAKING ENGINE ACTIVE" : "CLICK PLAY TO LISTEN"}
+              </span>
+            </div>
+
+            {isPlaying && (
+              <button
+                onClick={stopAll}
+                className="p-2.5 border border-border text-slate-400 dark:text-zinc-500 hover:text-red-500 hover:border-red-500 rounded-sm transition-all cursor-pointer ml-2"
+                title="Reset Audio Reader"
+              >
+                <RotateCcw size={14} />
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-4 text-[10px]">
+            {spotifyUrl && (
+              <a
+                href={spotifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-1.5 font-bold uppercase tracking-widest text-slate-400 dark:text-zinc-500 hover:text-[#1DB954] transition-colors"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                Spotify
+              </a>
+            )}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
 };
 
 export default PodcastPlayer;

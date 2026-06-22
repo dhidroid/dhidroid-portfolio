@@ -60,36 +60,37 @@ const SelectedWork = () => {
         className="w-full"
       >
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 px-4 md:px-0">
-             <div className="max-w-xl">
-               <Badge className="mb-6 rounded-none">Portfolio</Badge>
-               <motion.h2 
-                 variants={fadeInUp} 
-                 className="text-4xl md:text-5xl font-bold font-display tracking-tight mb-4 text-foreground"
-               >
-                 Selected Work
-               </motion.h2>
-               <motion.p variants={fadeInUp} className="text-muted-foreground text-lg leading-relaxed font-sans">
-                 A curated selection of projects demonstrating design engineering and performance.
-               </motion.p>
+             <div className="max-w-xl select-none">
+                <div className="mb-4">
+                  <span className="text-xs font-mono text-slate-400 dark:text-zinc-500 bg-slate-100 dark:bg-zinc-800/80 px-2.5 py-1 rounded-md border border-slate-200/50 dark:border-zinc-700/50">
+                    05 // RECENT PROJECTS
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold font-display uppercase tracking-tighter mb-4 text-slate-900 dark:text-white">
+                  Selected Work
+                </h2>
+                <p className="text-slate-500 dark:text-zinc-400 text-base leading-relaxed font-body">
+                  A curated selection of projects demonstrating design engineering and full-stack performance.
+                </p>
              </div>
-             <motion.div variants={fadeInUp}>
-               <Link to="/works" className="inline-flex items-center gap-2 font-medium text-primary hover:gap-3 transition-all">
-                 View All Projects <ArrowRight className="w-5 h-5" />
-               </Link>
-             </motion.div>
+             <div>
+                <Link to="/works" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-primary hover:gap-3 transition-all">
+                  [ View All Projects ] <ArrowRight className="w-4 h-4" />
+                </Link>
+             </div>
         </div>
 
-        {/* Connected Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 border border-border/60 divide-y md:divide-y-0 md:divide-x divide-border/60 bg-card">
+        {/* Connected Grid - Swiss Editorial divide */}
+        <div className="grid grid-cols-1 md:grid-cols-3 border border-slate-200 dark:border-zinc-800 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-zinc-800 bg-white/40 dark:bg-zinc-950/20 backdrop-blur-sm shadow-lg">
           {projects.map((project) => (
              <motion.div 
                key={project._id}
                variants={fadeInUp}
-               className="group relative flex flex-col hover:bg-muted/5 transition-colors duration-500"
+               className="group relative flex flex-col hover:bg-slate-50/50 dark:hover:bg-zinc-900/10 transition-colors duration-500"
              >
                {/* Image Area */}
-               <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-border/60 bg-muted/20">
-                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500 z-10" />
+               <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-slate-200 dark:border-zinc-800 bg-slate-100/50 dark:bg-zinc-950/40">
+                  <div className="absolute inset-0 bg-slate-950/5 dark:bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
                   {(project as any).image?.asset?.url && (
                     <img 
                       src={(project as any).image.asset.url} 
@@ -102,25 +103,25 @@ const SelectedWork = () => {
                {/* Content Area */}
                <div className="p-8 flex flex-col flex-grow">
                  {/* Tech Stack */}
-                 <div className="flex flex-wrap gap-2 mb-6">
+                 <div className="flex flex-wrap gap-2 mb-6 select-none">
                    {project.technologies?.slice(0, 3).map((tech, i) => (
-                     <span key={i} className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground border border-border/60 px-2 py-1">
+                     <span key={i} className="text-[10px] font-mono tracking-wider text-slate-500 dark:text-zinc-500 border border-slate-200 dark:border-zinc-800 px-2 py-0.5 rounded">
                        {tech.title}
                      </span>
                    ))}
                  </div>
                  
-                 <h3 className="text-2xl font-bold font-display text-foreground mb-3 group-hover:text-primary transition-colors">
+                 <h3 className="text-xl md:text-2xl font-extrabold font-display uppercase tracking-tight text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors select-none">
                    {project.title}
                  </h3>
                  
-                 <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 mb-8 font-sans">
+                 <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-3 mb-8 font-sans">
                    {project.projectDescription}
                  </p>
 
-                 <div className="mt-auto pt-6 border-t border-border/40 flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">View Case Study</span>
-                    <div className="w-10 h-10 flex items-center justify-center bg-muted/10 text-foreground group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                 <div className="mt-auto pt-6 border-t border-slate-200 dark:border-zinc-800/60 flex items-center justify-between select-none">
+                    <span className="text-xs font-mono uppercase tracking-wider text-slate-700 dark:text-zinc-300 group-hover:text-primary transition-colors">[ View Case Study ]</span>
+                    <div className="w-10 h-10 flex items-center justify-center bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300 rounded-full shadow-sm">
                         <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
                     </div>
                  </div>

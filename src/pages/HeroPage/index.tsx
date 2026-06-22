@@ -170,10 +170,7 @@ const HomePage: React.FC = () => {
 
       <Hero />
 
-      {/* Stuxen V2 Flow: Stats immediately after Hero (or mixed) */}
-      <div className="mb-24">
-        <ExperienceStats />
-      </div>
+      <ExperienceStats />
 
       {/* <Capabilities /> */}
       <ServiceList />
@@ -181,25 +178,30 @@ const HomePage: React.FC = () => {
 
       {/* <Testimonials /> */}
       {workExpData.length > 0 && (
-        <div className="pt-24 bg-gray-50 border-t border-gray-100">
+        <div className="pt-24 bg-background border-t border-slate-200 dark:border-zinc-800">
           <WorkExperience experiences={workExpData} />
         </div>
       )}
 
       {/* Blog Section */}
-      <section className="py-24 bg-white border-t border-gray-100">
+      <section className="py-24 bg-background border-t border-slate-200 dark:border-zinc-800">
         <Container>
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 font-display">
-                Latest <span className="text-primary italic font-serif font-normal">Insights</span>
+            <div className="select-none">
+              <div className="mb-4">
+                <span className="text-xs font-mono text-slate-400 dark:text-zinc-500 bg-slate-100 dark:bg-zinc-800/80 px-2.5 py-1 rounded-md border border-slate-200/50 dark:border-zinc-700/50">
+                  06 // ARTICLES & ESSAYS
+                </span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold font-display uppercase tracking-tighter mb-4 text-slate-900 dark:text-white">
+                Latest Insights
               </h2>
-              <p className="text-lg text-gray-500 font-body">
+              <p className="text-lg text-slate-500 dark:text-zinc-400 font-body">
                 Thoughts on development, design, and technology.
               </p>
             </div>
-            <Link to="/bloglist" className="text-primary font-semibold hover:underline">
-              View all posts &rarr;
+            <Link to="/bloglist" className="font-mono text-xs uppercase tracking-wider text-primary">
+              [ View all posts ]
             </Link>
           </div>
 

@@ -86,12 +86,16 @@ const SEO: React.FC<SEOProps> = ({
       
       {/* Article specific Open Graph */}
       {type === 'article' && publishedAt && (
-        <>
-          <meta property="article:published_time" content={publishedAt} />
-          <meta property="article:modified_time" content={modifiedAt || publishedAt} />
-          <meta property="article:author" content={author || PERSONAL_INFO.name} />
-          {section && <meta property="article:section" content={section} />}
-        </>
+        <meta property="article:published_time" content={publishedAt} />
+      )}
+      {type === 'article' && publishedAt && (
+        <meta property="article:modified_time" content={modifiedAt || publishedAt} />
+      )}
+      {type === 'article' && publishedAt && (
+        <meta property="article:author" content={author || PERSONAL_INFO.name} />
+      )}
+      {type === 'article' && publishedAt && section && (
+        <meta property="article:section" content={section} />
       )}
       
       {/* Twitter */}

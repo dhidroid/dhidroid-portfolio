@@ -74,18 +74,21 @@ const BlogList = () => {
                 {...generateMetaForRoute('/bloglist')}
             />
 
-            <main className="bg-white min-h-screen">
+            <main className="bg-background min-h-screen">
                 <BlogIntro />
 
                 <Container className="max-w-[1800px] px-6 pb-32">
                     {/* Category Filter */}
-                    <div className="flex gap-6 mb-16 overflow-x-auto pb-4 scrollbar-hide">
+                    <div className="flex gap-2.5 mb-16 overflow-x-auto pb-4 scrollbar-hide border-b border-border">
                         {categories.map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
-                                className={`text-sm font-medium uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 ${selectedCategory === cat ? 'text-black border-b border-black' : 'text-gray-400 hover:text-gray-600'
-                                    }`}
+                                className={`text-xs font-mono uppercase tracking-wider px-4 py-2 border transition-all duration-300 cursor-pointer whitespace-nowrap flex-shrink-0 ${
+                                    selectedCategory === cat
+                                        ? 'bg-[#5235F6] text-white border-[#5235F6]'
+                                        : 'border-border text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:border-slate-300 dark:hover:border-zinc-700 bg-transparent'
+                                }`}
                             >
                                 {cat}
                             </button>

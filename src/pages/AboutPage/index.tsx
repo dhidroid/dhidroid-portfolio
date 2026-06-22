@@ -8,6 +8,8 @@ import TechSphere from '../../components/about/TechSphere';
 import WorkExperience from '../../components/home/WorkExperience';
 import CTA from '../../components/home/CTA';
 import { client } from "../../senity/senity";
+import { Container } from "../../components/ui/Container";
+import { D3MapVoronoiStippling } from "../../components/about/D3MapVoronoiStippling";
 
 const AboutPage = () => {
     const [workExpData, setWorkExpData] = React.useState<any[]>([]);
@@ -128,14 +130,17 @@ const AboutPage = () => {
                 {...generateMetaForRoute('/about')}
             />
 
-            <main className="bg-white min-h-screen">
+            <main className="bg-background min-h-screen">
                 <AboutHero />
+                <Container className="max-w-[1800px] px-6 mb-16">
+                    <D3MapVoronoiStippling />
+                </Container>
                 <ExperienceStats />
                 <TechSphere />
                 <CoreValues />
 
                 {workExpData.length > 0 && (
-                    <div className="pt-24 bg-gray-50 border-t border-gray-100">
+                    <div className="pt-24 bg-background border-t border-slate-200 dark:border-zinc-800">
                         <WorkExperience experiences={workExpData} />
                     </div>
                 )}

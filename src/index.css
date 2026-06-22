@@ -13,20 +13,20 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --background: hsl(35 15% 97%); /* Warm paper color #FAF8F5 */
+    --foreground: hsl(240 5.9% 10%); /* Slate 900 charcoal #111111 */
+    --radius: 0.25rem; /* Swiss sharp radius */
+    --border: hsl(35 12% 88%); /* Muted paper border #E5E2DC */
+    --input: hsl(35 12% 88%);
+    --ring: hsl(222.2 84% 4.9%);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: hsl(240 10% 5%); /* Anthracite charcoal #0C0C0E */
+    --foreground: hsl(210 40% 98%); /* Warm white #F3F4F6 */
+    --border: hsl(240 7% 13%); /* Steel charcoal border #1E1E22 */
+    --input: hsl(240 7% 13%);
+    --ring: hsl(212.7 26.8% 83.9%);
   }
 
   html {

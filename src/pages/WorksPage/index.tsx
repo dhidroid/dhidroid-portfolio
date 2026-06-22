@@ -10,7 +10,7 @@ const WorksPage = () => {
             <SEO
                 {...generateMetaForRoute('/works')}
             />
-            <main className="bg-white min-h-screen">
+            <main className="bg-background min-h-screen">
                 <WorksIntro />
                 <ProjectGrid />
             </main>
