@@ -456,23 +456,6 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
             />
           </div>
         </div>
-
-        {/* Right Column: D3 Animation (4 columns) */}
-        <div className="lg:col-span-4 flex flex-col relative h-[380px] lg:h-full overflow-hidden bg-slate-50/50 dark:bg-zinc-950/20">
-          <div className="absolute top-4 left-4 z-10 font-mono text-[9px] text-slate-400 dark:text-zinc-500">
-            [ D3_SCATTERPLOT // {location.pathname.toUpperCase()} ]
-          </div>
-
-          {/* Dynamic D3 Loader Canvas */}
-          <div ref={d3ContainerRef} className="w-full h-full flex items-center justify-center">
-            <canvas ref={d3CanvasRef} style={{ width: "100%", height: "100%" }} className="block" />
-          </div>
-
-          <div className="absolute bottom-4 left-4 right-4 flex justify-between font-mono text-[9px] text-slate-400 dark:text-zinc-500">
-            <span>SCATTER: SYNCED</span>
-            <span>SHAPES: SHAPE-MAPPING</span>
-          </div>
-        </div>
       </div>
 
       {/* Progress Line */}
