@@ -21,9 +21,9 @@ const Footer = () => {
       <Newsletter />
       
       {/* Interactive D3 Generative Visual */}
-      <div className="max-w-[1800px] mx-auto px-4 md:px-8 mt-12">
+      {/* <div className="max-w-[1800px] mx-auto px-4 md:px-8 mt-12">
         <D3FooterAnimation />
-      </div>
+      </div> */}
 
       <div className="pt-16 pb-12">
         <Container>

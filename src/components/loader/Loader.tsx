@@ -3,11 +3,6 @@ import { useLocation } from "react-router";
 import { motion } from "motion/react";
 import * as d3 from "d3";
 
-interface LoaderProps {
-  pageName?: string;
-  pageDescription?: string;
-}
-
 interface ScatterPoint {
   label: string;
   category: string;
@@ -15,7 +10,7 @@ interface ScatterPoint {
   y: number; // 0 - 100
 }
 
-const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Element => {
+const Loader = (): React.JSX.Element => {
   const location = useLocation();
   const [lines, setLines] = useState<string[]>([]);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
@@ -431,7 +426,7 @@ const Loader = ({ pageName, pageDescription }: LoaderProps = {}): React.JSX.Elem
               {getPageTitle(location.pathname)}
             </h1>
             <p className="text-sm font-mono text-slate-400 dark:text-zinc-500 mt-6 uppercase tracking-wider">
-              PATH // LOCALHOST:5173{location.pathname}
+              PATH // {window.location.origin}{location.pathname}
             </p>
           </div>
 
