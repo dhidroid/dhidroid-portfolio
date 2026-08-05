@@ -7,6 +7,7 @@ interface BlogHeroProps {
   date: string;
   readingTime?: number;
   author?: string;
+  authorImage?: string;
   category?: string;
   image?: string;
 }
@@ -16,6 +17,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({
     date, 
     readingTime, 
     author, 
+    authorImage,
     category,
     image 
 }) => {
@@ -61,9 +63,22 @@ const BlogHero: React.FC<BlogHeroProps> = ({
                 </span>
               </div>
               {author && (
-                <div className="flex justify-between p-4">
+                <div className="flex justify-between items-center p-4">
                   <span className="text-slate-400">WRITER:</span>
-                  <span className="font-bold text-foreground">{author.toUpperCase()}</span>
+                  <div className="flex items-center gap-2">
+                    {authorImage ? (
+                      <img 
+                        src={authorImage} 
+                        alt={author} 
+                        className="w-5 h-5 rounded-full object-cover border border-primary/40"
+                      />
+                    ) : (
+                      <div className="w-5 h-5 rounded-full bg-[#5235F6]/10 text-[#5235F6] flex items-center justify-center font-bold text-[9px]">
+                        {author.charAt(0)}
+                      </div>
+                    )}
+                    <span className="font-bold text-foreground">{author.toUpperCase()}</span>
+                  </div>
                 </div>
               )}
               {readingTime && (

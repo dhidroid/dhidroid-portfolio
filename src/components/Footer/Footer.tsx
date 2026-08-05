@@ -83,6 +83,9 @@ const Footer = () => {
                   <LinkPreview href="/bloglist" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Blog</LinkPreview>
                 </li>
                 <li>
+                  <LinkPreview href="/blog/authors" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Blog Authors</LinkPreview>
+                </li>
+                <li>
                   <LinkPreview href="/schedule" className="text-slate-600 dark:text-zinc-400 hover:text-primary dark:hover:text-primary transition-colors text-sm">Schedule Demo</LinkPreview>
                 </li>
               </ul>

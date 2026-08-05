@@ -16,6 +16,7 @@ import BlogHero from "../../components/blog/BlogHero";
 import BlogShare from "../../components/blog/BlogShare";
 import RecommendedBlogs from "../../components/blog/RecommendedBlogs";
 import PodcastPlayer from "../../components/blog/PodcastPlayer";
+import BlogAuthorByline from "../../components/blog/BlogAuthorByline";
 
 const builder = imageUrlBuilder(client);
 
@@ -160,7 +161,7 @@ const BlogPage = () => {
           *[_type == "post" && slug.current == $slug][0] {
             title,
             mainImage { asset->{_id, url}, alt },
-            author -> { name, image { asset->{_id, url} } },
+            author -> { name, slug { current }, image { asset->{_id, url} }, bio },
             categories[] -> { title },
             publishedAt,
             body,
@@ -292,6 +293,7 @@ const BlogPage = () => {
                     date={post.publishedAt}
                     readingTime={post.readingTime}
                     author={post.author?.name}
+                    authorImage={post.author?.image?.asset?.url}
                     category={post.categories?.[0]?.title}
                     image={post.mainImage?.asset?.url}
                 />
@@ -325,6 +327,9 @@ const BlogPage = () => {
                                 </p>
                             </div>
                         )}
+
+                        {/* Author Byline Spotlight */}
+                        <BlogAuthorByline author={post.author} />
 
                         {/* Share Component */}
                         <BlogShare title={post.title} url={currentUrl} />

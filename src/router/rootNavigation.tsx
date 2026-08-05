@@ -9,6 +9,7 @@ import Loader from "../components/loader/Loader";
 const HomeScreen = React.lazy(() => import("../pages/HeroPage/index"));
 const BlogPage = React.lazy(() => import("../pages/BlogPage/index"));
 const BlogList = React.lazy(() => import("../pages/BlogPage/BlogList"));
+const BlogAuthorsPage = React.lazy(() => import("../pages/BlogAuthorsPage/index"));
 const AboutPage = React.lazy(() => import("../pages/AboutPage"));
 const SkillsPage = React.lazy(() => import("../pages/SkillsPage"));
 const ServicesPage = React.lazy(() => import("../pages/ServicesPage"));
@@ -76,6 +77,8 @@ export function Router() {
 
             {/* Blog Routes */}
             <Route path="/bloglist" element={<BlogList />} />
+            <Route path="/blog/authors" element={<BlogAuthorsPage />} />
+            <Route path="/authors" element={<BlogAuthorsPage />} />
             <Route path="/blog/:slug" element={<BlogPage />} />
             <Route path="/createblog" element={<BlogCreate />} />
 
