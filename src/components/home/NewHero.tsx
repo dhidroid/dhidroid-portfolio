@@ -13,7 +13,6 @@ const NewHero: React.FC = () => {
             {/* Header/Eyebrow */}
             <div className="flex items-center gap-4 mb-8 text-sm font-medium text-gray-500">
                <span className="flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-gray-200 shadow-sm">
-                  <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                   Available for work
                </span>
                <span>Based in India, working worldwide</span>

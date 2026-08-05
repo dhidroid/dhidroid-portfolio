@@ -53,7 +53,6 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, 
         <div className="flex items-center justify-between p-4 px-6 border-b border-border/40 bg-muted/20">
             {title && (
                 <div className="flex items-center gap-2">
-                     <span className="w-2 h-2 rounded-full bg-primary" />
                      <h3 className="font-display font-medium uppercase tracking-wider text-sm">{title}</h3>
                 </div>
             )}

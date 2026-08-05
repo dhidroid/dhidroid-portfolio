@@ -231,7 +231,6 @@ const ChatBot = () => {
             {/* Header */}
             <div className="bg-[#5235F6]/10 p-3 border-b border-[#5235F6]/30 flex justify-between items-center select-none">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500" />
                 <span className="text-[#A99DFF] font-bold text-xs uppercase tracking-wider">DhiDroid Agent v5.0</span>
               </div>
               <span className="text-white text-[10px] opacity-60">HF DIRECT</span>
