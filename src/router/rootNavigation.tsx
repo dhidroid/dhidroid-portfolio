@@ -46,7 +46,6 @@ function BlogCreate() {
 }
 
 export function Router() {
-  const location = useLocation();
 
   return (
     <Suspense fallback={<LoadingFallback />}>
