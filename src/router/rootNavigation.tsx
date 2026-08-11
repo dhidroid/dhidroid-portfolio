@@ -47,19 +47,9 @@ function BlogCreate() {
 
 export function Router() {
   const location = useLocation();
-  const [transitioning, setTransitioning] = useState(false);
-
-  useEffect(() => {
-    setTransitioning(true);
-    const timer = setTimeout(() => {
-      setTransitioning(false);
-    }, 2500); // 2.5s route change overlay timer
-    return () => clearTimeout(timer);
-  }, [location.pathname]);
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      {transitioning && <Loader />}
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow">
