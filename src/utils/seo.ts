@@ -22,11 +22,11 @@ export interface ExperienceData {
 }
 
 export const EXPERIENCE_DATA: ExperienceData = {
-  yearsOfExperience: "10+",
+  yearsOfExperience: "1.5+",
   projectsCompleted: "50+",
   clientsServed: "30+",
   technologies: [
-    "React Native", "Go", "TypeScript", "Node.js", "React", 
+    "React Native", "Go", "TypeScript", "Node.js", "React",
     "Python", "PostgreSQL", "MongoDB", "Firebase",
     "AWS", "Docker", "Sanity Studio CMS", "Git", "Figma"
   ],
@@ -245,16 +245,16 @@ function defaultTitleForRoute(route: string) {
   switch (route) {
     case '/': return `${PERSONAL_INFO.seo.defaultTitle}`;
     case '/works':
-    case '/project': return `Portfolio & Case Studies | ${base} - 10+ Years Experience (${EXPERIENCE_DATA.projectsCompleted} Projects)`;
+    case '/project': return `Portfolio & Case Studies | ${base} - 1.5+ Years Experience (${EXPERIENCE_DATA.projectsCompleted} Projects)`;
     case '/bloglist': return `Engineering Blog & Technical Insights | ${base} - React Native, Go & Sanity CMS`;
     case '/authors':
     case '/blog/authors': return `Blog Authors & Editorial Team | ${base} - Sanity Studio Authors`;
-    case '/skills': return `Expertise & Tech Stack | ${base} - 10+ Yrs Exp in ${EXPERIENCE_DATA.technologies.slice(0, 4).join(', ')}`;
-    case '/about': return `The About Gazette & Biography | ${base} - 10+ Years Experience`;
-    case '/services': return `Mobile & Full-Stack Development Services | ${base} - 10+ Yrs Exp`;
+    case '/skills': return `Expertise & Tech Stack | ${base} - 1.5+ Yrs Exp in ${EXPERIENCE_DATA.technologies.slice(0, 4).join(', ')}`;
+    case '/about': return `The About Gazette & Biography | ${base} - 1.5+ Years Experience`;
+    case '/services': return `Mobile & Full-Stack Development Services | ${base} - 1.5+ Yrs Exp`;
     case '/pricing': return `Pricing & Project Tiers | ${base} - Transparent Engineering Services`;
     case '/contact': return `Contact ${PERSONAL_INFO.name} | ${base} - Let's Build Something Great`;
-    case '/schedule': return `Schedule Technical Consultation | ${base} - 10+ Yrs Engineering Expertise`;
+    case '/schedule': return `Schedule Technical Consultation | ${base} - 1.5+ Yrs Engineering Expertise`;
     case '/changelog': return `Changelog | ${base} - System Version History`;
     case '/licenses': return `Licenses | ${base} - Open Source Software Licenses`;
     case '/style-guide': return `Style Guide | ${base} - Editorial Design System`;
@@ -272,10 +272,10 @@ function defaultDescriptionForRoute(route: string) {
     case '/blog/authors': return `Meet the writers, engineers, and contributors publishing technical articles and tutorials on the Dhidroid engineering blog directly from Sanity CMS.`;
     case '/skills': return `Technical Stack: ${EXPERIENCE_DATA.technologies.join(', ')}. Over ${EXPERIENCE_DATA.yearsOfExperience} years of hands-on expertise in ${EXPERIENCE_DATA.specializations.join(', ')}.`;
     case '/about': return `${PERSONAL_INFO.name} - ${PERSONAL_INFO.role} with ${EXPERIENCE_DATA.yearsOfExperience} years of experience building mobile applications and distributed backend architecture in Chennai, India.`;
-    case '/services': return `Senior software engineering services backed by 10+ years experience: Mobile App Architecture, Go Backend Microservices, Full-Stack Web Development, and Sanity CMS Integration.`;
-    case '/pricing': return `Transparent pricing for senior engineering and mobile architecture services with 10+ years of hands-on experience.`;
-    case '/contact': return `Get in touch with Dhinesh Kumar (10+ years experience) for mobile app development, backend architecture, and technical consulting.`;
-    case '/schedule': return `Book a technical consultation with Dhinesh Kumar. 10+ years experience in React Native, Go, and Cloud Architecture.`;
+    case '/services': return `Senior software engineering services backed by 1.5+ years experience: Mobile App Architecture, Go Backend Microservices, Full-Stack Web Development, and Sanity CMS Integration.`;
+    case '/pricing': return `Transparent pricing for senior engineering and mobile architecture services with 1.5+ years of hands-on experience.`;
+    case '/contact': return `Get in touch with Dhinesh Kumar (1.5+ years experience) for mobile app development, backend architecture, and technical consulting.`;
+    case '/schedule': return `Book a technical consultation with Dhinesh Kumar. 1.5+ years experience in React Native, Go, and Cloud Architecture.`;
     default: return PERSONAL_INFO.seo.defaultDescription;
   }
 }
@@ -285,16 +285,16 @@ function defaultKeywordsForRoute(route: string) {
   switch (route) {
     case '/': return [...base, ...EXPERIENCE_DATA.specializations, `${EXPERIENCE_DATA.yearsOfExperience} years experience`, 'Senior Software Engineer'];
     case '/works':
-    case '/project': return [...base, 'Portfolio', 'Case Studies', 'Project Portfolio', 'Mobile Architecture', 'React Native Apps', '10+ Years Exp'];
+    case '/project': return [...base, 'Portfolio', 'Case Studies', 'Project Portfolio', 'Mobile Architecture', 'React Native Apps', '1.5+ Years Exp'];
     case '/bloglist': return [...base, 'Technical Blog', 'Sanity CMS', 'React Native Tutorials', 'Go Microservices', 'Software Engineering Blog'];
     case '/authors':
     case '/blog/authors': return [...base, 'Blog Authors', 'Sanity Studio Authors', 'Editorial Board', 'Technical Writers', 'Engineering Team'];
-    case '/skills': return [...base, 'Tech Stack', 'React Native', 'Go', 'TypeScript', 'Docker', '10+ Years Experience'];
-    case '/about': return [...base, 'About Developer', 'Senior Software Engineer', 'Mobile Specialist', '10+ Years Experience', 'Chennai Engineer'];
-    case '/services': return [...base, 'Senior Engineering Services', 'Mobile Architecture', 'Go Services', '10+ Years Exp'];
+    case '/skills': return [...base, 'Tech Stack', 'React Native', 'Go', 'TypeScript', 'Docker', '1.5+ Years Experience'];
+    case '/about': return [...base, 'About Developer', 'Senior Software Engineer', 'Mobile Specialist', '1.5+ Years Experience', 'Chennai Engineer'];
+    case '/services': return [...base, 'Senior Engineering Services', 'Mobile Architecture', 'Go Services', '1.5+ Years Exp'];
     case '/pricing': return [...base, 'Engineering Rates', 'Project Pricing', 'Consulting Fees', 'Software Architect Rates'];
-    case '/contact': return [...base, 'Contact Engineer', 'Hire Senior Developer', '10+ Years Exp', 'Project Inquiry'];
-    case '/schedule': return [...base, 'Book Call', 'Technical Consultation', '10+ Years Experience', 'Architecture Review'];
+    case '/contact': return [...base, 'Contact Engineer', 'Hire Senior Developer', '1.5+ Years Exp', 'Project Inquiry'];
+    case '/schedule': return [...base, 'Book Call', 'Technical Consultation', '1.5+ Years Experience', 'Architecture Review'];
     default: return base;
   }
 }

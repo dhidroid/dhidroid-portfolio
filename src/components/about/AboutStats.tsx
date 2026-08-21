@@ -3,7 +3,7 @@ import { Container } from "../ui/Container";
 
 const stats = [
     { number: "3+", label: "Years Experience" },
-    { number: "10+", label: "Projects Completed" },
+    { number: "1.5+", label: "Projects Completed" },
     { number: "5+", label: "Happy Clients" },
     { number: "24/7", label: "Support" }
 ];

@@ -28,12 +28,12 @@ const SchedulePage = () => {
         <React.Fragment>
             <SEO
                 {...generateMetaForRoute('/schedule')}
-                title="Schedule a Technical Consultation | Dhidroid (10+ Yrs Exp)"
+                title="Schedule a Technical Consultation | Dhidroid (1.5+ Yrs Exp)"
                 description="Book a 30-minute technical consultation call with Dhinesh Kumar (Senior Software Engineer & Mobile Specialist)."
             />
 
             <main className="bg-background min-h-screen">
-                
+
                 {/* Header Hero Section */}
                 <section className="pt-28 pb-16 md:pt-36 md:pb-24 border-b border-border bg-background">
                     <Container className="max-w-[1800px] px-6">
@@ -51,7 +51,7 @@ const SchedulePage = () => {
                             {/* Subtitle */}
                             <div className="grid md:grid-cols-12 gap-6 items-end pt-2">
                                 <p className="md:col-span-8 text-lg md:text-xl text-slate-600 dark:text-zinc-400 max-w-3xl font-body leading-relaxed">
-                                    Discuss mobile app architecture, Go backend microservices, or full-stack engineering requirements directly with Dhinesh Kumar (10+ years experience).
+                                    Discuss mobile app architecture, Go backend microservices, or full-stack engineering requirements directly with Dhinesh Kumar (1.5+ years experience).
                                 </p>
 
                                 <div className="md:col-span-4 flex justify-start md:justify-end gap-6 font-mono text-xs text-slate-500 dark:text-zinc-400 border-t md:border-t-0 border-border pt-4 md:pt-0">
@@ -76,7 +76,7 @@ const SchedulePage = () => {
 
                             {/* Left Side: Technical Scope & Agenda */}
                             <div className="lg:col-span-5 space-y-10">
-                                
+
                                 <div>
                                     <span className="font-mono text-xs text-[#5235F6] font-bold uppercase tracking-widest block mb-2">
                                         CONSULTATION AGENDA
@@ -125,7 +125,7 @@ const SchedulePage = () => {
                                 {/* Stats Bar */}
                                 <div className="grid grid-cols-3 gap-4 border-t border-border pt-8 font-mono">
                                     <div className="p-3 bg-slate-100/50 dark:bg-zinc-900/50 border border-border rounded-sm text-center">
-                                        <span className="block text-2xl font-bold text-[#5235F6]">10+</span>
+                                        <span className="block text-2xl font-bold text-[#5235F6]">1.5+</span>
                                         <span className="text-[10px] text-slate-500 uppercase">YEARS EXP</span>
                                     </div>
                                     <div className="p-3 bg-slate-100/50 dark:bg-zinc-900/50 border border-border rounded-sm text-center">
@@ -156,7 +156,7 @@ const SchedulePage = () => {
                                     <Cal
                                         namespace="30min"
                                         calLink="dhidroid/30min"
-                                        style={{ width: "100%", height: "100%", minHeight: "680px",  }}
+                                        style={{ width: "100%", height: "100%", minHeight: "680px", }}
                                         config={{ "layout": "month_view", "theme": "light" }}
                                     />
                                 </div>

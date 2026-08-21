@@ -4,15 +4,15 @@ import { Container } from "../ui/Container";
 import { D3MapVoronoiStippling } from "./D3MapVoronoiStippling";
 import WorkExperience from "../home/WorkExperience";
 import { DynamicIcon } from "../ui/DynamicIcon";
-import { 
-  Newspaper, 
-  MapPin, 
-  Calendar, 
-  TrendingUp, 
-  Award, 
-  Terminal, 
-  Globe, 
-  CheckCircle2, 
+import {
+  Newspaper,
+  MapPin,
+  Calendar,
+  TrendingUp,
+  Award,
+  Terminal,
+  Globe,
+  CheckCircle2,
   ArrowRight,
   Sparkles,
   Layers,
@@ -144,11 +144,11 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
 
   return (
     <div className="bg-[#FAF8F5] dark:bg-[#0C0C0E] text-slate-900 dark:text-zinc-100 min-h-screen font-serif transition-colors duration-300">
-      
+
       {/* 1. TOP GAZETTE MASTHEAD */}
       <header className="pt-24 md:pt-32 pb-6 border-b-2 border-slate-900 dark:border-zinc-200">
         <Container className="max-w-[1800px] px-6">
-          
+
           {/* Top Issue Dateline Bar */}
           <div className="flex flex-col sm:flex-row justify-between items-center py-2 border-b border-t border-slate-900/30 dark:border-zinc-800 text-[11px] font-mono tracking-widest text-slate-600 dark:text-zinc-400 uppercase gap-2 select-none">
             <div className="flex items-center gap-3">
@@ -156,7 +156,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
               <span>•</span>
               <span>{currentDate}</span>
               <span>•</span>
-              <span className="hidden md:inline">10+ YEARS EXPERIENCE EDITION</span>
+              <span className="hidden md:inline">1.5+ YEARS EXPERIENCE EDITION</span>
             </div>
             <div className="flex items-center gap-3">
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -188,7 +188,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
             <div className="md:col-span-4 font-bold text-[#5235F6] flex items-center gap-2">
               <Sparkles className="w-3.5 h-3.5" />
               <span>LEAD REPORT:</span>
-              <span className="text-slate-900 dark:text-white font-normal truncate">DHINESH KUMAR (10+ YRS EXP)</span>
+              <span className="text-slate-900 dark:text-white font-normal truncate">DHINESH KUMAR (1.5+ YRS EXP)</span>
             </div>
             <div className="md:col-span-5 truncate text-slate-600 dark:text-zinc-400">
               SECTION A: BIOGRAPHY • SECTION B: SKILLS MATRIX • SECTION C: CAREER WORKERS • SECTION D: PRICING
@@ -206,21 +206,21 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
       <section className="py-12 border-b border-slate-300 dark:border-zinc-800">
         <Container className="max-w-[1800px] px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            
+
             {/* LEFT 8 COLUMNS: MAIN FEATURE STORY */}
             <div className="lg:col-span-8 space-y-8 pr-0 lg:pr-6 lg:border-r border-slate-300 dark:border-zinc-800">
-              
+
               <div className="space-y-4">
                 <div className="inline-block px-2 py-0.5 bg-[#5235F6] text-white font-mono text-[10px] uppercase tracking-widest">
                   SPECIAL FRONT PAGE BIOGRAPHY
                 </div>
-                
+
                 <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold font-serif leading-[1.05] tracking-tight text-slate-900 dark:text-white">
                   SENIOR SOFTWARE ENGINEER CRAFTS HIGH-PERFORMANCE MOBILE & CLOUD ECOSYSTEMS
                 </h2>
 
                 <h3 className="text-lg md:text-xl font-serif italic text-slate-600 dark:text-zinc-400 border-l-2 border-[#5235F6] pl-4">
-                  Dhinesh Kumar brings over 10+ years of software engineering expertise, bridging native mobile applications with scalable Go backend microservices from Chennai, India.
+                  Dhinesh Kumar brings over 1.5+ years of software engineering expertise, bridging native mobile applications with scalable Go backend microservices from Chennai, India.
                 </h3>
 
                 <div className="flex flex-wrap items-center gap-4 pt-2 font-mono text-xs text-slate-500 border-b border-slate-200 dark:border-zinc-800 pb-3">
@@ -228,7 +228,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
                   <span>•</span>
                   <span>LOCATION: CHENNAI, INDIA</span>
                   <span>•</span>
-                  <span>10+ YEARS EXPERIENCE</span>
+                  <span>1.5+ YEARS EXPERIENCE</span>
                 </div>
               </div>
 
@@ -265,7 +265,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
 
             {/* RIGHT 4 COLUMNS: AUDIT SUMMARY & IMPACT METRICS */}
             <div className="lg:col-span-4 space-y-8">
-              
+
               {/* CAREER AUDIT METRICS BOX */}
               <div className="border-2 border-slate-900 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6 space-y-6">
                 <div className="border-b-2 border-slate-900 dark:border-zinc-700 pb-3">
@@ -279,7 +279,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
 
                 <div className="grid grid-cols-2 gap-4 text-center font-mono">
                   <div className="p-3 bg-slate-50 dark:bg-zinc-950 border border-slate-300 dark:border-zinc-800">
-                    <span className="text-2xl md:text-3xl font-extrabold text-[#5235F6] block">10+</span>
+                    <span className="text-2xl md:text-3xl font-extrabold text-[#5235F6] block">1.5+</span>
                     <span className="text-[10px] text-slate-500 uppercase block">YEARS EXP</span>
                   </div>
                   <div className="p-3 bg-slate-50 dark:bg-zinc-950 border border-slate-300 dark:border-zinc-800">
@@ -333,7 +333,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
       {/* 3. SECTION B: TECHNICAL SKILLS & STACK MATRIX (SKILLS PAGE BASED) */}
       <section className="py-16 border-b-2 border-slate-900 dark:border-zinc-800 bg-slate-100/50 dark:bg-zinc-900/30">
         <Container className="max-w-[1800px] px-6 space-y-12">
-          
+
           <div className="border-t-4 border-b-2 border-slate-900 dark:border-zinc-200 py-3 flex flex-col md:flex-row justify-between items-center font-mono text-xs tracking-widest uppercase">
             <span className="font-bold text-[#5235F6]">SECTION B // TECHNICAL SKILLS & STACK MATRIX</span>
             <span className="text-slate-500 font-normal">PAGE 02 • SYSTEM ENGINE TOOLKIT</span>
@@ -345,11 +345,10 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
               <button
                 key={cat.title}
                 onClick={() => setActiveSkillCategory(cat.title)}
-                className={`px-5 py-2.5 font-mono text-xs uppercase tracking-wider border cursor-pointer transition-all duration-300 ${
-                  activeSkillCategory === cat.title
+                className={`px-5 py-2.5 font-mono text-xs uppercase tracking-wider border cursor-pointer transition-all duration-300 ${activeSkillCategory === cat.title
                     ? 'bg-slate-900 dark:bg-white text-white dark:text-black border-slate-900 dark:border-white font-bold shadow-md'
                     : 'bg-white dark:bg-zinc-900 border-slate-300 dark:border-zinc-800 text-slate-600 dark:text-zinc-400 hover:border-slate-900'
-                }`}
+                  }`}
               >
                 {cat.title}
               </button>
@@ -372,7 +371,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
                     <h3 className="text-2xl font-bold font-serif text-slate-900 dark:text-white uppercase tracking-wide">
                       {cat.title} TOOLKIT
                     </h3>
-                    <span className="font-mono text-xs text-slate-400">10+ YEARS HANDS-ON EXPERIENCE</span>
+                    <span className="font-mono text-xs text-slate-400">1.5+ YEARS HANDS-ON EXPERIENCE</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -421,7 +420,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
       {/* 4. SECTION C: CAREER WORKERS & DELIVERED PROJECTS (WORKS BASED) */}
       <section className="py-16 border-b border-slate-300 dark:border-zinc-800">
         <Container className="max-w-[1800px] px-6 space-y-12">
-          
+
           <div className="border-t-4 border-b-2 border-slate-900 dark:border-zinc-200 py-3 flex flex-col md:flex-row justify-between items-center font-mono text-xs tracking-widest uppercase">
             <span className="font-bold text-[#5235F6]">SECTION C // CAREER WORKERS & DELIVERED CASE STUDIES</span>
             <span className="text-slate-500 font-normal">PAGE 03 • WORK EXPERIENCE & PROJECTS</span>
@@ -490,7 +489,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
       {/* 5. SECTION D: SERVICE PACKAGES & TRANSPARENT PRICING (PRICING PAGE BASED) */}
       <section className="py-16 border-b-2 border-slate-900 dark:border-zinc-800 bg-slate-100/50 dark:bg-zinc-900/30">
         <Container className="max-w-[1800px] px-6 space-y-12">
-          
+
           <div className="border-t-4 border-b-2 border-slate-900 dark:border-zinc-200 py-3 flex flex-col md:flex-row justify-between items-center font-mono text-xs tracking-widest uppercase">
             <span className="font-bold text-[#5235F6]">SECTION D // COMMERCIAL SERVICE PACKAGES & TRANSPARENT PRICING</span>
             <span className="text-slate-500 font-normal">PAGE 04 • SERVICE TARIFF</span>
@@ -504,7 +503,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
               SERVICE PACKAGES & RATES
             </h3>
             <p className="text-sm md:text-base font-serif text-slate-600 dark:text-zinc-400">
-              Clear, transparent pricing tiers for software engineering, mobile development, and architecture. Backed by 10+ years experience with no hidden fees.
+              Clear, transparent pricing tiers for software engineering, mobile development, and architecture. Backed by 1.5+ years experience with no hidden fees.
             </p>
           </div>
 
@@ -513,17 +512,15 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
             {PRICING_PACKAGES.map((pkg) => (
               <div
                 key={pkg.name}
-                className={`border-2 p-8 flex flex-col justify-between transition-all duration-300 relative bg-white dark:bg-zinc-900 ${
-                  pkg.popular
+                className={`border-2 p-8 flex flex-col justify-between transition-all duration-300 relative bg-white dark:bg-zinc-900 ${pkg.popular
                     ? 'border-[#5235F6] shadow-2xl ring-2 ring-[#5235F6]/20'
                     : 'border-slate-900 dark:border-zinc-700'
-                }`}
+                  }`}
               >
                 {/* Badge */}
                 <div className="flex justify-between items-center border-b border-slate-200 dark:border-zinc-800 pb-4 mb-6 font-mono text-xs">
-                  <span className={`px-2.5 py-1 font-bold uppercase tracking-widest ${
-                    pkg.popular ? 'bg-[#5235F6] text-white' : 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300'
-                  }`}>
+                  <span className={`px-2.5 py-1 font-bold uppercase tracking-widest ${pkg.popular ? 'bg-[#5235F6] text-white' : 'bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300'
+                    }`}>
                     {pkg.badge}
                   </span>
                   <span className="text-slate-400">FIXED SCOPE</span>
@@ -533,7 +530,7 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
                   <h4 className="text-xl font-bold font-serif text-slate-900 dark:text-white">
                     {pkg.name}
                   </h4>
-                  
+
                   <div className="font-serif">
                     <span className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
                       {pkg.price !== "Custom" ? `$${pkg.price}` : pkg.price}
@@ -559,11 +556,10 @@ export const NewspaperAboutLayout: React.FC<NewspaperAboutLayoutProps> = ({ work
                 {/* Action Link */}
                 <Link
                   to="/schedule"
-                  className={`inline-flex items-center justify-center gap-2 w-full py-3 font-mono text-xs font-bold uppercase tracking-wider transition-colors ${
-                    pkg.popular
+                  className={`inline-flex items-center justify-center gap-2 w-full py-3 font-mono text-xs font-bold uppercase tracking-wider transition-colors ${pkg.popular
                       ? 'bg-[#5235F6] text-white hover:bg-slate-900'
                       : 'bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-[#5235F6] dark:hover:bg-[#5235F6] dark:hover:text-white'
-                  }`}
+                    }`}
                 >
                   <span>CHOOSE {pkg.name.split(" ")[0]}</span>
                   <ArrowRight className="w-4 h-4" />
