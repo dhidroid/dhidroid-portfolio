@@ -16,10 +16,10 @@
   ],
   "dependencies": {
     "@sanity/code-input": "^7.1.2",
-    "@sanity/vision": "^5.30.0",
+    "@sanity/vision": "^6.15.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "sanity": "^5.30.0",
+    "sanity": "^6.15.0",
     "styled-components": "^6.4.2",
     "tailwind-scrollbar": "^4.0.2"
   },
