@@ -1,12 +1,12 @@
-# dhidroid 
+# dhidroid
 
 Personal portfolio website showcasing projects, blog, and services
 
-![CI](https://github.com/dhidroid/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/dhidroid/dhidroid-portfolio/actions/workflows/ci.yml/badge.svg)
 
 ## About
 
-I'm a passionate mobile app and backend developer specializing in React Native, Go, and cloud services. 
+I'm a passionate mobile app and backend developer specializing in React Native, Go, and cloud services.
 
 ## Features
 
@@ -24,6 +24,7 @@ I'm a passionate mobile app and backend developer specializing in React Native, 
 ## Tech Stack
 
 ### Frontend
+
 - React 19
 - TypeScript
 - Vite
@@ -32,15 +33,18 @@ I'm a passionate mobile app and backend developer specializing in React Native, 
 - React Router
 
 ### Backend & CMS
+
 - Sanity CMS
 - Node.js (for scripts)
 
 ### AI & ML
+
 - Hugging Face Inference
+- Hugging Face Transformers.js
 - Web LLM
-- Xenova Transformers
 
 ### Tools & Deployment
+
 - Vercel
 - GitHub Actions
 - ESLint
@@ -55,15 +59,15 @@ I'm a passionate mobile app and backend developer specializing in React Native, 
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 22.20+
 
-- npm or yarn
+- npm
 
 ### Installation
 
 ```bash
 
-npm install
+npm ci
 
 ```
 
@@ -94,6 +98,24 @@ npm run build
 - `npm run lint` - Run ESLint
 
 - `npm run format` - Format code with Prettier
+
+## Sanity Studio
+
+The content-management studio is maintained in `sanity-server`.
+
+```bash
+
+cd sanity-server
+
+npm ci
+
+npm run dev
+
+```
+
+## Continuous integration
+
+GitHub Actions audits dependencies and builds both the portfolio and Sanity Studio on pull requests. Changed JavaScript and TypeScript files are linted.
 
 ## Contributors
 

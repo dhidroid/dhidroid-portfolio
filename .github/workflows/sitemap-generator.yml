@@ -1,59 +1,45 @@
-name: Daily Sitemap Generator
+name: Generate sitemap
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # runs every day at midnight UTC
+    - cron: '0 0 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   generate-sitemap:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout repo
+      - name: Check out repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PERSONAL_TOKEN }}  # Use PAT for checkout
           fetch-depth: 0
-          
-      - name: Debug token
-        env:
-          TOKEN: ${{ secrets.PERSONAL_TOKEN }}
-        run: |
-          if [ -z "$TOKEN" ]; then
-            echo "❌ TOKEN is EMPTY — secret not found"
-            exit 1
-          else
-            echo "✅ TOKEN is loaded (masked)"
-          fi
-          
-      - name: Setup Node.js
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          
+          node-version: 22.20.0
+          cache: npm
+
       - name: Install dependencies
-        run: |
-          npm install --force || npm ci
-          
+        run: npm ci
+
       - name: Generate sitemap
         run: node sitemap.js
-        
+
       - name: Commit and push sitemap
-        env:
-          TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         run: |
-          git config user.name "dhidroid"
-          git config user.email "dhidroid@users.noreply.github.com"
-          
-          # Check if there are changes
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           if git diff --quiet public/sitemap.xml; then
-            echo "No changes to sitemap"
+            echo "Sitemap is up to date."
             exit 0
           fi
-          
+
           git add public/sitemap.xml
-          git commit -m "🤖 Update sitemap [skip ci]"
-          
-          # Push using PAT
-          git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+          git commit -m "chore: update sitemap"
+          git push origin "HEAD:$GITHUB_REF_NAME"

@@ -15,31 +15,53 @@ try {
 }
 
 async function main() {
-  const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8')
+  );
   const dataDir = path.join(__dirname, '..', 'src', 'utils', 'Data');
-  const about = JSON.parse(fs.readFileSync(path.join(dataDir, 'aboutData.json'))).about || '';
-  const heroData = fs.existsSync(path.join(dataDir, 'HeroData.ts')) ? 'see HeroData' : '';
+  const about =
+    JSON.parse(fs.readFileSync(path.join(dataDir, 'aboutData.json'))).about ||
+    '';
+  const heroData = fs.existsSync(path.join(dataDir, 'HeroData.ts'))
+    ? 'see HeroData'
+    : '';
 
   // Get contributors if GITHUB_TOKEN is provided
   const token = process.env.GITHUB_TOKEN;
   let contributorsMd = '';
   if (token && Octokit) {
     const octo = new Octokit({ auth: token });
-    const [owner, repo] = (pkg.repository && pkg.repository.url) ? parseRepo(pkg.repository.url) : ['',''];
+    const [owner, repo] =
+      pkg.repository && pkg.repository.url
+        ? parseRepo(pkg.repository.url)
+        : ['', ''];
     try {
-      const { data } = await octo.repos.listContributors({ owner, repo, per_page: 10 });
-      contributorsMd = data.map(c => `- [![](${c.avatar_url}&s=40)](${c.html_url}) ${c.login}`).join('\n');
+      const { data } = await octo.repos.listContributors({
+        owner,
+        repo,
+        per_page: 10,
+      });
+      contributorsMd = data
+        .map(c => `- [![](${c.avatar_url}&s=40)](${c.html_url}) ${c.login}`)
+        .join('\n');
     } catch (err) {
       console.warn('Could not fetch contributors:', err.message);
     }
   }
 
-  const title = `# ${pkg.name} \n\n${pkg.description || ''}`;
-  const badges = `![CI](https://github.com/${pkg.name}/actions/workflows/ci.yml/badge.svg)`;
+  const [owner, repo] =
+    pkg.repository && pkg.repository.url
+      ? parseRepo(pkg.repository.url)
+      : ['', ''];
+  const title = `# ${pkg.name}\n\n${pkg.description || ''}`;
+  const badges =
+    owner && repo
+      ? `![CI](https://github.com/${owner}/${repo}/actions/workflows/ci.yml/badge.svg)`
+      : '';
 
   const features = `## Features\n\n- **Modern Tech Stack**: React 19, TypeScript, Vite, Tailwind CSS\n- **CMS Integration**: Sanity CMS for content management\n- **AI Chatbot**: Integrated chatbot using Hugging Face and Web LLM\n- **Responsive Design**: Mobile-first design with Framer Motion animations\n- **SEO Optimized**: React Helmet for meta tags and sitemap generation\n- **Analytics**: Vercel Analytics and Speed Insights\n- **Blog System**: Markdown-based blog with syntax highlighting\n- **Project Showcase**: Dynamic project portfolio with filtering\n- **Contact Integration**: Cal.com embed for scheduling\n- **Performance**: Optimized with lazy loading and code splitting`;
 
-  const techStack = `## Tech Stack\n\n### Frontend\n- React 19\n- TypeScript\n- Vite\n- Tailwind CSS\n- Framer Motion\n- React Router\n\n### Backend & CMS\n- Sanity CMS\n- Node.js (for scripts)\n\n### AI & ML\n- Hugging Face Inference\n- Web LLM\n- Xenova Transformers\n\n### Tools & Deployment\n- Vercel\n- GitHub Actions\n- ESLint\n- Prettier\n- Husky`;
+  const techStack = `## Tech Stack\n\n### Frontend\n- React 19\n- TypeScript\n- Vite\n- Tailwind CSS\n- Framer Motion\n- React Router\n\n### Backend & CMS\n- Sanity CMS\n- Node.js (for scripts)\n\n### AI & ML\n- Hugging Face Inference\n- Hugging Face Transformers.js\n- Web LLM\n\n### Tools & Deployment\n- Vercel\n- GitHub Actions\n- ESLint\n- Prettier\n- Husky`;
 
   const content = [
     title,
@@ -52,11 +74,11 @@ async function main() {
     '- Projects, Blogs, Skills are sourced from `src/utils/Data`',
     '## Getting Started',
     '### Prerequisites',
-    '- Node.js 18+',
-    '- npm or yarn',
+    '- Node.js 22.20+',
+    '- npm',
     '### Installation',
     '```bash',
-    'npm install',
+    'npm ci',
     '```',
     '### Development',
     '```bash',
@@ -72,11 +94,22 @@ async function main() {
     '- `npm run preview` - Preview production build',
     '- `npm run lint` - Run ESLint',
     '- `npm run format` - Format code with Prettier',
+    '## Sanity Studio',
+    'The content-management studio is maintained in `sanity-server`.',
+    '```bash',
+    'cd sanity-server',
+    'npm ci',
+    'npm run dev',
+    '```',
+    '## Continuous integration',
+    'GitHub Actions audits dependencies and builds both the portfolio and Sanity Studio on pull requests. Changed JavaScript and TypeScript files are linted.',
     '## Contributors',
     contributorsMd || '- No contributors found or GITHUB_TOKEN not set',
-  ].filter(Boolean).join('\n\n');
+  ]
+    .filter(Boolean)
+    .join('\n\n');
 
-  fs.writeFileSync(path.join(__dirname, '..', 'README.md'), content);
+  fs.writeFileSync(path.join(__dirname, '..', 'README.md'), `${content}\n`);
   console.log('README.md updated');
 
   function parseRepo(url) {
@@ -87,4 +120,7 @@ async function main() {
   }
 }
 
-main().catch(err => { console.error(err); process.exit(1); });
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
